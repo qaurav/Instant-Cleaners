@@ -287,7 +287,7 @@ const BookingCRUD = () => {
             select
           >
             <MenuItem value="pending">Pending</MenuItem>
-            <MenuItem value="cancelled">Confirmed</MenuItem>
+            <MenuItem value="confirmed">Confirmed</MenuItem>
             <MenuItem value="completed">Completed</MenuItem>
           </TextField>
           <TextField
