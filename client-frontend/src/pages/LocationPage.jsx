@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import ServiceCard from "../components/ServiceCard";  // Import ServiceCard
-
+import api from "../api";
+import ServiceCard from "../components/ServiceCard";
 
 const LocationPage = () => {
   const { id } = useParams();
@@ -14,23 +13,23 @@ const LocationPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch location details
-    axios.get(`/api/locations/${id}`)
-      .then(res => {
+    api
+      .get(`/locations/${id}`)
+      .then((res) => {
         setLocation(res.data);
 
-        // If services are populated objects, use them directly
         if (res.data.services && res.data.services.length > 0) {
-          // Check if services are objects or just IDs
           if (typeof res.data.services[0] === "object") {
             setServicesAtLocation(res.data.services);
             setLoading(false);
           } else {
-            // If only IDs, fetch all services and filter
-            axios.get("/api/services")
-              .then(svcRes => {
+            api
+              .get("/services")
+              .then((svcRes) => {
                 const allServices = svcRes.data;
-                const filteredServices = allServices.filter(svc => res.data.services.includes(svc._id));
+                const filteredServices = allServices.filter((svc) =>
+                  res.data.services.includes(svc._id)
+                );
                 setServicesAtLocation(filteredServices);
                 setLoading(false);
               })
@@ -69,7 +68,7 @@ const LocationPage = () => {
       <h2>Services at this Location</h2>
       {servicesAtLocation.length > 0 ? (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 16 }}>
-          {servicesAtLocation.map(service => (
+          {servicesAtLocation.map((service) => (
             <ServiceCard
               key={service._id}
               service={service}
@@ -89,5 +88,3 @@ const LocationPage = () => {
 };
 
 export default LocationPage;
-
-

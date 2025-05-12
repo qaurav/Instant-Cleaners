@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import BookingForm from "../components/BookingForm";
 
 const ServicePage = () => {
@@ -10,8 +10,8 @@ const ServicePage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios
-      .get(`/api/services/${id}`)
+    api
+      .get(`/services/${id}`)
       .then((res) => {
         setService(res.data);
         setLoading(false);

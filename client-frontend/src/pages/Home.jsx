@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import BookingForm from "../components/BookingForm";
 import ContactForm from "../components/ContactForm";
 import LocationCard from "../components/LocationCard";
@@ -31,8 +31,8 @@ function Home() {
   }, [location]);
 
   useEffect(() => {
-    axios.get("/api/locations").then((res) => setLocations(res.data));
-    axios.get("/api/services").then((res) => setServices(res.data));
+    api.get("/locations").then((res) => setLocations(res.data));
+    api.get("/services").then((res) => setServices(res.data));
   }, []);
 
   return (
@@ -75,7 +75,6 @@ function Home() {
         <AboutUs />
       </section>
 
-
       {/* Services Section */}
       <section
         id="services"
@@ -99,7 +98,6 @@ function Home() {
       <section id="testimonials">
         <Testimonials />
       </section>
-
 
       {/* Contact Section */}
       <section id="contact" style={{ padding: "40px 20px" }}>
