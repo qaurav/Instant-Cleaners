@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import {
   Box,
   TextField,
@@ -11,6 +10,7 @@ import {
   Typography,
   Alert,
 } from "@mui/material";
+import api from "../api";
 
 const BookingForm = ({ fixedService }) => {
   const [services, setServices] = useState([]);
@@ -29,8 +29,8 @@ const BookingForm = ({ fixedService }) => {
 
   useEffect(() => {
     if (!fixedService) {
-      axios
-        .get("/api/services")
+      api
+        .get("/services")
         .then((res) => setServices(res.data))
         .catch((err) => console.error("Failed to fetch services", err));
     }
@@ -46,7 +46,7 @@ const BookingForm = ({ fixedService }) => {
     setErrorMsg("");
     setSubmitting(true);
     try {
-      await axios.post("/api/bookings", formData);
+      await api.post("/bookings", formData);
       setSuccessMsg("Booking submitted successfully!");
       setFormData({
         clientName: "",
