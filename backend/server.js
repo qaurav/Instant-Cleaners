@@ -13,34 +13,12 @@ const app = express();
 
 // Middleware
 
-const allowedOrigins = [
-  'https://client-frontend-8d1s.onrender.com',   // Replace with your deployed client frontend URL
-  'https://admin-frontend-nuo3.onrender.com',    // Replace with your deployed admin frontend URL
-  'http://localhost:3001',                      // For local client frontend dev
-  'http://localhost:3000',                      // For local admin frontend dev (if different port)
-];
-
-
 
 app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like Postman or curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `CORS policy does not allow access from origin ${origin}`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
-  credentials: true,  // If you use cookies or authentication headers
+  origin: "http://localhost:3000", // your frontend URL
+  credentials: true
 }));
-
-
-// app.use(cors({
-//   origin: "http://localhost:3000", // your frontend URL
-//   credentials: true
-// }));
-// app.use(express.json());
+app.use(express.json());
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
