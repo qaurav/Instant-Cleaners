@@ -11,6 +11,8 @@ const contactRoutes = require('./routes/contactRoutes');
 const app = express();
 
 const allowedOrigins = [
+  "https://admin-frontend-nuo3.onrender.com",
+  "https://client-frontend-8d1s.onrender.com",
   "http://localhost:3000",
   "http://localhost:3001"
 ];
