@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -44,7 +43,7 @@ const Navbar = () => {
     } else {
       navigate("/", { state: { scrollTo: id } });
     }
-    setDrawerOpen(false); // close drawer if open
+    setDrawerOpen(false);
   };
 
   const drawer = (
@@ -63,11 +62,15 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="fixed" color="primary">
+      <AppBar position="fixed" color="primary" sx={{ top: 30 }}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Service Booking
-          </Typography>
+          <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
+            <img
+              src="/instantcleanerslogo.jpg"  // <-- use this path for public folder image
+              alt="Instant Carpet Cleaning Services"
+              style={{ height: 70, marginRight: 8 }}
+            />
+          </Box>
 
           {isMobile ? (
             <>
@@ -81,11 +84,7 @@ const Navbar = () => {
                 <MenuIcon />
               </IconButton>
 
-              <Drawer
-                anchor="left"
-                open={drawerOpen}
-                onClose={() => setDrawerOpen(false)}
-              >
+              <Drawer anchor="left" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
                 {drawer}
               </Drawer>
             </>
