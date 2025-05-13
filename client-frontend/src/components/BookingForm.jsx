@@ -69,9 +69,9 @@ const BookingForm = ({ fixedService }) => {
       component="form"
       onSubmit={handleSubmit}
       sx={{
-        maxWidth: 400,
+        maxWidth: 500,
         mx: "auto",
-        p: 3,
+        p: 1, // Reduced from 2 to 1
         boxShadow: 3,
         borderRadius: 2,
         backgroundColor: "background.paper",
@@ -91,6 +91,7 @@ const BookingForm = ({ fixedService }) => {
         required
         fullWidth
         margin="normal"
+        size="small" // Reduce field height
       />
 
       <TextField
@@ -102,6 +103,7 @@ const BookingForm = ({ fixedService }) => {
         required
         fullWidth
         margin="normal"
+        size="small" // Reduce field height
       />
 
       <TextField
@@ -113,6 +115,7 @@ const BookingForm = ({ fixedService }) => {
         required
         fullWidth
         margin="normal"
+        size="small" // Reduce field height
       />
 
       {fixedService ? (
@@ -124,6 +127,7 @@ const BookingForm = ({ fixedService }) => {
           InputProps={{
             readOnly: true,
           }}
+          size="small" // Reduce field height
         />
       ) : (
         <FormControl fullWidth margin="normal" required>
@@ -135,6 +139,7 @@ const BookingForm = ({ fixedService }) => {
             value={formData.service}
             label="Select Service"
             onChange={handleChange}
+            size="small" // Reduce field height
           >
             <MenuItem value="">
               <em>None</em>
@@ -155,6 +160,7 @@ const BookingForm = ({ fixedService }) => {
         onChange={handleChange}
         fullWidth
         margin="normal"
+        size="small" // Reduce field height
       />
 
       <TextField
@@ -169,6 +175,7 @@ const BookingForm = ({ fixedService }) => {
         InputLabelProps={{
           shrink: true,
         }}
+        size="small" // Reduce field height
       />
 
       <TextField
@@ -177,9 +184,10 @@ const BookingForm = ({ fixedService }) => {
         value={formData.message}
         onChange={handleChange}
         multiline
-        rows={4}
+        rows={2} // Reduced from 3 to 2
         fullWidth
         margin="normal"
+        size="small" // Reduce field height
       />
 
       <Button
@@ -188,18 +196,18 @@ const BookingForm = ({ fixedService }) => {
         color="primary"
         disabled={submitting}
         fullWidth
-        sx={{ mt: 2 }}
+        sx={{ mt: 0.5 }} // Reduced from 1 to 0.5
       >
         {submitting ? "Submitting..." : "Submit Booking"}
       </Button>
 
       {successMsg && (
-        <Alert severity="success" sx={{ mt: 2 }}>
+        <Alert severity="success" sx={{ mt: 0.5 }}>
           {successMsg}
         </Alert>
       )}
       {errorMsg && (
-        <Alert severity="error" sx={{ mt: 2 }}>
+        <Alert severity="error" sx={{ mt: 0.5 }}>
           {errorMsg}
         </Alert>
       )}

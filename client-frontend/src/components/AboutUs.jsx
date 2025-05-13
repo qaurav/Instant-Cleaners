@@ -1,7 +1,10 @@
 import React from "react";
 import { Box, Grid, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const AboutUs = () => {
+  const navigate = useNavigate();
+
   return (
     <Box
       id="aboutus"
@@ -40,7 +43,11 @@ const AboutUs = () => {
             We believe in transparency, trust, and excellence. Thank you for choosing us as your service partner!
           </Typography>
           <Box textAlign="center" mt={3}>
-            <Button variant="contained" color="primary">
+            <Button 
+              variant="contained" 
+              color="primary"
+              onClick={() => navigate("/aboutus")}
+            >
               Learn More
             </Button>
           </Box>
