@@ -19,10 +19,11 @@ function Home() {
 
   const [locations, setLocations] = useState([]);
   const [services, setServices] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
 
   useEffect(() => {
     if (location.state?.scrollTo) {
-      const section = document.getElementById(location.state.scrollTo);
+      const section = document.getElementId(location.state.scrollTo);
       if (section) {
         section.scrollIntoView({ behavior: "smooth" });
       }
@@ -35,30 +36,40 @@ function Home() {
     api.get("/services").then((res) => setServices(res.data));
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      console.log("Window width:", window.innerWidth, "isMobile:", window.innerWidth <= 600);
+      setIsMobile(window.innerWidth <= 600);
+    };
+    window.addEventListener("resize", handleResize);
+    handleResize(); // Initial check
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div>
       {/* Home Section */}
       <section
         id="home"
         style={{
-          minHeight: "70vh", // Kept reduced height
+          minHeight: "70vh",
           display: "flex",
-          flexDirection: "row", // Side-by-side layout
+          flexDirection: isMobile ? "column-reverse" : "row",
           justifyContent: "space-between",
-          alignItems: "flex-start", // Align items at the top
+          alignItems: isMobile ? "stretch" : "flex-start",
           padding: "40px 20px",
           position: "relative",
           background: "#f0f0f0",
-          flexWrap: "wrap", // Stack on mobile
+          flexWrap: "wrap",
         }}
       >
         {/* Left Side: Background with Text */}
         <div
           style={{
-            flex: "1 1 50%", // Take 50% of the width
-            minHeight: "68vh", // Match section height
-            minWidth: "300px", // Ensure it doesn't shrink too much on mobile
-            backgroundColor: "#757575", // Gray background as per image
+            flex: "1 1 50%",
+            minHeight: "68vh",
+            minWidth: "300px",
+            backgroundColor: "#757575",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -81,13 +92,13 @@ function Home() {
         {/* Right Side: Booking Form */}
         <div
           style={{
-            flex: "1 1 40%", // Slightly narrower to match image
-            minWidth: "300px", // Ensure it doesn't shrink too much on mobile
+            flex: "1 1 40%",
+            minWidth: "300px",
             display: "flex",
             justifyContent: "center",
-            alignItems: "flex-start", // Align at the top
+            alignItems: "flex-start",
             padding: "20px",
-            overflowY: "auto", // Allow vertical scrolling if form is too tall
+            overflowY: "auto",
           }}
         >
           <div style={sectionStyle}>
@@ -144,7 +155,52 @@ function Home() {
       {/* Contact Section */}
       <section id="contact" style={{ padding: "40px 20px" }}>
         <div style={sectionStyle}>
-          <ContactForm />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: isMobile ? "column-reverse" : "row",
+              justifyContent: "space-between",
+              alignItems: "stretch", // Force equal height for both items
+              flexWrap: "nowrap",
+              gap: "20px",
+            }}
+          >
+            {/* Left Side: Contact Form */}
+            <div
+              style={{
+                flex: "1 1 50%",
+                minWidth: "300px",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                padding: "20px",
+                overflowY: "auto",
+              }}
+            >
+              <ContactForm />
+            </div>
+
+            {/* Right Side: Sydney Map View (Google Maps Embed) */}
+            <div
+              style={{
+                flex: "1 1 50%",
+                minWidth: "300px",
+                padding: "20px",
+                position: "relative",
+              }}
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.993683414541!2d151.2069903152093!3d-33.86881998065764!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12ae401e8b983f%3A0x5017d681632c800!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2sus!4v1631234567890"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen=""
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Sydney Map"
+              ></iframe>
+            </div>
+          </div>
         </div>
       </section>
     </div>
