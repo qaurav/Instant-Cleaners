@@ -13,6 +13,13 @@ import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Collapse from "@mui/material/Collapse";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import api from "../api";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const navItems = [
   { label: "Home", id: "home" },
@@ -40,9 +47,35 @@ const Navbar = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const topBarHeight = isMobile ? 180 : 60; // Match this to your TopBar height
+  const topBarHeight = isMobile ? 180 : 60;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeId, setActiveId] = useState("home");
+  const [services, setServices] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [anchorElServices, setAnchorElServices] = useState(null);
+  const [anchorElLocations, setAnchorElLocations] = useState(null);
+  const [openServices, setOpenServices] = useState(false);
+  const [openLocations, setOpenLocations] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const [servicesRes, locationsRes] = await Promise.all([
+          api.get("/services"),
+          api.get("/locations"),
+        ]);
+        setServices(servicesRes.data);
+        setLocations(locationsRes.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (location.state && location.state.scrollTo) {
@@ -54,21 +87,53 @@ const Navbar = () => {
     }
   }, [location]);
 
-  const scrollToSection = (id) => {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+  const handleNavClick = (id) => {
+    // Close any open dropdowns
+    setAnchorElServices(null);
+    setAnchorElLocations(null);
+
+    if (location.pathname === "/") {
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: "smooth" });
+      } else {
+        console.log("Scrolling to section:", id, "Section not found");
+      }
+      setActiveId(id);
+    } else {
+      navigate("/", { state: { scrollTo: id }, replace: true });
       setActiveId(id);
     }
+    setDrawerOpen(false);
   };
 
-  const handleNavClick = (id) => {
-    if (location.pathname === "/") {
-      scrollToSection(id);
-    } else {
-      navigate("/", { state: { scrollTo: id } });
-      setActiveId(id);
+  const handleButtonClick = (id) => {
+    handleNavClick(id);
+  };
+
+  const handleToggleDropdown = (id, event) => {
+    event.stopPropagation(); // Prevent drawer closing or scroll when clicking arrow
+    if (id === "locations") {
+      setAnchorElLocations(anchorElLocations ? null : event.currentTarget);
+      setOpenLocations(!openLocations);
+    } else if (id === "services") {
+      setAnchorElServices(anchorElServices ? null : event.currentTarget);
+      setOpenServices(!openServices);
     }
+    // Important: Do NOT close drawer when toggling dropdown
+  };
+
+  const handleServiceClick = (id) => {
+    navigate(`/services/${id}`);
+    setAnchorElServices(null);
+    setOpenServices(false);
+    setDrawerOpen(false);
+  };
+
+  const handleLocationClick = (id) => {
+    navigate(`/locations/${id}`);
+    setAnchorElLocations(null);
+    setOpenLocations(false);
     setDrawerOpen(false);
   };
 
@@ -78,26 +143,78 @@ const Navbar = () => {
         width: { xs: "100vw", sm: 300 },
         maxWidth: "100vw",
         backgroundColor: "#fff",
-        height: "100%", // Ensure the drawer background covers the full height
-        paddingTop: 0, // Remove paddingTop to eliminate extra space
+        height: "100%",
+        paddingTop: 0,
       }}
       role="presentation"
-      onClick={() => setDrawerOpen(false)}
-      onKeyDown={() => setDrawerOpen(false)}
+      // Removed onClick and onKeyDown handlers to prevent drawer closing on menu item clicks
     >
       <List>
         {navItems.map(({ label, id }) => (
-          <ListItem key={id} disablePadding>
-            <ListItemButton
-              onClick={() => handleNavClick(id)}
-              sx={{
-                ...fontStyles,
-                ...(activeId === id ? activeStyle : {}),
-              }}
-            >
-              <ListItemText primary={label} />
-            </ListItemButton>
-          </ListItem>
+          <React.Fragment key={id}>
+            <ListItem disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  if ((id === "services" || id === "locations") && !loading) {
+                    // For labels in drawer, scroll to section and keep dropdown open
+                    if ((id === "services" && !openServices) || (id === "locations" && !openLocations)) {
+                      if (id === "services") {
+                        setOpenServices(true);
+                      } else if (id === "locations") {
+                        setOpenLocations(true);
+                      }
+                    } else {
+                      // If already open, scroll to section
+                      handleNavClick(id);
+                      setOpenServices(false);
+                      setOpenLocations(false);
+                    }
+                  } else {
+                    handleNavClick(id);
+                  }
+                }}
+                sx={{
+                  ...fontStyles,
+                  ...(activeId === id ? activeStyle : {}),
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <ListItemText primary={label} />
+                {(id === "services" || id === "locations") && !loading && (
+                  id === "services" ? (openServices ? <ExpandLessIcon /> : <ExpandMoreIcon />) : (openLocations ? <ExpandLessIcon /> : <ExpandMoreIcon />)
+                )}
+                {(id === "services" || id === "locations") && loading && <CircularProgress size={20} />}
+              </ListItemButton>
+            </ListItem>
+            {id === "services" && !loading && (
+              <Collapse in={openServices} timeout={300} easing="ease-in-out" unmountOnExit>
+                <List component="div" disablePadding>
+                  {services.map((service) => (
+                    <ListItem key={service._id} disablePadding sx={{ pl: 4 }}>
+                      <ListItemButton onClick={() => handleServiceClick(service._id)}>
+                        <ListItemText primary={service.name} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            )}
+            {id === "locations" && !loading && (
+              <Collapse in={openLocations} timeout={300} easing="ease-in-out" unmountOnExit>
+                <List component="div" disablePadding>
+                  {locations.map((location) => (
+                    <ListItem key={location._id} disablePadding sx={{ pl: 4 }}>
+                      <ListItemButton onClick={() => handleLocationClick(location._id)}>
+                        <ListItemText primary={location.name} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+              </Collapse>
+            )}
+          </React.Fragment>
         ))}
         <ListItem disablePadding>
           <ListItemButton
@@ -130,17 +247,100 @@ const Navbar = () => {
           {!isMobile ? (
             <Box sx={{ display: "flex", gap: 3 }}>
               {navItems.map(({ label, id }) => (
-                <Button
+                <Box
                   key={id}
-                  onClick={() => handleNavClick(id)}
-                  sx={{
-                    ...fontStyles,
-                    color: "#fff",
-                    ...(activeId === id ? activeStyle : { borderBottom: "none" }),
-                  }}
+                  sx={{ position: "relative", display: "flex", alignItems: "center" }}
                 >
-                  {label}
-                </Button>
+                  <Button
+                    onClick={() => {
+                      handleButtonClick(id);
+                    }}
+                    sx={{
+                      ...fontStyles,
+                      color: "#fff",
+                      ...(activeId === id ? activeStyle : { borderBottom: "none" }),
+                      paddingRight: id === "locations" || id === "services" ? 0 : undefined,
+                    }}
+                  >
+                    {label}
+                  </Button>
+                  {(id === "locations" || id === "services") && !loading && (
+                    <IconButton
+                      onClick={(event) => handleToggleDropdown(id, event)}
+                      sx={{
+                        color: "#fff",
+                        padding: "6px",
+                        "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" },
+                      }}
+                    >
+                      {id === "locations" && openLocations ? <ExpandLessIcon /> : id === "locations" ? <ExpandMoreIcon /> : id === "services" && openServices ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                    </IconButton>
+                  )}
+                  {id === "services" && !loading && (
+                    <Menu
+                      anchorEl={anchorElServices}
+                      open={openServices && Boolean(anchorElServices)}
+                      onClose={() => {
+                        setAnchorElServices(null);
+                        setOpenServices(false);
+                      }}
+                      TransitionProps={{ timeout: 200 }}
+                      MenuListProps={{
+                        sx: { backgroundColor: "rgb(37, 150, 190)", color: "#fff" },
+                      }}
+                      PaperProps={{
+                        sx: {
+                          mt: 1,
+                          "& .MuiMenu-list": { padding: 0 },
+                        },
+                      }}
+                      disableAutoFocus
+                      disableScrollLock
+                    >
+                      {services.map((service) => (
+                        <MenuItem
+                          key={service._id}
+                          onClick={() => handleServiceClick(service._id)}
+                          sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
+                        >
+                          {service.name}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  )}
+                  {id === "locations" && !loading && (
+                    <Menu
+                      anchorEl={anchorElLocations}
+                      open={openLocations && Boolean(anchorElLocations)}
+                      onClose={() => {
+                        setAnchorElLocations(null);
+                        setOpenLocations(false);
+                      }}
+                      TransitionProps={{ timeout: 200 }}
+                      MenuListProps={{
+                        sx: { backgroundColor: "rgb(37, 150, 190)", color: "#fff" },
+                      }}
+                      PaperProps={{
+                        sx: {
+                          mt: 1,
+                          "& .MuiMenu-list": { padding: 0 },
+                        },
+                      }}
+                      disableAutoFocus
+                      disableScrollLock
+                    >
+                      {locations.map((location) => (
+                        <MenuItem
+                          key={location._id}
+                          onClick={() => handleLocationClick(location._id)}
+                          sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
+                        >
+                          {location.name}
+                        </MenuItem>
+                      ))}
+                    </Menu>
+                  )}
+                </Box>
               ))}
             </Box>
           ) : (
@@ -164,7 +364,7 @@ const Navbar = () => {
                     borderColor: "#fff",
                   },
                 }}
-                onClick={() => handleNavClick("contact")}
+                onClick={() => handleButtonClick("contact")}
                 endIcon={<span style={{ fontSize: 16, transform: "translateX(2px)" }}>→</span>}
               >
                 REQUEST A QUOTE
@@ -187,7 +387,6 @@ const Navbar = () => {
         </Toolbar>
       </AppBar>
 
-      {/* Spacer for TopBar + Navbar */}
       <Box sx={{ height: topBarHeight + 64 }} />
 
       <Drawer
@@ -195,11 +394,11 @@ const Navbar = () => {
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         sx={{
-          zIndex: 1500, // Ensure the Drawer is above the Navbar but below the TopBar
+          zIndex: 1500,
           "& .MuiDrawer-paper": {
-            top: `${topBarHeight}px`, // Start the drawer below the TopBar
-            height: `calc(100% - ${topBarHeight}px)`, // Adjust height to exclude TopBar
-            paddingTop: 0, // Ensure no additional padding at the top
+            top: `${topBarHeight}px`,
+            height: `calc(100% - ${topBarHeight}px)`,
+            paddingTop: 0,
           },
         }}
       >
@@ -210,3 +409,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+

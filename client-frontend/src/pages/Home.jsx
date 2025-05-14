@@ -23,13 +23,20 @@ function Home() {
 
   useEffect(() => {
     if (location.state?.scrollTo) {
-      const section = document.getElementId(location.state.scrollTo);
+      const section = document.getElementById(location.state.scrollTo);
       if (section) {
-        section.scrollIntoView({ behavior: "smooth" });
+        const rect = section.getBoundingClientRect();
+        const isInView = rect.top >= 0 && rect.bottom <= window.innerHeight;
+        if (!isInView) {
+          section.scrollIntoView({ behavior: "smooth" });
+        } else {
+          console.log("Home.jsx: Section already in view, skipping scroll:", location.state.scrollTo);
+        }
       }
       window.history.replaceState({}, document.title);
     }
   }, [location]);
+
 
   useEffect(() => {
     api.get("/locations").then((res) => setLocations(res.data));
@@ -38,7 +45,6 @@ function Home() {
 
   useEffect(() => {
     const handleResize = () => {
-      console.log("Window width:", window.innerWidth, "isMobile:", window.innerWidth <= 600);
       setIsMobile(window.innerWidth <= 600);
     };
     window.addEventListener("resize", handleResize);
@@ -109,7 +115,7 @@ function Home() {
 
       {/* Locations Section */}
       <section id="locations" style={{ padding: "40px 20px" }}>
-        <div style={sectionStyle}>
+        <div style={{ ...sectionStyle, textAlign: "center" }}>
           <h2>Our Locations</h2>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
             {locations.map((loc) => (
@@ -133,7 +139,7 @@ function Home() {
         id="services"
         style={{ padding: "40px 20px", background: "#f9f9f9" }}
       >
-        <div style={sectionStyle}>
+        <div style={{ ...sectionStyle, textAlign: "center" }}>
           <h2>Our Services</h2>
           <div style={{ display: "flex", flexWrap: "wrap" }}>
             {services.map((svc) => (
@@ -158,7 +164,7 @@ function Home() {
           <div
             style={{
               display: "flex",
-              flexDirection: isMobile ? "column" : "row", // Changed "column-reverse" to "column" for mobile
+              flexDirection: isMobile ? "column" : "row",
               justifyContent: "space-between",
               alignItems: "stretch",
               flexWrap: "nowrap",
@@ -190,7 +196,7 @@ function Home() {
               }}
             >
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3312.993683414541!2d151.2069903152093!3d-33.86881998065764!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b12ae401e8b983f%3A0x5017d681632c800!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2sus!4v1631234567890"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d424141.6978944982!2d150.93197474999997!3d-33.84824395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743f%3A0x3017d681632a850!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2snp!4v1747214629578!5m2!1sen!2snp"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
