@@ -42,7 +42,7 @@ function Home() {
       setIsMobile(window.innerWidth <= 600);
     };
     window.addEventListener("resize", handleResize);
-    handleResize(); // Initial check
+    handleResize();
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -158,9 +158,9 @@ function Home() {
           <div
             style={{
               display: "flex",
-              flexDirection: isMobile ? "column-reverse" : "row",
+              flexDirection: isMobile ? "column" : "row", // Changed "column-reverse" to "column" for mobile
               justifyContent: "space-between",
-              alignItems: "stretch", // Force equal height for both items
+              alignItems: "stretch",
               flexWrap: "nowrap",
               gap: "20px",
             }}
