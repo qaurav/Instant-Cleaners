@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
 const ServiceCard = ({ service, onClick }) => (
-  <Card sx={{ width: 220, m: 1, cursor: "pointer" }} onClick={() => onClick(service._id)}>
+  <Card sx={{ width: 280, m: 1, cursor: "pointer" }} onClick={() => onClick(service._id)}>
     <CardMedia
       component="img"
       height="120"

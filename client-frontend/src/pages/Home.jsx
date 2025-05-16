@@ -113,27 +113,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Locations Section */}
-      <section id="locations" style={{ padding: "40px 20px" }}>
-        <div style={{ ...sectionStyle, textAlign: "center" }}>
-          <h2>Our Locations</h2>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {locations.map((loc) => (
-              <LocationCard
-                key={loc._id}
-                location={loc}
-                onClick={(id) => navigate(`/locations/${id}`)}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About Us Section */}
-      <section id="aboutus">
-        <AboutUs />
-      </section>
-
+      
       {/* Services Section */}
       <section
         id="services"
@@ -152,6 +132,30 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* About Us Section */}
+      <section id="aboutus">
+        <AboutUs />
+      </section>
+
+
+{/* Locations Section */}
+      <section id="locations" style={{ padding: "40px 20px" }}>
+        <div style={{ ...sectionStyle, textAlign: "center" }}>
+          <h2>Our Locations</h2>
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {locations.map((loc) => (
+              <LocationCard
+                key={loc._id}
+                location={loc}
+                onClick={(id) => navigate(`/locations/${id}`)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      
 
       {/* Testimonials Section */}
       <section id="testimonials">
