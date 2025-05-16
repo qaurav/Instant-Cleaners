@@ -5,10 +5,10 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
 const LocationCard = ({ location, onClick }) => (
-  <Card sx={{ width: 280, m: 1, cursor: 'pointer' }} onClick={() => onClick(location._id)}>
+  <Card sx={{ width: 380, m: 2, cursor: 'pointer' }} onClick={() => onClick(location._id)}>
     <CardMedia
       component="img"
-      height="120"
+      height="160"
       image={location.image || 'https://via.placeholder.com/220x120'}
       alt={location.name}
     />
@@ -17,7 +17,7 @@ const LocationCard = ({ location, onClick }) => (
         {location.name}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        {location.description?.slice(0, 50)}...
+        {location.description?.slice(0, 100)}...
       </Typography>
     </CardContent>
   </Card>

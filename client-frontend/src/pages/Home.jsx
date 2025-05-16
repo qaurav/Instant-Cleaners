@@ -7,6 +7,7 @@ import LocationCard from "../components/LocationCard";
 import ServiceCard from "../components/ServiceCard";
 import AboutUs from "../components/AboutUs";
 import Testimonials from "../components/Testimonials";
+import { Box, Typography } from "@mui/material";
 
 const sectionStyle = {
   maxWidth: 1200,
@@ -113,15 +114,21 @@ function Home() {
         </div>
       </section>
 
-      
+
       {/* Services Section */}
-      <section
-        id="services"
-        style={{ padding: "40px 20px", background: "#f9f9f9" }}
-      >
-        <div style={{ ...sectionStyle, textAlign: "center" }}>
-          <h2>Our Services</h2>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+
+      <section id="services" style={{ backgroundColor: "#f0f4f8" }}>
+        <Box
+          sx={{
+            padding: { xs: "40px 10px", sm: "60px 20px" }, // smaller padding on mobile
+            maxWidth: { xs: "100%", md: 1400 },           // wider on desktop
+            mx: "auto",
+          }}
+        >
+          <Typography variant="h3" component="h2" gutterBottom align="center">
+            Our Services
+          </Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
             {services.map((svc) => (
               <ServiceCard
                 key={svc._id}
@@ -129,9 +136,10 @@ function Home() {
                 onClick={(id) => navigate(`/services/${id}`)}
               />
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
       </section>
+
 
       {/* About Us Section */}
       <section id="aboutus">
@@ -139,11 +147,17 @@ function Home() {
       </section>
 
 
-{/* Locations Section */}
-      <section id="locations" style={{ padding: "40px 20px" }}>
-        <div style={{ ...sectionStyle, textAlign: "center" }}>
-          <h2>Our Locations</h2>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
+      {/* Locations Section */}
+      <section id="locations" style={{ backgroundColor: "#f0f4f8" }}>
+        <Box
+          sx={{
+            padding: { xs: "40px 10px", sm: "60px 20px" }, // smaller padding on mobile
+            maxWidth: { xs: "100%", md: 1400 },           // wider on desktop
+            mx: "auto",
+          }}
+        >
+          <Typography variant="h3" component="h2" gutterBottom align="center">Our Locations</Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
             {locations.map((loc) => (
               <LocationCard
                 key={loc._id}
@@ -151,11 +165,9 @@ function Home() {
                 onClick={(id) => navigate(`/locations/${id}`)}
               />
             ))}
-          </div>
-        </div>
+          </Box>
+        </Box>
       </section>
-
-      
 
       {/* Testimonials Section */}
       <section id="testimonials">
