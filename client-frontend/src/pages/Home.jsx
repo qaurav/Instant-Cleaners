@@ -142,7 +142,7 @@ function Home() {
 
 
       {/* About Us Section */}
-      <section id="aboutus">
+      <section id="aboutus" style={{ backgroundColor: "#f0f4f8" }}>
         <AboutUs />
       </section>
 
