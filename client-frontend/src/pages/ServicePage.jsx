@@ -5,26 +5,41 @@ import BookingForm from "../components/BookingForm";
 
 const accentColor = "rgb(37, 150, 190)";
 
+// Utility: Render star rating (full stars only)
+const renderStars = (count = 5) => (
+  <div style={{ marginBottom: 8 }}>
+    {Array.from({ length: count }).map((_, i) => (
+      <span key={i} style={{ color: "#ffb400", fontSize: "1.3rem" }}>★</span>
+    ))}
+  </div>
+);
+
 const packageData = [
   {
     name: "Basic Refresh",
-    price: "$50",
+    price: 69.99,
+    wasPrice: 99.99,
     features: "Standard steam cleaning & quick drying",
     icon: "💧",
+    rating: 4,
     bg: "linear-gradient(135deg, #e0f7fa 0%, #f9faff 100%)"
   },
   {
     name: "Premium Care",
-    price: "$80",
+    price: 99.99,
+    wasPrice: 149.99,
     features: "Deep cleaning, stain removal & deodorizing",
     icon: "✨",
+    rating: 5,
     bg: "linear-gradient(135deg, #b2ebf2 0%, #f9faff 100%)"
   },
   {
     name: "Deluxe Protection",
-    price: "$120",
+    price: 149.99,
+    wasPrice: 199.99,
     features: "All Premium features + fabric protection & eco-friendly products",
     icon: "🛡️",
+    rating: 5,
     bg: "linear-gradient(135deg, #80deea 0%, #f9faff 100%)"
   }
 ];
@@ -201,6 +216,7 @@ const ServicePage = () => {
           gap: 36,
           justifyContent: "center",
           marginBottom: 44,
+          padding: "0 12px",
         }}
       >
         {packageData.map((pkg, i) => (
@@ -212,16 +228,69 @@ const ServicePage = () => {
               maxWidth: 300,
               background: pkg.bg,
               borderRadius: 18,
-              boxShadow: "0 2px 16px rgba(37,150,190,0.08)",
+              boxShadow: "0 2px 16px rgba(37,150,190,0.10)",
               padding: "36px 22px 28px 22px",
               textAlign: "center",
               border: `2px solid ${accentColor}20`,
+              margin: "0 8px",
               transition: "transform 0.2s",
             }}
           >
             <div style={{ fontSize: "2.3rem", marginBottom: 12 }}>{pkg.icon}</div>
-            <div style={{ fontWeight: 700, fontSize: "1.2rem", color: accentColor, marginBottom: 10 }}>{pkg.name}</div>
-            <div style={{ fontSize: "1.7rem", fontWeight: 800, color: "#222", marginBottom: 10 }}>{pkg.price}</div>
+            <div
+              style={{
+                fontWeight: 700,
+                fontSize: "1.2rem",
+                color: accentColor,
+                marginBottom: 10,
+              }}
+            >
+              {pkg.name}
+            </div>
+
+            {/* Star Rating */}
+            {renderStars(pkg.rating)}
+
+            {/* "Starts from" label */}
+            <div
+              style={{
+                fontSize: "0.95rem",
+                color: "#666",
+                marginBottom: 4,
+                letterSpacing: 0.5,
+                fontWeight: 500,
+              }}
+            >
+              Starts from
+            </div>
+
+            {/* Price display */}
+            <div style={{ marginBottom: 8 }}>
+              {pkg.wasPrice && (
+                <span
+                  style={{
+                    textDecoration: "line-through",
+                    color: "#b0b0b0",
+                    fontSize: "1.1rem",
+                    marginRight: 8,
+                    fontWeight: 500,
+                  }}
+                >
+                  ${pkg.wasPrice}
+                </span>
+              )}
+              <span
+                style={{
+                  fontSize: "2rem",
+                  fontWeight: 800,
+                  color: "#222",
+                  letterSpacing: 1,
+                }}
+              >
+                ${pkg.price}
+              </span>
+            </div>
+
             <div style={{ fontSize: "1.07rem", color: "#444" }}>{pkg.features}</div>
           </div>
         ))}
@@ -241,7 +310,7 @@ const ServicePage = () => {
       </h2>
       <ol style={{ paddingLeft: 22, marginBottom: 36 }}>
         {stepList.map((step, idx) => (
-          <li key={idx} style={{ marginBottom: 10, fontSize: "1.12rem" }}>
+          <li key={idx} style={{ marginBottom: 15, fontSize: "1.12rem" }}>
             <b style={{ color: accentColor }}>{step.split(":")[0]}:</b>
             {step.includes(":") ? <span> {step.split(":").slice(1).join(":")}</span> : null}
           </li>
