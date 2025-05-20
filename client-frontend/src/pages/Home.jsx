@@ -130,11 +130,7 @@ function Home() {
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
             {services.map((svc) => (
-              <ServiceCard
-                key={svc._id}
-                service={svc}
-                onClick={(id) => navigate(`/services/${id}`)}
-              />
+              <ServiceCard key={svc._id} service={svc} onClick={(id) => navigate(`/services/${id}`)} />
             ))}
           </Box>
         </Box>
@@ -146,28 +142,24 @@ function Home() {
         <AboutUs />
       </section>
 
-
       {/* Locations Section */}
       <section id="locations" style={{ backgroundColor: "#f0f4f8" }}>
         <Box
           sx={{
-            padding: { xs: "40px 10px", sm: "60px 20px" }, // smaller padding on mobile
-            maxWidth: { xs: "100%", md: 1400 },           // wider on desktop
+            padding: { xs: "40px 10px", sm: "60px 20px" },
+            maxWidth: { xs: "100%", md: 1400 },
             mx: "auto",
           }}
         >
           <Typography variant="h3" component="h2" gutterBottom align="center">Our Locations</Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
             {locations.map((loc) => (
-              <LocationCard
-                key={loc._id}
-                location={loc}
-                onClick={(id) => navigate(`/locations/${id}`)}
-              />
+              <LocationCard key={loc._id} location={loc} onClick={(id) => navigate(`/locations/${id}`)} />
             ))}
           </Box>
         </Box>
       </section>
+
 
       {/* Testimonials Section */}
       <section id="testimonials">

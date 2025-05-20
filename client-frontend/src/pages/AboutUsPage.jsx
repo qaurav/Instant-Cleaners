@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, Container, Grid } from "@mui/material";
+import { Box, Typography, Container, Grid, useTheme, useMediaQuery } from "@mui/material";
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
@@ -17,15 +17,31 @@ const AboutUsPage = () => {
   const [open, setOpen] = useState(false);
   const [index, setIndex] = useState(0);
 
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down("sm")); // small devices
+  const isSm = useMediaQuery(theme.breakpoints.between("sm", "md")); // medium devices
+
+  // Adjust image height based on screen size
+  const imageHeight = isXs ? 120 : isSm ? 150 : 180;
+
+  // Adjust typography font size for smaller screens
+  const bodyFontSize = isXs ? "1rem" : "1.2rem";
+
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 4, md: 8 } }}>
       {/* Title at the top */}
       <Typography
         variant="h3"
         component="h1"
         align="center"
         gutterBottom
-        sx={{ fontWeight: "bold", color: "#004d40", letterSpacing: 1, mb: 6 }}
+        sx={{
+          fontWeight: "bold",
+          color: "#004d40",
+          letterSpacing: 1,
+          mb: { xs: 4, md: 6 },
+          fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" },
+        }}
       >
         About Us
       </Typography>
@@ -42,7 +58,7 @@ const AboutUsPage = () => {
                   alt={`Gallery image ${i + 1}`}
                   sx={{
                     width: "100%",
-                    height: 180,
+                    height: imageHeight,
                     objectFit: "cover",
                     borderRadius: 3,
                     boxShadow: 3,
@@ -69,7 +85,7 @@ const AboutUsPage = () => {
             <Typography
               variant="body1"
               paragraph
-              sx={{ fontSize: "1.2rem", color: "#555", mb: 3 }}
+              sx={{ fontSize: bodyFontSize, color: "#555", mb: 3 }}
             >
               Welcome to our Service Booking platform! We are dedicated to providing top-notch services across multiple locations. Our mission is to connect you with the best professionals and make your booking experience seamless and hassle-free.
             </Typography>
@@ -77,7 +93,7 @@ const AboutUsPage = () => {
             <Typography
               variant="body1"
               paragraph
-              sx={{ fontSize: "1.2rem", color: "#555", mb: 3 }}
+              sx={{ fontSize: bodyFontSize, color: "#555", mb: 3 }}
             >
               Whether you need home repairs, cleaning, or any other service, we have you covered. Our team is committed to quality, reliability, and customer satisfaction.
             </Typography>
@@ -85,7 +101,7 @@ const AboutUsPage = () => {
             <Typography
               variant="body1"
               paragraph
-              sx={{ fontSize: "1.2rem", color: "#555" }}
+              sx={{ fontSize: bodyFontSize, color: "#555" }}
             >
               We believe in transparency, trust, and excellence. Thank you for choosing us as your service partner!
             </Typography>
