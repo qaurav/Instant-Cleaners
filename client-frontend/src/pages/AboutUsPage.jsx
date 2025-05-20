@@ -19,6 +19,17 @@ const AboutUsPage = () => {
 
   return (
     <Container maxWidth="lg" sx={{ py: 8 }}>
+      {/* Title at the top */}
+      <Typography
+        variant="h3"
+        component="h1"
+        align="center"
+        gutterBottom
+        sx={{ fontWeight: "bold", color: "#004d40", letterSpacing: 1, mb: 6 }}
+      >
+        About Us
+      </Typography>
+
       <Grid container spacing={6} alignItems="center">
         {/* Left Side: Images */}
         <Grid item xs={12} md={6}>
@@ -55,15 +66,6 @@ const AboutUsPage = () => {
         {/* Right Side: Text Content */}
         <Grid item xs={12} md={6}>
           <Box sx={{ px: { xs: 0, md: 4 } }}>
-            <Typography
-              variant="h3"
-              component="h1"
-              gutterBottom
-              sx={{ fontWeight: "bold", color: "#004d40", letterSpacing: 1 }}
-            >
-              About Us
-            </Typography>
-
             <Typography
               variant="body1"
               paragraph
