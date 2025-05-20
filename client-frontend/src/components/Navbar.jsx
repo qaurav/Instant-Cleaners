@@ -18,8 +18,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import api from "../api";
-import CircularProgress from "@mui/material/CircularProgress";
+import { createSlug } from "../slugify";
 
 const navItems = [
   { label: "Home", id: "home" },
@@ -42,7 +41,7 @@ const activeStyle = {
   fontWeight: 700,
 };
 
-const Navbar = () => {
+const Navbar = ({ services = [], locations = [] }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -50,32 +49,14 @@ const Navbar = () => {
   const topBarHeight = isMobile ? 180 : 60;
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeId, setActiveId] = useState("home");
-  const [services, setServices] = useState([]);
-  const [locations, setLocations] = useState([]);
   const [anchorElServices, setAnchorElServices] = useState(null);
   const [anchorElLocations, setAnchorElLocations] = useState(null);
   const [openServices, setOpenServices] = useState(false);
   const [openLocations, setOpenLocations] = useState(false);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [servicesRes, locationsRes] = await Promise.all([
-          api.get("/services"),
-          api.get("/locations"),
-        ]);
-        setServices(servicesRes.data);
-        setLocations(locationsRes.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  // Add debugging logs for props
+  // console.log("Navbar received services:", services);
+  // console.log("Navbar received locations:", locations);
 
   useEffect(() => {
     if (location.state && location.state.scrollTo) {
@@ -88,9 +69,10 @@ const Navbar = () => {
   }, [location]);
 
   const handleNavClick = (id) => {
-    // Close any open dropdowns
     setAnchorElServices(null);
     setAnchorElLocations(null);
+    setOpenServices(false);
+    setOpenLocations(false);
 
     if (location.pathname === "/") {
       const section = document.getElementById(id);
@@ -112,26 +94,31 @@ const Navbar = () => {
   };
 
   const handleToggleDropdown = (id, event) => {
-    event.stopPropagation(); // Prevent drawer closing or scroll when clicking arrow
+    event.stopPropagation();
     if (id === "locations") {
       setAnchorElLocations(anchorElLocations ? null : event.currentTarget);
       setOpenLocations(!openLocations);
+      setAnchorElServices(null);
+      setOpenServices(false);
     } else if (id === "services") {
       setAnchorElServices(anchorElServices ? null : event.currentTarget);
       setOpenServices(!openServices);
+      setAnchorElLocations(null);
+      setOpenLocations(false);
     }
-    // Important: Do NOT close drawer when toggling dropdown
   };
 
-  const handleServiceClick = (id) => {
-    navigate(`/services/${id}`);
+  const handleServiceClick = (service) => {
+    const slug = createSlug(service.name);
+    navigate(`/services/${slug}`);
     setAnchorElServices(null);
     setOpenServices(false);
     setDrawerOpen(false);
   };
 
-  const handleLocationClick = (id) => {
-    navigate(`/locations/${id}`);
+  const handleLocationClick = (location) => {
+    const slug = createSlug(location.name);
+    navigate(`/locations/${slug}`);
     setAnchorElLocations(null);
     setOpenLocations(false);
     setDrawerOpen(false);
@@ -147,7 +134,6 @@ const Navbar = () => {
         paddingTop: 0,
       }}
       role="presentation"
-      // Removed onClick and onKeyDown handlers to prevent drawer closing on menu item clicks
     >
       <List>
         {navItems.map(({ label, id }) => (
@@ -155,19 +141,13 @@ const Navbar = () => {
             <ListItem disablePadding>
               <ListItemButton
                 onClick={() => {
-                  if ((id === "services" || id === "locations") && !loading) {
-                    // For labels in drawer, scroll to section and keep dropdown open
-                    if ((id === "services" && !openServices) || (id === "locations" && !openLocations)) {
-                      if (id === "services") {
-                        setOpenServices(true);
-                      } else if (id === "locations") {
-                        setOpenLocations(true);
-                      }
-                    } else {
-                      // If already open, scroll to section
-                      handleNavClick(id);
-                      setOpenServices(false);
+                  if (id === "services" || id === "locations") {
+                    if (id === "services") {
+                      setOpenServices(!openServices);
                       setOpenLocations(false);
+                    } else if (id === "locations") {
+                      setOpenLocations(!openLocations);
+                      setOpenServices(false);
                     }
                   } else {
                     handleNavClick(id);
@@ -182,35 +162,46 @@ const Navbar = () => {
                 }}
               >
                 <ListItemText primary={label} />
-                {(id === "services" || id === "locations") && !loading && (
+                {(id === "services" || id === "locations") && (
                   id === "services" ? (openServices ? <ExpandLessIcon /> : <ExpandMoreIcon />) : (openLocations ? <ExpandLessIcon /> : <ExpandMoreIcon />)
                 )}
-                {(id === "services" || id === "locations") && loading && <CircularProgress size={20} />}
               </ListItemButton>
             </ListItem>
-            {id === "services" && !loading && (
+            {id === "services" && (
               <Collapse in={openServices} timeout={300} easing="ease-in-out" unmountOnExit>
                 <List component="div" disablePadding>
-                  {services.map((service) => (
-                    <ListItem key={service._id} disablePadding sx={{ pl: 4 }}>
-                      <ListItemButton onClick={() => handleServiceClick(service._id)}>
-                        <ListItemText primary={service.name} />
-                      </ListItemButton>
+                  {services.length === 0 ? (
+                    <ListItem disablePadding sx={{ pl: 4 }}>
+                      <ListItemText primary="No services available" />
                     </ListItem>
-                  ))}
+                  ) : (
+                    services.map((service) => (
+                      <ListItem key={service._id} disablePadding sx={{ pl: 4 }}>
+                        <ListItemButton onClick={() => handleServiceClick(service)}>
+                          <ListItemText primary={service.name} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))
+                  )}
                 </List>
               </Collapse>
             )}
-            {id === "locations" && !loading && (
+            {id === "locations" && (
               <Collapse in={openLocations} timeout={300} easing="ease-in-out" unmountOnExit>
                 <List component="div" disablePadding>
-                  {locations.map((location) => (
-                    <ListItem key={location._id} disablePadding sx={{ pl: 4 }}>
-                      <ListItemButton onClick={() => handleLocationClick(location._id)}>
-                        <ListItemText primary={location.name} />
-                      </ListItemButton>
+                  {locations.length === 0 ? (
+                    <ListItem disablePadding sx={{ pl: 4 }}>
+                      <ListItemText primary="No locations available" />
                     </ListItem>
-                  ))}
+                  ) : (
+                    locations.map((location) => (
+                      <ListItem key={location._id} disablePadding sx={{ pl: 4 }}>
+                        <ListItemButton onClick={() => handleLocationClick(location)}>
+                          <ListItemText primary={location.name} />
+                        </ListItemButton>
+                      </ListItem>
+                    ))
+                  )}
                 </List>
               </Collapse>
             )}
@@ -264,7 +255,7 @@ const Navbar = () => {
                   >
                     {label}
                   </Button>
-                  {(id === "locations" || id === "services") && !loading && (
+                  {(id === "locations" || id === "services") && (
                     <IconButton
                       onClick={(event) => handleToggleDropdown(id, event)}
                       sx={{
@@ -276,7 +267,7 @@ const Navbar = () => {
                       {id === "locations" && openLocations ? <ExpandLessIcon /> : id === "locations" ? <ExpandMoreIcon /> : id === "services" && openServices ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                     </IconButton>
                   )}
-                  {id === "services" && !loading && (
+                  {id === "services" && (
                     <Menu
                       anchorEl={anchorElServices}
                       open={openServices && Boolean(anchorElServices)}
@@ -297,18 +288,24 @@ const Navbar = () => {
                       disableAutoFocus
                       disableScrollLock
                     >
-                      {services.map((service) => (
-                        <MenuItem
-                          key={service._id}
-                          onClick={() => handleServiceClick(service._id)}
-                          sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
-                        >
-                          {service.name}
+                      {services.length === 0 ? (
+                        <MenuItem sx={{ color: "#fff", padding: "8px 16px" }}>
+                          No services available
                         </MenuItem>
-                      ))}
+                      ) : (
+                        services.map((service) => (
+                          <MenuItem
+                            key={service._id}
+                            onClick={() => handleServiceClick(service)}
+                            sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
+                          >
+                            {service.name}
+                          </MenuItem>
+                        ))
+                      )}
                     </Menu>
                   )}
-                  {id === "locations" && !loading && (
+                  {id === "locations" && (
                     <Menu
                       anchorEl={anchorElLocations}
                       open={openLocations && Boolean(anchorElLocations)}
@@ -329,15 +326,21 @@ const Navbar = () => {
                       disableAutoFocus
                       disableScrollLock
                     >
-                      {locations.map((location) => (
-                        <MenuItem
-                          key={location._id}
-                          onClick={() => handleLocationClick(location._id)}
-                          sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
-                        >
-                          {location.name}
+                      {locations.length === 0 ? (
+                        <MenuItem sx={{ color: "#fff", padding: "8px 16px" }}>
+                          No locations available
                         </MenuItem>
-                      ))}
+                      ) : (
+                        locations.map((location) => (
+                          <MenuItem
+                            key={location._id}
+                            onClick={() => handleLocationClick(location)}
+                            sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
+                          >
+                            {location.name}
+                          </MenuItem>
+                        ))
+                      )}
                     </Menu>
                   )}
                 </Box>
@@ -409,4 +412,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-

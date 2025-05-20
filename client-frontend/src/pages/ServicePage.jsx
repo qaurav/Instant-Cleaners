@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import api from "../api"; // Your axios or fetch wrapper
+import { useParams, Link, useNavigate } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
+import { createSlug } from "../slugify";
 
 const accentColor = "rgb(37, 150, 190)";
 
@@ -61,28 +61,36 @@ const stepList = [
   "Final Quality Check: We ensure your complete satisfaction with a spotless, refreshed carpet."
 ];
 
-const ServicePage = () => {
-  const { id } = useParams();
+const ServicePage = ({ services }) => {
+  const { slug } = useParams();
+  const navigate = useNavigate();
   const [service, setService] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchService = async () => {
-      try {
-        const res = await api.get(`/services/${id}`);
-        setService(res.data);
-      } catch (err) {
-        setError("Failed to load service");
-      } finally {
-        setLoading(false);
-      }
-    };
+    // console.log("useEffect running with services:", services);
+    if (!services || services.length === 0) {
+      console.log("No services available, setting error");
+      setError("No services available.");
+      return;
+    }
+    // services.forEach(svc => {
+    //   const generatedSlug = createSlug(svc.name);
+    //   console.log(`Service name: "${svc.name}" -> Generated slug: "${generatedSlug}"`);
+    // });
+    const matchedService = services.find(svc => {
+      const generatedSlug = createSlug(svc.name).toLowerCase();
+      const normalizedSlug = slug.toLowerCase().trim();
+      return generatedSlug === normalizedSlug;
+    });
+    if (!matchedService) {
+      setService(null);
+      setError("Service not found");
+      return;
+    }
+    setService(matchedService);
+  }, [slug, services]);
 
-    fetchService();
-  }, [id]);
-
-  if (loading) return <p>Loading service...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!service) return <p>Service not found</p>;
 
@@ -323,7 +331,7 @@ const ServicePage = () => {
 
       <div style={{ textAlign: "center", marginBottom: 40 }}>
         <span style={{ fontWeight: 700, color: accentColor, fontSize: "1.1rem" }}>
-          Don’t wait!&nbsp;
+          Don’t wait!
         </span>
         <span>
           Contact us today to schedule your appointment and enjoy a healthier, fresher living space with our trusted carpet cleaning experts.
