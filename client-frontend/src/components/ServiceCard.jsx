@@ -3,6 +3,13 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 
+// Utility to strip HTML tags
+function stripHtml(html) {
+  const div = document.createElement("div");
+  div.innerHTML = html;
+  return div.textContent || div.innerText || "";
+}
+
 const ServiceCard = ({ service, onClick }) => (
   <Card sx={{ width: 380, m: 2, cursor: "pointer" }} onClick={() => onClick(service._id)}>
     <CardMedia
@@ -14,11 +21,10 @@ const ServiceCard = ({ service, onClick }) => (
     <CardContent>
       <Typography variant="h6">{service.name}</Typography>
       <Typography variant="body2" color="text.secondary">
-        {service.description?.slice(0, 100)}...
+        {stripHtml(service.description)?.slice(0, 100)}...
       </Typography>
     </CardContent>
   </Card>
 );
-
 
 export default ServiceCard;
