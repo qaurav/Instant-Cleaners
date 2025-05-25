@@ -1,111 +1,126 @@
+// Navbar.jsx
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
+import IconButton from "@mui/icons-material/Menu";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import Box from "@mui/material/Box";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-
-// Safe slug creator for consistency with Footer
-const createSlug = (text) => {
-  if (typeof text !== "string") {
-    text = String(text || "");
-  }
-  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
-};
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const navItems = [
   { label: "Home", id: "home" },
   { label: "Locations", id: "locations" },
   { label: "About Us", id: "aboutus" },
   { label: "Services", id: "services" },
+  { label: "Testimonials", id: "testimonials" },
   { label: "Contact", id: "contact" },
 ];
 
-const fontStyles = {
-  fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-  fontSize: 16,
-  fontWeight: 500,
-  textTransform: "none",
-};
-
-const activeStyle = {
-  color: "#FFD700",
-  borderBottom: "2px solid #FFD700",
-  fontWeight: 700,
-};
-
-const Navbar = ({ services = [], locations = [] }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
+const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentActiveId }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const topBarHeight = isMobile ? 180 : 60;
+  const navbarHeight = 64;
+
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeId, setActiveId] = useState("home");
+  const [activeIdState, setActiveIdState] = useState("home");
+  const [topBarVisible, setTopBarVisible] = useState(true);
+
+  // Dropdown anchors for desktop menus
   const [anchorElServices, setAnchorElServices] = useState(null);
   const [anchorElLocations, setAnchorElLocations] = useState(null);
-  const [openServices, setOpenServices] = useState(false);
-  const [openLocations, setOpenLocations] = useState(false);
+
+  // Drawer dropdown open states for mobile
+  const [openServicesDrawer, setOpenServicesDrawer] = useState(false);
+  const [openLocationsDrawer, setOpenLocationsDrawer] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const idToLabel = navItems.reduce((acc, item) => {
+    acc[item.id] = item.label;
+    return acc;
+  }, {});
+
+  // Sync local activeIdState with parentActiveId for home page
+  useEffect(() => {
+    if (location.pathname === "/" && parentActiveId && parentActiveId !== activeIdState) {
+      setActiveIdState(parentActiveId);
+    }
+  }, [parentActiveId, location.pathname]);
+
+  // Handle dynamic navbar text based on route
+  useEffect(() => {
+    const path = location.pathname;
+
+    if (path.startsWith("/locations/")) {
+      const slug = path.replace("/locations/", "");
+      const locationItem = locations.find((loc) => createSlug(loc.name) === slug);
+      const locationName = locationItem ? locationItem.name : slug;
+      setActiveIdState(`Locations > ${locationName}`);
+    } else if (path.startsWith("/services/")) {
+      const slug = path.replace("/services/", "");
+      const serviceItem = services.find((svc) => createSlug(svc.name) === slug);
+      const serviceName = serviceItem ? serviceItem.name : slug;
+      setActiveIdState(`Services > ${serviceName}`);
+    } else if (path === "/about") {
+      setActiveIdState("About Us");
+    } else if (path === "/") {
+      setActiveIdState(parentActiveId || "home");
+    } else {
+      setActiveIdState("home");
+    }
+  }, [location.pathname, locations, services, parentActiveId]);
 
   useEffect(() => {
-    if (location.state && location.state.scrollTo) {
-      setActiveId(location.state.scrollTo);
-    } else if (location.pathname === "/") {
-      setActiveId("home");
-    } else {
-      setActiveId(null);
+    const handleScroll = () => {
+      setTopBarVisible(window.scrollY <= 50);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const createSlug = (text) => {
+    if (typeof text !== "string") {
+      text = String(text || "");
     }
-  }, [location]);
+    return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  };
 
   const handleNavClick = (id) => {
+    setDrawerOpen(false);
     setAnchorElServices(null);
     setAnchorElLocations(null);
-    setOpenServices(false);
-    setOpenLocations(false);
+    setOpenServicesDrawer(false);
+    setOpenLocationsDrawer(false);
 
     if (location.pathname === "/") {
       const section = document.getElementById(id);
       if (section) {
         section.scrollIntoView({ behavior: "smooth" });
       }
-      setActiveId(id);
     } else {
       navigate("/", { state: { scrollTo: id }, replace: true });
-      setActiveId(id);
     }
-    setDrawerOpen(false);
-  };
 
-  const handleButtonClick = (id) => {
-    handleNavClick(id);
-  };
-
-  const handleToggleDropdown = (id, event) => {
-    event.stopPropagation();
-    if (id === "locations") {
-      setAnchorElLocations(anchorElLocations ? null : event.currentTarget);
-      setOpenLocations(!openLocations);
-      setAnchorElServices(null);
-      setOpenServices(false);
-    } else if (id === "services") {
-      setAnchorElServices(anchorElServices ? null : event.currentTarget);
-      setOpenServices(!openServices);
-      setAnchorElLocations(null);
-      setOpenLocations(false);
+    setActiveIdState(id);
+    if (setActiveId) {
+      setActiveId(id);
     }
   };
 
@@ -114,8 +129,8 @@ const Navbar = ({ services = [], locations = [] }) => {
     const slug = createSlug(name);
     navigate(`/services/${slug}`);
     setAnchorElServices(null);
-    setOpenServices(false);
     setDrawerOpen(false);
+    setOpenServicesDrawer(false);
   };
 
   const handleLocationClick = (location) => {
@@ -123,108 +138,138 @@ const Navbar = ({ services = [], locations = [] }) => {
     const slug = createSlug(name);
     navigate(`/locations/${slug}`);
     setAnchorElLocations(null);
-    setOpenLocations(false);
     setDrawerOpen(false);
+    setOpenLocationsDrawer(false);
+  };
+
+  const handleOpenServicesMenu = (event) => {
+    setAnchorElServices(event.currentTarget);
+    setAnchorElLocations(null);
+  };
+
+  const handleOpenLocationsMenu = (event) => {
+    setAnchorElLocations(event.currentTarget);
+    setAnchorElServices(null);
+  };
+
+  const handleCloseMenus = () => {
+    setAnchorElServices(null);
+    setAnchorElLocations(null);
+  };
+
+  const drawerOffset = topBarVisible ? topBarHeight + navbarHeight : navbarHeight;
+
+  // Format the activeIdState text for display
+  const formatActiveIdText = (text) => {
+    if (text.startsWith("Locations >")) {
+      const parts = text.split(" > ");
+      return (
+        <>
+          {parts[0]} {"> "}
+          <span style={{ fontSize: "0.8rem" }}>{parts[1]}</span>
+        </>
+      );
+    } else if (text.startsWith("Services >")) {
+      const parts = text.split(" > ");
+      return (
+        <>
+          {parts[0]} {"> "}
+          <span style={{ fontSize: "0.8rem" }}>{parts[1]}</span>
+        </>
+      );
+    }
+    return text;
   };
 
   const drawer = (
-    <Box
-      sx={{
-        width: { xs: "100vw", sm: 300 },
-        maxWidth: "100vw",
-        backgroundColor: "#fff",
-        height: "100%",
-        paddingTop: 0,
-      }}
-      role="presentation"
-    >
+    <Box sx={{ width: 250 }} role="presentation">
       <List>
         {navItems.map(({ label, id }) => (
           <React.Fragment key={id}>
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => {
-                  if (id === "services" || id === "locations") {
-                    if (id === "services") {
-                      setOpenServices(!openServices);
-                      setOpenLocations(false);
-                    } else if (id === "locations") {
-                      setOpenLocations(!openLocations);
-                      setOpenServices(false);
-                    }
-                  } else {
-                    handleNavClick(id);
-                  }
-                }}
-                sx={{
-                  ...fontStyles,
-                  ...(activeId === id ? activeStyle : {}),
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
-                <ListItemText primary={label} />
-                {(id === "services" || id === "locations") && (
-                  id === "services" ? (openServices ? <ExpandLessIcon /> : <ExpandMoreIcon />) : (openLocations ? <ExpandLessIcon /> : <ExpandMoreIcon />)
-                )}
-              </ListItemButton>
-            </ListItem>
-            {id === "services" && (
-              <Collapse in={openServices} timeout={300} easing="ease-in-out" unmountOnExit>
-                <List component="div" disablePadding>
-                  {services.length === 0 ? (
-                    <ListItem disablePadding sx={{ pl: 4 }}>
-                      <ListItemText primary="No services available" />
-                    </ListItem>
-                  ) : (
-                    services.map((service, idx) => {
-                      const name = service.name || service.title || "Unnamed Service";
-                      return (
-                        <ListItem key={idx} disablePadding sx={{ pl: 4 }}>
-                          <ListItemButton onClick={() => handleServiceClick(service)}>
-                            <ListItemText primary={name} />
-                          </ListItemButton>
-                        </ListItem>
-                      );
-                    })
-                  )}
-                </List>
-              </Collapse>
-            )}
-            {id === "locations" && (
-              <Collapse in={openLocations} timeout={300} easing="ease-in-out" unmountOnExit>
-                <List component="div" disablePadding>
-                  {locations.length === 0 ? (
-                    <ListItem disablePadding sx={{ pl: 4 }}>
-                      <ListItemText primary="No locations available" />
-                    </ListItem>
-                  ) : (
-                    locations.map((location, idx) => {
-                      const name = location.name || location.title || "Unnamed Location";
-                      return (
-                        <ListItem key={idx} disablePadding sx={{ pl: 4 }}>
-                          <ListItemButton onClick={() => handleLocationClick(location)}>
-                            <ListItemText primary={name} />
-                          </ListItemButton>
-                        </ListItem>
-                      );
-                    })
-                  )}
-                </List>
-              </Collapse>
+            {id === "services" ? (
+              <>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => setOpenServicesDrawer(!openServicesDrawer)}>
+                    <ListItemText primary="Services" />
+                    {openServicesDrawer ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </ListItemButton>
+                </ListItem>
+                <Collapse in={openServicesDrawer} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {services.length === 0 ? (
+                      <ListItemButton sx={{ pl: 4 }} disabled>
+                        <ListItemText primary="No services available" />
+                      </ListItemButton>
+                    ) : (
+                      services.map((service, idx) => (
+                        <ListItemButton
+                          key={idx}
+                          sx={{ pl: 4 }}
+                          onClick={() => handleServiceClick(service)}
+                        >
+                          <ListItemText primary={service.name} />
+                        </ListItemButton>
+                      ))
+                    )}
+                  </List>
+                </Collapse>
+              </>
+            ) : id === "locations" ? (
+              <>
+                <ListItem disablePadding>
+                  <ListItemButton onClick={() => setOpenLocationsDrawer(!openLocationsDrawer)}>
+                    <ListItemText primary="Locations" />
+                    {openLocationsDrawer ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </ListItemButton>
+                </ListItem>
+                <Collapse in={openLocationsDrawer} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {locations.length === 0 ? (
+                      <ListItemButton sx={{ pl: 4 }} disabled>
+                        <ListItemText primary="No locations available" />
+                      </ListItemButton>
+                    ) : (
+                      locations.map((location, idx) => (
+                        <ListItemButton
+                          key={idx}
+                          sx={{ pl: 4 }}
+                          onClick={() => handleLocationClick(location)}
+                        >
+                          <ListItemText primary={location.name} />
+                        </ListItemButton>
+                      ))
+                    )}
+                  </List>
+                </Collapse>
+              </>
+            ) : (
+              <ListItem disablePadding>
+                <ListItemButton onClick={() => handleNavClick(id)}>
+                  <ListItemText primary={label} />
+                </ListItemButton>
+              </ListItem>
             )}
           </React.Fragment>
         ))}
+        {/* Redesigned Request a Quote button with border and background */}
         <ListItem disablePadding>
           <ListItemButton
             onClick={() => handleNavClick("contact")}
             sx={{
-              ...fontStyles,
-              ...(activeId === "contact" ? activeStyle : {}),
+              backgroundColor: "#FFD700", // Yellow background
+              border: "2px solid #FFD700", // Matching border
+              borderRadius: 4, // Rounded corners
+              padding: "8px 16px", // Adjusted padding
+              "&:hover": {
+                backgroundColor: "#FFC107", // Slightly darker yellow on hover
+                borderColor: "#FFC107",
+              },
             }}
           >
-            <ListItemText primary="REQUEST A QUOTE" />
+            <ListItemText
+              primary="Request a Quote"
+              sx={{ color: "#333", fontWeight: 600, textTransform: "uppercase" }} // Dark text for contrast
+            />
           </ListItemButton>
         </ListItem>
       </List>
@@ -235,188 +280,202 @@ const Navbar = ({ services = [], locations = [] }) => {
     <>
       <AppBar
         position="fixed"
-        color="default"
+        color="primary"
         sx={{
-          top: topBarHeight,
-          backgroundColor: "rgb(37, 150, 190)",
-          boxShadow: "none",
-          zIndex: 1300,
+          top: topBarVisible ? topBarHeight : 0,
+          height: navbarHeight,
+          zIndex: 1400,
+          transition: "top 0.3s ease-in-out",
+          px: isMobile ? 1 : 3,
         }}
       >
-        <Toolbar sx={{ minHeight: 64, display: "flex", justifyContent: "space-between" }}>
-          {!isMobile ? (
-            <Box sx={{ display: "flex", gap: 3 }}>
-              {navItems.map(({ label, id }) => (
-                <Box
-                  key={id}
-                  sx={{ position: "relative", display: "flex", alignItems: "center" }}
-                >
-                  <Button
-                    onClick={() => {
-                      handleButtonClick(id);
-                    }}
-                    sx={{
-                      ...fontStyles,
-                      color: "#fff",
-                      ...(activeId === id ? activeStyle : { borderBottom: "none" }),
-                      paddingRight: id === "locations" || id === "services" ? 0 : undefined,
-                    }}
-                  >
-                    {label}
-                  </Button>
-                  {(id === "locations" || id === "services") && (
-                    <IconButton
-                      onClick={(event) => handleToggleDropdown(id, event)}
-                      sx={{
-                        color: "#fff",
-                        padding: "6px",
-                        "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" },
-                      }}
-                    >
-                      {id === "locations" && openLocations ? <ExpandLessIcon /> : id === "locations" ? <ExpandMoreIcon /> : id === "services" && openServices ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                    </IconButton>
-                  )}
-                  {id === "services" && (
-                    <Menu
-                      anchorEl={anchorElServices}
-                      open={openServices && Boolean(anchorElServices)}
-                      onClose={() => {
-                        setAnchorElServices(null);
-                        setOpenServices(false);
-                      }}
-                      TransitionProps={{ timeout: 200 }}
-                      MenuListProps={{
-                        sx: { backgroundColor: "rgb(37, 150, 190)", color: "#fff" },
-                      }}
-                      PaperProps={{
-                        sx: {
-                          mt: 1,
-                          "& .MuiMenu-list": { padding: 0 },
-                        },
-                      }}
-                      disableAutoFocus
-                      disableScrollLock
-                    >
-                      {services.length === 0 ? (
-                        <MenuItem sx={{ color: "#fff", padding: "8px 16px" }}>
-                          No services available
-                        </MenuItem>
-                      ) : (
-                        services.map((service, idx) => {
-                          const name = service.name || service.title || "Unnamed Service";
-                          return (
-                            <MenuItem
-                              key={idx}
-                              onClick={() => handleServiceClick(service)}
-                              sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
-                            >
-                              {name}
-                            </MenuItem>
-                          );
-                        })
-                      )}
-                    </Menu>
-                  )}
-                  {id === "locations" && (
-                    <Menu
-                      anchorEl={anchorElLocations}
-                      open={openLocations && Boolean(anchorElLocations)}
-                      onClose={() => {
-                        setAnchorElLocations(null);
-                        setOpenLocations(false);
-                      }}
-                      TransitionProps={{ timeout: 200 }}
-                      MenuListProps={{
-                        sx: { backgroundColor: "rgb(37, 150, 190)", color: "#fff" },
-                      }}
-                      PaperProps={{
-                        sx: {
-                          mt: 1,
-                          "& .MuiMenu-list": { padding: 0 },
-                        },
-                      }}
-                      disableAutoFocus
-                      disableScrollLock
-                    >
-                      {locations.length === 0 ? (
-                        <MenuItem sx={{ color: "#fff", padding: "8px 16px" }}>
-                          No locations available
-                        </MenuItem>
-                      ) : (
-                        locations.map((location, idx) => {
-                          const name = location.name || location.title || "Unnamed Location";
-                          return (
-                            <MenuItem
-                              key={idx}
-                              onClick={() => handleLocationClick(location)}
-                              sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
-                            >
-                              {name}
-                            </MenuItem>
-                          );
-                        })
-                      )}
-                    </Menu>
-                  )}
-                </Box>
-              ))}
-            </Box>
-          ) : (
-            <Box />
-          )}
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            {!isMobile && (
-              <Button
-                variant="outlined"
-                sx={{
-                  borderColor: "#fff",
-                  color: "#fff",
-                  fontWeight: 600,
-                  textTransform: "none",
-                  fontSize: 16,
-                  px: 3,
-                  py: 1,
-                  "&:hover": {
-                    backgroundColor: "rgba(255,255,255,0.2)",
-                    borderColor: "#fff",
-                  },
-                }}
-                onClick={() => handleButtonClick("contact")}
-                endIcon={<span style={{ fontSize: 16, transform: "translateX(2px)" }}>→</span>}
-              >
-                REQUEST A QUOTE
-              </Button>
-            )}
-
-            {isMobile && (
+        <Toolbar
+          sx={{
+            minHeight: navbarHeight,
+            display: "flex",
+            justifyContent: "space-between",
+            px: isMobile ? 0 : 2,
+          }}
+        >
+          {(isMobile || isTablet) ? (
+            <>
               <IconButton
                 color="inherit"
                 edge="start"
-                onClick={() => setDrawerOpen(true)}
                 aria-label="menu"
+                onClick={() => setDrawerOpen(true)}
                 size="large"
-                sx={{ color: "#fff" }}
+                sx={{ mr: 1 }}
               >
                 <MenuIcon />
               </IconButton>
-            )}
-          </Box>
+              <Typography
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{
+                  flexGrow: 1,
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  color: "#fff",
+                  fontSize: "1rem",
+                }}
+              >
+                {formatActiveIdText(activeIdState)}
+              </Typography>
+            </>
+          ) : (
+            <Box sx={{ display: "flex", gap: 3, alignItems: "center" }}>
+              {navItems.map(({ label, id }) => {
+                if (id === "services") {
+                  return (
+                    <Box key={id} sx={{ position: "relative" }}>
+                      <Button
+                        color="inherit"
+                        endIcon={<ExpandMoreIcon />}
+                        sx={{
+                          textTransform: "none",
+                          borderBottom: activeIdState.startsWith("Services") ? "2px solid #FFD700" : "none",
+                          fontWeight: activeIdState.startsWith("Services") ? 700 : 500,
+                          fontSize: 16,
+                          "&:hover": {
+                            borderBottom: "2px solid #FFD700",
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                        onClick={(e) => setAnchorElServices(e.currentTarget)}
+                      >
+                        {label}
+                      </Button>
+                      <Menu
+                        anchorEl={anchorElServices}
+                        open={Boolean(anchorElServices)}
+                        onClose={() => setAnchorElServices(null)}
+                        MenuListProps={{ sx: { backgroundColor: "rgb(37, 150, 190)", color: "#fff" } }}
+                        PaperProps={{ sx: { mt: 1 } }}
+                      >
+                        {services.length === 0 ? (
+                          <MenuItem disabled sx={{ color: "#fff" }}>
+                            No services available
+                          </MenuItem>
+                        ) : (
+                          services.map((service, idx) => (
+                            <MenuItem
+                              key={idx}
+                              onClick={() => handleServiceClick(service)}
+                              sx={{ color: "#fff" }}
+                            >
+                              {service.name}
+                            </MenuItem>
+                          ))
+                        )}
+                      </Menu>
+                    </Box>
+                  );
+                }
+                if (id === "locations") {
+                  return (
+                    <Box key={id} sx={{ position: "relative" }}>
+                      <Button
+                        color="inherit"
+                        endIcon={<ExpandMoreIcon />}
+                        sx={{
+                          textTransform: "none",
+                          borderBottom: activeIdState.startsWith("Locations") ? "2px solid #FFD700" : "none",
+                          fontWeight: activeIdState.startsWith("Locations") ? 700 : 500,
+                          fontSize: 16,
+                          "&:hover": {
+                            borderBottom: "2px solid #FFD700",
+                            backgroundColor: "transparent",
+                          },
+                        }}
+                        onClick={(e) => setAnchorElLocations(e.currentTarget)}
+                      >
+                        {label}
+                      </Button>
+                      <Menu
+                        anchorEl={anchorElLocations}
+                        open={Boolean(anchorElLocations)}
+                        onClose={() => setAnchorElLocations(null)}
+                        MenuListProps={{ sx: { backgroundColor: "rgb(37, 150, 190)", color: "#fff" } }}
+                        PaperProps={{ sx: { mt: 1 } }}
+                      >
+                        {locations.length === 0 ? (
+                          <MenuItem disabled sx={{ color: "fff" }}>
+                            No locations available
+                          </MenuItem>
+                        ) : (
+                          locations.map((location, idx) => (
+                            <MenuItem
+                              key={idx}
+                              onClick={() => handleLocationClick(location)}
+                              sx={{ color: "#fff" }}
+                            >
+                              {location.name}
+                            </MenuItem>
+                          ))
+                        )}
+                      </Menu>
+                    </Box>
+                  );
+                }
+                return (
+                  <Button
+                    key={id}
+                    color="inherit"
+                    sx={{
+                      textTransform: "none",
+                      borderBottom: activeIdState === id || activeIdState === "About Us" ? "2px solid #FFD700" : "none",
+                      fontWeight: activeIdState === id || activeIdState === "About Us" ? 700 : 500,
+                      fontSize: 16,
+                      "&:hover": {
+                        borderBottom: "2px solid #FFD700",
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                    onClick={() => handleNavClick(id)}
+                  >
+                    {label}
+                  </Button>
+                );
+              })}
+            </Box>
+          )}
+
+          {!isMobile && !isTablet && (
+            <Button
+              variant="outlined"
+              sx={{
+                borderColor: "#fff",
+                color: "#fff",
+                fontWeight: 600,
+                textTransform: "none",
+                fontSize: 16,
+                px: 3,
+                py: 1,
+                "&:hover": {
+                  backgroundColor: "rgba(255,255,255,0.2)",
+                  borderColor: "#fff",
+                },
+              }}
+              onClick={() => handleNavClick("contact")}
+            >
+              REQUEST A QUOTE
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
-
-      <Box sx={{ height: topBarHeight + 64 }} />
 
       <Drawer
         anchor="left"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}
         sx={{
-          zIndex: 1500,
+          zIndex: 1600,
           "& .MuiDrawer-paper": {
-            top: `${topBarHeight}px`,
-            height: `calc(100% - ${topBarHeight}px)`,
-            paddingTop: 0,
+            zIndex: 1600,
+            top: drawerOffset,
+            height: `calc(100% - ${drawerOffset}px)`,
           },
         }}
       >

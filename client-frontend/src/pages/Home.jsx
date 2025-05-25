@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useMemo } from "react";
+// Home.jsx
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
+import Navbar from "../components/Navbar";
 import BookingForm from "../components/BookingForm";
 import ContactForm from "../components/ContactForm";
 import LocationCard from "../components/LocationCard";
@@ -23,16 +25,23 @@ function Home() {
   const [locations, setLocations] = useState([]);
   const [services, setServices] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
+  const [activeId, setActiveId] = useState("home");
+
+  const sectionRefs = useRef({
+    home: null,
+    services: null,
+    aboutus: null,
+    locations: null,
+    testimonials: null,
+    contact: null,
+  });
 
   useEffect(() => {
     if (location.state?.scrollTo) {
       const section = document.getElementById(location.state.scrollTo);
       if (section) {
-        const rect = section.getBoundingClientRect();
-        const isInView = rect.top >= 0 && rect.bottom <= window.innerHeight;
-        if (!isInView) {
-          section.scrollIntoView({ behavior: "smooth" });
-        }
+        section.scrollIntoView({ behavior: "smooth" });
+        setActiveId(location.state.scrollTo);
       }
       window.history.replaceState({}, document.title);
     }
@@ -52,7 +61,37 @@ function Home() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Create slug maps for services and locations
+  useEffect(() => {
+    if (!isMobile) return;
+
+    const handleScroll = () => {
+      const offsetAdjustment = 64 + (window.innerWidth <= 600 ? 180 : 60);
+      const scrollPosition = window.scrollY + offsetAdjustment + window.innerHeight * 0.3;
+
+      let newActiveId = activeId;
+
+      Object.entries(sectionRefs.current).forEach(([id, ref]) => {
+        if (ref) {
+          const sectionTop = ref.offsetTop;
+          const sectionBottom = sectionTop + ref.offsetHeight;
+
+          if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+            newActiveId = id;
+          }
+        }
+      });
+
+      if (newActiveId !== activeId) {
+        setActiveId(newActiveId);
+      }
+    };
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isMobile, activeId]);
+
   const serviceSlugMap = useMemo(() => {
     const map = {};
     services.forEach((svc) => {
@@ -71,9 +110,11 @@ function Home() {
 
   return (
     <div>
-      {/* Home Section */}
+      <Navbar services={services} locations={locations} setActiveId={setActiveId} activeId={activeId} />
+      {/* Rest of the JSX remains the same */}
       <section
         id="home"
+        ref={(el) => (sectionRefs.current.home = el)}
         style={{
           minHeight: "70vh",
           display: "flex",
@@ -86,7 +127,6 @@ function Home() {
           flexWrap: "wrap",
         }}
       >
-        {/* Left Side: Background with Text */}
         <div
           style={{
             flex: "1 1 50%",
@@ -103,16 +143,12 @@ function Home() {
             position: "relative",
           }}
         >
-          <h1 style={{ fontSize: "2.5rem" }}>
-            Welcome to Instant Cleaners
-          </h1>
+          <h1 style={{ fontSize: "2.5rem" }}>Welcome to Instant Cleaners</h1>
           <p style={{ fontSize: "1.2rem", maxWidth: "500px" }}>
             We provide top-notch cleaning services to keep your space spotless.
             Book now and experience the difference!
           </p>
         </div>
-
-        {/* Right Side: Booking Form */}
         <div
           style={{
             flex: "1 1 40%",
@@ -130,8 +166,11 @@ function Home() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section id="services" style={{ backgroundColor: "#f0f4f8" }}>
+      <section
+        id="services"
+        ref={(el) => (sectionRefs.current.services = el)}
+        style={{ backgroundColor: "#f0f4f8" }}
+      >
         <Box sx={{ padding: { xs: "40px 10px", sm: "60px 20px" }, maxWidth: { xs: "100%", md: 1400 }, mx: "auto" }}>
           <Typography variant="h3" component="h2" gutterBottom align="center">
             Our Services
@@ -151,13 +190,19 @@ function Home() {
         </Box>
       </section>
 
-      {/* About Us Section */}
-      <section id="aboutus" style={{ backgroundColor: "#f0f4f8" }}>
+      <section
+        id="aboutus"
+        ref={(el) => (sectionRefs.current.aboutus = el)}
+        style={{ backgroundColor: "#f0f4f8" }}
+      >
         <AboutUs />
       </section>
 
-      {/* Locations Section */}
-      <section id="locations" style={{ backgroundColor: "#f0f4f8" }}>
+      <section
+        id="locations"
+        ref={(el) => (sectionRefs.current.locations = el)}
+        style={{ backgroundColor: "#f0f4f8" }}
+      >
         <Box sx={{ padding: { xs: "40px 10px", sm: "60px 20px" }, maxWidth: { xs: "100%", md: 1400 }, mx: "auto" }}>
           <Typography variant="h3" component="h2" gutterBottom align="center">
             Our Locations
@@ -176,20 +221,23 @@ function Home() {
           </Box>
         </Box>
       </section>
-      {/* Testimonials Section */}
+
       <section
         id="testimonials"
+        ref={(el) => (sectionRefs.current.testimonials = el)}
         style={{
-          borderBottom: "2px solid #ccc",  // Add a subtle bottom border
-          paddingBottom: "20px",           // Optional: add some padding below
+          borderBottom: "2px solid #ccc",
+          paddingBottom: "20px",
         }}
       >
         <Testimonials />
       </section>
 
-
-      {/* Contact Section */}
-      <section id="contact" style={{ padding: "40px 20px" }}>
+      <section
+        id="contact"
+        ref={(el) => (sectionRefs.current.contact = el)}
+        style={{ padding: "40px 20px" }}
+      >
         <div style={sectionStyle}>
           <div
             style={{
@@ -197,37 +245,28 @@ function Home() {
               flexDirection: isMobile ? "column" : "row",
               justifyContent: "space-between",
               alignItems: "stretch",
-              flexWrap: "wrap",          // allow wrapping on small screens
+              flexWrap: "wrap",
               gap: "20px",
               width: "100%",
             }}
           >
-            {/* Left Side: Contact Form */}
             <div
               style={{
-                flex: "1 1 400px",       // flex-grow:1, flex-shrink:1, flex-basis:400px
-                maxWidth: isMobile ? "100%" : "48%",  // full width on mobile, half on desktop
+                flex: "1 1 400px",
+                maxWidth: isMobile ? "100%" : "48%",
                 padding: "20px",
                 overflowY: "auto",
               }}
             >
               <ContactForm />
             </div>
-
-            {/* Right Side: Map */}
             <div
               style={{
                 flex: "1 1 400px",
                 maxWidth: isMobile ? "100%" : "48%",
                 padding: "20px",
-                overflowy: "auto",
-              }
-                // flex: "1 1 400px",
-                // maxWidth: isMobile ? "100%" : "48%",
-                // padding: "20px",
-                // height: isMobile ? "300px" : "400px", // fixed height for map container
-                // boxSizing: "border-box",
-              }
+                overflowY: "auto",
+              }}
             >
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d424141.6978944982!2d150.93197474999997!3d-33.84824395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743f%3A0x3017d681632a850!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2snp!4v1747214629578!5m2!1sen!2snp"
@@ -242,8 +281,8 @@ function Home() {
             </div>
           </div>
         </div>
-      </section >
-    </div >
+      </section>
+    </div>
   );
 }
 

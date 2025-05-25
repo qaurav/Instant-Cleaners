@@ -1,23 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const TopBar = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const height = isMobile ? 180 : 60;
+
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setVisible(window.scrollY <= 50);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <Box
       sx={{
         position: "fixed",
-        top: 0,
+        top: visible ? 0 : -height,
         left: 0,
         right: 0,
+        height,
         backgroundColor: "#fff",
         color: "#222",
         display: "flex",
@@ -26,12 +38,11 @@ const TopBar = () => {
         justifyContent: isMobile ? "center" : "space-between",
         px: isMobile ? 2 : 5,
         py: isMobile ? 2 : 0,
-        zIndex: 1400,
-        width: "100%",
-        borderBottom: "3px solid rgb(37, 150, 190)",
-        minHeight: isMobile ? 150 : 60,
+        zIndex: 1500,
         boxSizing: "border-box",
+        borderBottom: "3px solid rgb(37, 150, 190)",
         userSelect: "none",
+        transition: "top 0.3s ease-in-out",
       }}
     >
       {/* Logo */}

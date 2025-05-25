@@ -9,12 +9,21 @@ import TopBar from "./components/TopBar";
 import AboutUsPage from "./pages/AboutUsPage";
 import { GlobalStyles } from "@mui/material";
 import api from "./api";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 function App() {
   const [services, setServices] = useState([]);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showLoader, setShowLoader] = useState(false);
+
+  // Responsive spacer heights
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const topBarHeight = isMobile ? 180 : 60; // match your TopBar heights
+  const navbarHeight = 64; // match your Navbar height
+  const spacerHeight = topBarHeight + navbarHeight;
 
   useEffect(() => {
     // Delay showing the loader by 200ms to avoid flashing
@@ -56,6 +65,10 @@ function App() {
       <Router>
         <TopBar />
         <Navbar services={services} locations={locations} loading={loading} />
+        
+        {/* Spacer div to prevent content being hidden behind fixed bars */}
+        <div style={{ height: spacerHeight }} />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/locations/:slug" element={<LocationPage locations={locations} />} />
