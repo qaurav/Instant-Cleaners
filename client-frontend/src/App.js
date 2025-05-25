@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import LocationPage from "./pages/LocationPage";
 import ServicePage from "./pages/ServicePage";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer"; // Ensure this import is correct
+import Footer from "./components/Footer";
 import TopBar from "./components/TopBar";
 import AboutUsPage from "./pages/AboutUsPage";
 import { GlobalStyles } from "@mui/material";
@@ -14,8 +14,12 @@ function App() {
   const [services, setServices] = useState([]);
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
+    // Delay showing the loader by 200ms to avoid flashing
+    const loaderTimeout = setTimeout(() => setShowLoader(true), 200);
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -23,38 +27,42 @@ function App() {
           api.get("/services"),
           api.get("/locations"),
         ]);
-        // console.log("Fetched services in App.js:", servicesRes.data);
-        // console.log("Fetched locations in App.js:", locationsRes.data);
         setServices(servicesRes.data || []);
         setLocations(locationsRes.data || []);
       } catch (error) {
-        // console.error("Error fetching data:", error);
         setServices([]);
         setLocations([]);
       } finally {
         setLoading(false);
+        clearTimeout(loaderTimeout);
       }
     };
+
     fetchData();
+
+    // Cleanup timeout on unmount
+    return () => clearTimeout(loaderTimeout);
   }, []);
 
-  if (loading) {
+  // Only show loading message if loading takes longer than 200ms
+  if (loading && showLoader) {
     return <div>Loading services...</div>;
   }
 
+  // Render app immediately, even if loading
   return (
     <>
       <GlobalStyles styles={{ body: { overflowX: "hidden" } }} />
       <Router>
         <TopBar />
-        <Navbar services={services} locations={locations} />
+        <Navbar services={services} locations={locations} loading={loading} />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/locations/:slug" element={<LocationPage locations={locations} />} />
           <Route path="/services/:slug" element={<ServicePage services={services} />} />
           <Route path="/aboutus" element={<AboutUsPage />} />
         </Routes>
-        <Footer services={services} locations={locations} /> {/* Pass props to Footer */}
+        <Footer services={services} locations={locations} loading={loading} />
       </Router>
     </>
   );

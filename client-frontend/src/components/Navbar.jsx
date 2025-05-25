@@ -18,7 +18,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Collapse from "@mui/material/Collapse";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { createSlug } from "../slugify";
+
+// Safe slug creator for consistency with Footer
+const createSlug = (text) => {
+  if (typeof text !== "string") {
+    text = String(text || "");
+  }
+  return text.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+};
 
 const navItems = [
   { label: "Home", id: "home" },
@@ -54,10 +61,6 @@ const Navbar = ({ services = [], locations = [] }) => {
   const [openServices, setOpenServices] = useState(false);
   const [openLocations, setOpenLocations] = useState(false);
 
-  // Add debugging logs for props
-  // console.log("Navbar received services:", services);
-  // console.log("Navbar received locations:", locations);
-
   useEffect(() => {
     if (location.state && location.state.scrollTo) {
       setActiveId(location.state.scrollTo);
@@ -78,8 +81,6 @@ const Navbar = ({ services = [], locations = [] }) => {
       const section = document.getElementById(id);
       if (section) {
         section.scrollIntoView({ behavior: "smooth" });
-      } else {
-        console.log("Scrolling to section:", id, "Section not found");
       }
       setActiveId(id);
     } else {
@@ -109,7 +110,8 @@ const Navbar = ({ services = [], locations = [] }) => {
   };
 
   const handleServiceClick = (service) => {
-    const slug = createSlug(service.name);
+    const name = service.name || service.title || "Unnamed Service";
+    const slug = createSlug(name);
     navigate(`/services/${slug}`);
     setAnchorElServices(null);
     setOpenServices(false);
@@ -117,7 +119,8 @@ const Navbar = ({ services = [], locations = [] }) => {
   };
 
   const handleLocationClick = (location) => {
-    const slug = createSlug(location.name);
+    const name = location.name || location.title || "Unnamed Location";
+    const slug = createSlug(name);
     navigate(`/locations/${slug}`);
     setAnchorElLocations(null);
     setOpenLocations(false);
@@ -175,13 +178,16 @@ const Navbar = ({ services = [], locations = [] }) => {
                       <ListItemText primary="No services available" />
                     </ListItem>
                   ) : (
-                    services.map((service) => (
-                      <ListItem key={service._id} disablePadding sx={{ pl: 4 }}>
-                        <ListItemButton onClick={() => handleServiceClick(service)}>
-                          <ListItemText primary={service.name} />
-                        </ListItemButton>
-                      </ListItem>
-                    ))
+                    services.map((service, idx) => {
+                      const name = service.name || service.title || "Unnamed Service";
+                      return (
+                        <ListItem key={idx} disablePadding sx={{ pl: 4 }}>
+                          <ListItemButton onClick={() => handleServiceClick(service)}>
+                            <ListItemText primary={name} />
+                          </ListItemButton>
+                        </ListItem>
+                      );
+                    })
                   )}
                 </List>
               </Collapse>
@@ -194,13 +200,16 @@ const Navbar = ({ services = [], locations = [] }) => {
                       <ListItemText primary="No locations available" />
                     </ListItem>
                   ) : (
-                    locations.map((location) => (
-                      <ListItem key={location._id} disablePadding sx={{ pl: 4 }}>
-                        <ListItemButton onClick={() => handleLocationClick(location)}>
-                          <ListItemText primary={location.name} />
-                        </ListItemButton>
-                      </ListItem>
-                    ))
+                    locations.map((location, idx) => {
+                      const name = location.name || location.title || "Unnamed Location";
+                      return (
+                        <ListItem key={idx} disablePadding sx={{ pl: 4 }}>
+                          <ListItemButton onClick={() => handleLocationClick(location)}>
+                            <ListItemText primary={name} />
+                          </ListItemButton>
+                        </ListItem>
+                      );
+                    })
                   )}
                 </List>
               </Collapse>
@@ -293,15 +302,18 @@ const Navbar = ({ services = [], locations = [] }) => {
                           No services available
                         </MenuItem>
                       ) : (
-                        services.map((service) => (
-                          <MenuItem
-                            key={service._id}
-                            onClick={() => handleServiceClick(service)}
-                            sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
-                          >
-                            {service.name}
-                          </MenuItem>
-                        ))
+                        services.map((service, idx) => {
+                          const name = service.name || service.title || "Unnamed Service";
+                          return (
+                            <MenuItem
+                              key={idx}
+                              onClick={() => handleServiceClick(service)}
+                              sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
+                            >
+                              {name}
+                            </MenuItem>
+                          );
+                        })
                       )}
                     </Menu>
                   )}
@@ -331,15 +343,18 @@ const Navbar = ({ services = [], locations = [] }) => {
                           No locations available
                         </MenuItem>
                       ) : (
-                        locations.map((location) => (
-                          <MenuItem
-                            key={location._id}
-                            onClick={() => handleLocationClick(location)}
-                            sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
-                          >
-                            {location.name}
-                          </MenuItem>
-                        ))
+                        locations.map((location, idx) => {
+                          const name = location.name || location.title || "Unnamed Location";
+                          return (
+                            <MenuItem
+                              key={idx}
+                              onClick={() => handleLocationClick(location)}
+                              sx={{ color: "#fff", "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" }, padding: "8px 16px" }}
+                            >
+                              {name}
+                            </MenuItem>
+                          );
+                        })
                       )}
                     </Menu>
                   )}
