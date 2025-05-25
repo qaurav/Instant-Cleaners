@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 
-// Safe slug creator
 const createSlug = (text) => {
   if (typeof text !== "string") {
     text = String(text || "");
@@ -11,56 +10,62 @@ const createSlug = (text) => {
 };
 
 const Footer = ({ services = [], locations = [] }) => {
-  // No need for useState or useEffect since data is passed as props
-  const isMobile = window.innerWidth <= 600;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Debugging logs
-  // console.log("Footer received services:", services);
-  // console.log("Footer received locations:", locations);
+  const containerStyle = {
+    display: "flex",
+    flexDirection: isMobile ? "column" : "row",
+    justifyContent: "space-around",
+    padding: "40px 20px",
+    backgroundColor: "#f5f5f5",
+    fontFamily: "Arial, sans-serif",
+    color: "#333",
+    gap: "20px",
+  };
+
+  const sectionStyle = {
+    maxWidth: isMobile ? "100%" : "300px",
+  };
+
+  const linkStyle = {
+    color: "#333",
+    textDecoration: "none",
+    transition: "color 0.3s",
+  };
+
+  const linkHoverStyle = {
+    color: "#1e90ff",
+  };
 
   return (
-    <footer
-      style={{
-        display: "flex",
-        justifyContent: "space-around",
-        padding: "40px 20px",
-        backgroundColor: "#f5f5f5",
-        fontFamily: "Arial, sans-serif",
-        color: "#333",
-        flexWrap: "wrap",
-        gap: "20px",
-      }}
-    >
+    <footer style={containerStyle}>
       {/* Logo and Description Section */}
-      <div style={{ maxWidth: "300px" }}>
-        <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
-          {/* Logo */}
-          <Box sx={{ display: "flex", alignItems: "center", mb: isMobile ? 2 : 0 }}>
-            <img
-              src="/instantcleanerslogo.jpg"
-              alt="Instant Carpet Cleaning Services"
-              style={{ height: isMobile ? 40 : 50, cursor: "pointer" }}
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            />
-          </Box>
-        </div>
+      <div style={sectionStyle}>
+        <Box sx={{ display: "flex", alignItems: "center", mb: isMobile ? 2 : 0 }}>
+          <img
+            src="/instantcleanerslogo.jpg"
+            alt="Instant Carpet Cleaning Services"
+            style={{ height: isMobile ? 40 : 50, cursor: "pointer" }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          />
+        </Box>
         <p style={{ fontSize: "14px", lineHeight: "1.5" }}>
           Our credibility is made on providing the best in support service, and we only realise
           that our trustworthiness is only as good as the last client we serve.
         </p>
-        {/* Social Media Icons */}
         <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
             <span style={{ fontSize: "20px", color: "#1e90ff" }}>📘</span>
           </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
             <span style={{ fontSize: "20px", color: "#1e90ff" }}>📷</span>
           </a>
         </div>
       </div>
 
       {/* Services Section */}
-      <div>
+      <div style={sectionStyle}>
         <h3 style={{ fontSize: "18px", marginBottom: "15px", textTransform: "uppercase" }}>
           Our Services
         </h3>
@@ -75,13 +80,9 @@ const Footer = ({ services = [], locations = [] }) => {
                 <li key={index}>
                   <Link
                     to={`/services/${slug}`}
-                    style={{
-                      color: "#333",
-                      textDecoration: "none",
-                      transition: "color 0.3s",
-                    }}
-                    onMouseEnter={(e) => (e.target.style.color = "#1e90ff")}
-                    onMouseLeave={(e) => (e.target.style.color = "#333")}
+                    style={linkStyle}
+                    onMouseEnter={(e) => (e.target.style.color = linkHoverStyle.color)}
+                    onMouseLeave={(e) => (e.target.style.color = linkStyle.color)}
                   >
                     {name}
                   </Link>
@@ -93,7 +94,7 @@ const Footer = ({ services = [], locations = [] }) => {
       </div>
 
       {/* Locations Section */}
-      <div>
+      <div style={sectionStyle}>
         <h3 style={{ fontSize: "18px", marginBottom: "15px", textTransform: "uppercase" }}>
           Our Locations
         </h3>
@@ -108,13 +109,9 @@ const Footer = ({ services = [], locations = [] }) => {
                 <li key={index}>
                   <Link
                     to={`/locations/${slug}`}
-                    style={{
-                      color: "#333",
-                      textDecoration: "none",
-                      transition: "color 0.3s",
-                    }}
-                    onMouseEnter={(e) => (e.target.style.color = "#1e90ff")}
-                    onMouseLeave={(e) => (e.target.style.color = "#333")}
+                    style={linkStyle}
+                    onMouseEnter={(e) => (e.target.style.color = linkHoverStyle.color)}
+                    onMouseLeave={(e) => (e.target.style.color = linkStyle.color)}
                   >
                     {name}
                   </Link>
@@ -126,12 +123,13 @@ const Footer = ({ services = [], locations = [] }) => {
       </div>
 
       {/* Contact Section */}
-      <div>
+      <div style={sectionStyle}>
         <h3 style={{ fontSize: "18px", marginBottom: "15px", textTransform: "uppercase" }}>
           Contact Us
         </h3>
         <p style={{ fontSize: "14px", lineHeight: "1.5" }}>
-          3-5 Kandy Avenue, Epping, NSW, 2121<br />
+          3-5 Kandy Avenue, Epping, NSW, 2121
+          <br />
           E:{" "}
           <a
             href="mailto:info@instantcleaners.com.au"
@@ -157,6 +155,7 @@ const Footer = ({ services = [], locations = [] }) => {
             fontSize: "14px",
             textTransform: "uppercase",
           }}
+          onClick={() => window.alert("Booking functionality coming soon!")}
         >
           Book Now
         </button>
