@@ -11,6 +11,10 @@ import { GlobalStyles } from "@mui/material";
 import api from "./api";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import LogoLoader from "./components/Loader"; // Add this import
+
+
+
 
 function App() {
   const [services, setServices] = useState([]);
@@ -55,8 +59,9 @@ function App() {
 
   // Only show loading message if loading takes longer than 200ms
   if (loading && showLoader) {
-    return <div>Loading services...</div>;
-  }
+  return <LogoLoader />;
+}
+
 
   // Render app immediately, even if loading
   return (

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import ServiceCard from "../components/ServiceCard";
-import { createSlug } from "../slugify"; // Your slug function
+import { createSlug } from "../slugify"; 
+import LogoLoader from "../components/Loader";
 
 const accentColor = "rgb(37, 150, 190)";
 
@@ -14,6 +15,7 @@ const LocationPage = ({ locations }) => {
   const [servicesAtLocation, setServicesAtLocation] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+    const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     if (!locations || locations.length === 0) {
@@ -65,7 +67,10 @@ const LocationPage = ({ locations }) => {
       });
   }, [slug, locations]);
 
-  if (loading) return <p>Loading location...</p>;
+if (loading && showLoader) {
+  return <LogoLoader />;
+}
+
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!location) return <p>Location not found</p>;
 
