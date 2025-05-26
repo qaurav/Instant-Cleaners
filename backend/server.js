@@ -2,6 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 
+const sitemapRouter = require('./routes/sitemapRouter'); // Path to the above router file
+
+
+
 const locationRoutes = require('./routes/locationRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
@@ -17,6 +21,7 @@ const allowedOrigins = [
   "http://localhost:3001"
 ];
 
+app.use('/', sitemapRouter);
 // Custom CORS middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
