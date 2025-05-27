@@ -1,47 +1,62 @@
-// src/components/LogoLoader.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const waveKeyframes = `
-@keyframes wave {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
+const revealKeyframes = `
+@keyframes reveal {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 `;
 
 const LogoLoader = () => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(false);
+    }, 2000); // Minimum 2-second display
+
+    return () => clearTimeout(timer); // Cleanup on unmount
+  }, []);
+
   const logoStyle = {
-    width: 180,
-    height: 180,
+    width: 400, // Equal width and height for perfect circle
+    height: 400, // Equal width and height for perfect circle
     display: "inline-block",
-    margin: "0 12px",
     filter: "drop-shadow(0 0 8px #2596be)",
-    animation: "wave 1.5s ease-in-out infinite",
+    animation: "reveal 1.5s ease-out forwards",
+    borderRadius: "50%", // Circular shape
+    transformOrigin: "center", // Scale from center
+    objectFit: "cover", // Ensure image fits within circular bounds
   };
 
-  const logos = Array.from({ length: 5 }).map((_, i) => (
-    <img
-      key={i}
-      src="/instantcleanerslogo.png"
-      alt="Loading"
-      style={{
-        ...logoStyle,
-        animationDelay: `${i * 0.3}s`,
-      }}
-    />
-  ));
+  if (!isVisible) return null; // Hide loader after 2 seconds
 
   return (
     <div
       style={{
-        textAlign: "center",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
         padding: "60px 0",
-        background: "linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%)",
+        background: "#ffffff", // White background
         borderRadius: 16,
         boxShadow: "0 8px 32px rgba(37, 150, 190, 0.15)",
       }}
     >
-      <style>{waveKeyframes}</style>
-      <div>{logos}</div>
+      <style>{revealKeyframes}</style>
+      <img
+        src="/instantcleanerslogo.jpg"
+        alt="Instant Carpet Cleaning Logo"
+        style={logoStyle}
+        onError={(e) => console.error("Image failed to load:", e.target.src)}
+      />
     </div>
   );
 };
