@@ -1,27 +1,37 @@
-name: 🚀 Deploy Admin via FTP
+name: Deploy Admin Frontend via FTP
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'admin/**'  # only run when admin files change
 
 jobs:
-  ftp-deploy:
-    name: 📂 FTP Deploy Admin
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: 🧾 Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: 📤 Upload admin folder to FTP server
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: ./admin-frontend
+        run: npm install
+
+      - name: Build project
+        working-directory: ./admin-frontend
+        run: npm run build
+
+      - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          server: ${{ secrets.FTP_HOST }}
+          host: ${{ secrets.FTP_HOST }}
+          local-dir: ./admin-frontend/build     # Update if your admin uses a different build folder
+          server-dir: /public_html/admin        # Deploying to the /admin subdirectory
           username: ${{ secrets.FTP_USERNAME_ADMIN }}
           password: ${{ secrets.FTP_PASSWORD_ADMIN }}
           port: ${{ secrets.FTP_PORT }}
-          local-dir: ./admin
-          server-dir: /public_html/admin/
-          dangerous-clean-slate: false
