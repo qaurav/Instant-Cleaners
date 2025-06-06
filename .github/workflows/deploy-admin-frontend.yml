@@ -1,0 +1,27 @@
+name: 🚀 Deploy Admin via FTP
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'admin/**'  # only run when admin files change
+
+jobs:
+  ftp-deploy:
+    name: 📂 FTP Deploy Admin
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧾 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 📤 Upload admin folder to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME_ADMIN }}
+          password: ${{ secrets.FTP_PASSWORD_ADMIN }}
+          port: ${{ secrets.FTP_PORT }}
+          local-dir: ./admin
+          server-dir: /public_html/admin/
+          dangerous-clean-slate: false
