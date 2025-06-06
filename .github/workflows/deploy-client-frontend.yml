@@ -29,8 +29,9 @@ jobs:
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          host: ${{ secrets.FTP_HOST }}
+          server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./client-frontend/build   # or dist, or .next, depending on your framework
           server-dir: /public_html/             # or a subfolder if you want
+          port: ${{ secrets.FTP_PORT }}
