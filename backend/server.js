@@ -16,7 +16,7 @@ const app = express();
 
 const allowedOrigins = [
   "https://instantcarpetcleaningservices.com.au",
-  "https://admin.instantcarpetcleaningservices.com.au"
+  "https://admin.instantcarpetcleaningservices.com.au",
   "https://admin-frontend-nuo3.onrender.com",
   "https://client-frontend-8d1s.onrender.com",
   "http://localhost:3000",
