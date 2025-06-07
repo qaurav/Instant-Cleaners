@@ -32,6 +32,6 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./client-frontend/build   # or dist, or .next, depending on your framework
+          local-dir: ./client-frontend/build/   # or dist, or .next, depending on your framework
           server-dir: /public_html/             # or a subfolder if you want
           port: ${{ secrets.FTP_PORT }}
