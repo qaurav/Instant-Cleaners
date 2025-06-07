@@ -22,6 +22,11 @@ jobs:
         working-directory: ./client-frontend
         run: npm install
 
+      - name: Create .env file
+        working-directory: ./client-frontend
+        run: |
+          echo "REACT_APP_API_BASE_URL=${{ secrets.REACT_APP_API_BASE_URL }}" > .env
+
       - name: Build project
         working-directory: ./client-frontend
         run: CI=false npm run build
@@ -32,6 +37,6 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./client-frontend/build/   # or dist, or .next, depending on your framework
-          server-dir: /public_html/             # or a subfolder if you want
+          local-dir: ./client-frontend/build/
+          server-dir: /public_html/
           port: ${{ secrets.FTP_PORT }}

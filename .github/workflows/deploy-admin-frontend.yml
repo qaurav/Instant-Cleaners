@@ -22,6 +22,11 @@ jobs:
         working-directory: ./admin-frontend
         run: npm install
 
+      - name: Create .env file
+        working-directory: ./admin-frontend
+        run: |
+          echo "REACT_APP_API_BASE_URL=${{ secrets.REACT_APP_API_BASE_URL }}" > .env
+
       - name: Build project
         working-directory: ./admin-frontend
         run: CI=false npm run build
@@ -33,5 +38,5 @@ jobs:
           username: ${{ secrets.FTP_USERNAME_ADMIN }}
           password: ${{ secrets.FTP_PASSWORD_ADMIN }}
           local-dir: ./admin-frontend/build/
-          server-dir: /public_html/admin/  # Subdirectory for admin frontend
+          server-dir: /public_html/admin/
           port: ${{ secrets.FTP_PORT }}
