@@ -30,8 +30,8 @@ jobs:
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_HOST }}
-          local-dir: ./admin-frontend/build/    # Update if your admin uses a different build folder
-          server-dir: /public_html/admin/        # Deploying to the /admin subdirectory
           username: ${{ secrets.FTP_USERNAME_ADMIN }}
           password: ${{ secrets.FTP_PASSWORD_ADMIN }}
+          local-dir: ./admin-frontend/build/
+          server-dir: /public_html/admin/  # Subdirectory for admin frontend
           port: ${{ secrets.FTP_PORT }}
