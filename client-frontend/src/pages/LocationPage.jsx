@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import api from "../api";
 import ServiceCard from "../components/ServiceCard";
-import { createSlug } from "../slugify"; 
+import { createSlug } from "../slugify";
 import LogoLoader from "../components/Loader";
 
 const accentColor = "rgb(37, 150, 190)";
@@ -15,7 +15,7 @@ const LocationPage = ({ locations }) => {
   const [servicesAtLocation, setServicesAtLocation] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-    const [showLoader, setShowLoader] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
 
   useEffect(() => {
     if (!locations || locations.length === 0) {
@@ -67,9 +67,9 @@ const LocationPage = ({ locations }) => {
       });
   }, [slug, locations]);
 
-if (loading && showLoader) {
-  return <LogoLoader />;
-}
+  if (loading && showLoader) {
+    return <LogoLoader />;
+  }
 
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!location) return <p>Location not found</p>;
@@ -134,29 +134,6 @@ if (loading && showLoader) {
         }}
         dangerouslySetInnerHTML={{ __html: location.description }}
       />
-
-      <h2
-        style={{
-          color: accentColor,
-          fontWeight: 700,
-          fontSize: "1.5rem",
-          marginBottom: 18,
-          marginTop: 10,
-        }}
-      >
-        Why Choose This Location?
-      </h2>
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: 32,
-          marginBottom: 36,
-          justifyContent: "center",
-        }}
-      >
-        {/* ... your features ... */}
-      </div>
 
       <h2
         style={{

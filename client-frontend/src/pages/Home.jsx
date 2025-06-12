@@ -111,7 +111,7 @@ function Home() {
       >
         <div
           style={{
-            flex: "1 1 60%", // Equal width with BookingForm
+            flex: "1 1 60%", 
             minHeight: "68vh",
             minWidth: "0", // Allow shrinking
             backgroundImage: `url(/welcomeimageinstantcleaners.jpg)`,

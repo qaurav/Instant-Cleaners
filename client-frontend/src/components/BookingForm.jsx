@@ -69,7 +69,7 @@ const BookingForm = ({ fixedService }) => {
       component="form"
       onSubmit={handleSubmit}
       sx={{
-        maxWidth: 500,
+        maxWidth: 600,
         mx: "auto",
         p: 1, // Reduced from 2 to 1
         boxShadow: 3,
