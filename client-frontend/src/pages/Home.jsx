@@ -1,4 +1,3 @@
-// Home.jsx
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
@@ -111,7 +110,6 @@ function Home() {
   return (
     <div>
       <Navbar services={services} locations={locations} setActiveId={setActiveId} activeId={activeId} />
-      {/* Rest of the JSX remains the same */}
       <section
         id="home"
         ref={(el) => (sectionRefs.current.home = el)}
@@ -132,22 +130,22 @@ function Home() {
             flex: "1 1 50%",
             minHeight: "68vh",
             minWidth: "300px",
-            backgroundColor: "#757575",
             display: "flex",
-            flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            color: "#fff",
-            textAlign: "center",
             padding: "20px",
             position: "relative",
           }}
         >
-          <h1 style={{ fontSize: "2.5rem" }}>CARPET & UPHOLSTERY CLEANING SYDNEY</h1>
-          <p style={{ fontSize: "1.2rem", maxWidth: "500px" }}>
-            At <b>Instant Carpet Cleaning Services</b>, we are passionate about deliverying <b>excepetional cleaning services</b> that transforms spaces into <b>pristine, safe and healthy spaces</b>. Our expert team operates all over <b>Sydney</b> providing upholstery cleaning solutions for <b>Residential, Commericial and Specialised facilities</b>.
-            Book now and experience the difference!
-          </p>
+          <img
+            src="/welcomeimagegeinstantcleaners.jpg"
+            alt="Welcome to Instant Carpet Cleaning Services"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
         </div>
         <div
           style={{
