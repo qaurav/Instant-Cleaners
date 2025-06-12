@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 // Custom arrow components for slick slider
 const PrevArrow = (props) => {
-  const { className, style, onClick } = props;
+  const { onClick } = props;
   return (
     <IconButton
       onClick={onClick}
@@ -28,7 +28,7 @@ const PrevArrow = (props) => {
 };
 
 const NextArrow = (props) => {
-  const { className, style, onClick } = props;
+  const { onClick } = props;
   return (
     <IconButton
       onClick={onClick}
