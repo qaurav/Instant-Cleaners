@@ -143,9 +143,9 @@ function Home() {
             position: "relative",
           }}
         >
-          <h1 style={{ fontSize: "2.5rem" }}>Welcome to Instant Cleaners</h1>
+          <h1 style={{ fontSize: "2.5rem" }}>CARPET & UPHOLSTERY CLEANING SYDNEY</h1>
           <p style={{ fontSize: "1.2rem", maxWidth: "500px" }}>
-            We provide top-notch cleaning services to keep your space spotless.
+            At <b>Instant Carpet Cleaning Services</b>, we are passionate about deliverying <b>excepetional cleaning services</b> that transforms spaces into <b>pristine, safe and healthy spaces</b>. Our expert team operates all over <b>Sydney</b> providing upholstery cleaning solutions for <b>Residential, Commericial and Specialised facilities</b>.
             Book now and experience the difference!
           </p>
         </div>
