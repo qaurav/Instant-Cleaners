@@ -138,7 +138,7 @@ function Home() {
           }}
         >
           <img
-            src="/welcomeimagegeinstantcleaners.jpg"
+            src="welcomeimageinstantcleaners.jpg"
             alt="Welcome to Instant Carpet Cleaning Services"
             style={{
               width: "100%",
