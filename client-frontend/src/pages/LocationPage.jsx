@@ -15,7 +15,7 @@ const LocationPage = ({ locations }) => {
   const [servicesAtLocation, setServicesAtLocation] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showLoader, setShowLoader] = useState(false);
+  const [showLoader] = useState(false);
 
   useEffect(() => {
     if (!locations || locations.length === 0) {
