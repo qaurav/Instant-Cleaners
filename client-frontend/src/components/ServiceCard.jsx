@@ -14,7 +14,7 @@ const ServiceCard = ({ service, onClick }) => (
     sx={{
       width: 380,
       height: 250,
-      m: 2,
+      m: 3,
       borderRadius: 3,
       overflow: "hidden",
       position: "relative",

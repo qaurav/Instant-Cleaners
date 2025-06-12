@@ -147,7 +147,7 @@ const LocationPage = ({ locations }) => {
         Services Available at This Location
       </h2>
       {servicesAtLocation.length > 0 ? (
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 16, justifyContent: "center" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center" }}>
           {servicesAtLocation.map((service) => (
             <ServiceCard
               key={service._id}
