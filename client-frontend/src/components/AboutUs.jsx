@@ -3,7 +3,7 @@ import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const BACKGROUND_IMG =
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80";
+  "https://i.pinimg.com/736x/ee/b6/46/eeb6463a561f8b097d53af4cec176a24.jpg";
 
 const AboutUs = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const AboutUs = () => {
         alignItems: "center",
         justifyContent: "center",
         overflow: "hidden",
-        background: `linear-gradient(rgba(0,77,64,0.7), rgba(0,77,64,0.7)), url(${BACKGROUND_IMG}) center/cover no-repeat`,
+        background: `url(${BACKGROUND_IMG}) center/cover no-repeat`,
         py: { xs: 8, md: 0 },
         px: { xs: 2, md: 6 },
       }}
@@ -93,7 +93,8 @@ const AboutUs = () => {
             textShadow: "0 1px 8px rgba(0,0,0,0.4)",
           }}
         >
-          Welcome to our Service Booking platform! We are dedicated to providing top-notch services across multiple locations. Our mission is to connect you with the best professionals and make your booking experience seamless and hassle-free.
+          Instant carpet cleaning services started out as “Experts Carpet Cleaning” in june, 2010 before changing its name to instant carpet cleaning services in 2019.
+
         </Typography>
         <Typography
           variant="h6"
@@ -105,7 +106,8 @@ const AboutUs = () => {
             textShadow: "0 1px 8px rgba(0,0,0,0.4)",
           }}
         >
-          Whether you need home repairs, cleaning, or any other service, we have you covered. Our team is committed to quality, reliability, and customer satisfaction.
+          Over the past 15 years, we have quickly grown from a husband-and-wife team, working just a few hours a week, to a large team made up of passionate and highly trained detail cleaners – not just ordinary, hasty spray-and-wipers!
+
         </Typography>
         <Typography
           variant="h6"
@@ -117,7 +119,7 @@ const AboutUs = () => {
             textShadow: "0 1px 8px rgba(0,0,0,0.4)",
           }}
         >
-          We believe in transparency, trust, and excellence. Thank you for choosing us as your service partner!
+     Instant carpet cleaning services high standard quickly became the norm, with new clients constantly asking us where we had been hiding ourselves all these years, as our cleaning standards were so much higher than what they had experienced in the past
         </Typography>
         <Button
           variant="contained"

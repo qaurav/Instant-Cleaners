@@ -128,7 +128,7 @@ const Footer = ({ services = [], locations = [] }) => {
           Contact Us
         </h3>
         <p style={{ fontSize: "14px", lineHeight: "1.5" }}>
-          3-5 Kandy Avenue, Epping, NSW, 2121
+          2 Chifley Square, Sydney NSW 2000
           <br />
           E:{" "}
           <a
@@ -139,8 +139,8 @@ const Footer = ({ services = [], locations = [] }) => {
           </a>
           <br />
           P:{" "}
-          <a href="tel:1300680961" style={{ color: "#1e90ff", textDecoration: "none" }}>
-            1300 680 961
+          <a href="tel:+61411331731" style={{ color: "#1e90ff", textDecoration: "none" }}>
+            +61411331731
           </a>
         </p>
         <button

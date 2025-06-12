@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api";
 import Navbar from "../components/Navbar";
@@ -91,22 +91,6 @@ function Home() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile, activeId]);
 
-  const serviceSlugMap = useMemo(() => {
-    const map = {};
-    services.forEach((svc) => {
-      map[createSlug(svc.name)] = svc._id;
-    });
-    return map;
-  }, [services]);
-
-  const locationSlugMap = useMemo(() => {
-    const map = {};
-    locations.forEach((loc) => {
-      map[createSlug(loc.name)] = loc._id;
-    });
-    return map;
-  }, [locations]);
-
   return (
     <div>
       <Navbar services={services} locations={locations} setActiveId={setActiveId} activeId={activeId} />
@@ -116,20 +100,20 @@ function Home() {
         style={{
           minHeight: "70vh",
           display: "flex",
-          flexDirection: isMobile ? "column-reverse" : "row",
+          flexDirection: isMobile ? "column" : "row", // Row for desktop, column for mobile
           justifyContent: "space-between",
-          alignItems: isMobile ? "stretch" : "flex-start",
+          alignItems: "stretch", // Ensure equal height
           padding: "40px 20px",
           position: "relative",
           background: "#f0f0f0",
-          flexWrap: "wrap",
+          flexWrap: "nowrap", // Prevent wrapping
         }}
       >
         <div
           style={{
-            flex: "1 1 50%",
+            flex: "1 1 60%", // Equal width with BookingForm
             minHeight: "68vh",
-            minWidth: "300px",
+            minWidth: "0", // Allow shrinking
             backgroundImage: `url(/welcomeimageinstantcleaners.jpg)`,
             backgroundSize: "cover",
             backgroundPosition: "center",
@@ -137,7 +121,6 @@ function Home() {
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            color: "#fff",
             textAlign: "center",
             padding: "20px",
             position: "relative",
@@ -150,30 +133,48 @@ function Home() {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent overlay for text readability
+              backgroundColor: "rgba(0, 0, 0, 0.4)", // Darker overlay for better text contrast
               zIndex: 1,
             }}
           />
-          <div style={{ position: "relative", zIndex: 2 }}>
-            <h1 style={{ fontSize: "2.5rem" }}>CARPET & UPHOLSTERY CLEANING SYDNEY</h1>
-            <p style={{ fontSize: "1.2rem", maxWidth: "500px" }}>
-              At <b>Instant Carpet Cleaning Services</b>, we are passionate about delivering <b>exceptional cleaning services</b> that transform spaces into <b>pristine, safe, and healthy spaces</b>. Our expert team operates all over <b>Sydney</b> providing upholstery cleaning solutions for <b>Residential, Commercial, and Specialized facilities</b>.
-              Book now and experience the difference!
+          <div style={{ position: "relative", zIndex: 2, color: "#fff", padding: "20px" }}>
+            <h1
+              style={{
+                fontSize: "3.5rem",
+                fontWeight: "bold",
+                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
+                marginBottom: "20px",
+                letterSpacing: "2px",
+              }}
+            >
+              CARPET & UPHOLSTERY CLEANING SYDNEY
+            </h1>
+            <p
+              style={{
+                fontSize: "1.8rem",
+                maxWidth: "700px",
+                lineHeight: "1.8",
+                textShadow: "2px 2px 6px rgba(0, 0, 0, 0.8)",
+                padding: "15px",
+              }}
+            >
+              At <b>Instant Carpet Cleaning Services</b>, we are passionate about delivering <b>exceptional cleaning services</b> that transform spaces into <b>pristine, safe, and healthy spaces</b>. Our expert team operates all over <b>Sydney</b> providing upholstery cleaning solutions for <b>Residential, Commercial, and Specialized facilities</b>. Book now and experience the difference!
             </p>
           </div>
         </div>
         <div
           style={{
-            flex: "1 1 40%",
-            minWidth: "300px",
+            flex: "1 1 50%", // Equal width with image section
+            minHeight: "68vh",
+            minWidth: "0", // Allow shrinking
             display: "flex",
             justifyContent: "center",
-            alignItems: "flex-start",
+            alignItems: "center",
             padding: "20px",
             overflowY: "auto",
           }}
         >
-          <div style={sectionStyle}>
+          <div style={{ ...sectionStyle, height: "100%", display: "flex", alignItems: "center" }}>
             <BookingForm />
           </div>
         </div>
@@ -182,7 +183,6 @@ function Home() {
       <section
         id="services"
         ref={(el) => (sectionRefs.current.services = el)}
-        style={{ backgroundColor: "#f0f4f8" }}
       >
         <Box sx={{ padding: { xs: "40px 10px", sm: "60px 20px" }, maxWidth: { xs: "100%", md: 1400 }, mx: "auto" }}>
           <Typography variant="h3" component="h2" gutterBottom align="center">

@@ -55,7 +55,7 @@ const testimonialsData = [
     image:
       "https://randomuser.me/api/portraits/women/68.jpg",
     text:
-      "This service was amazing! The team was professional and punctual. Highly recommend to anyone looking for quality service.",
+      "Had a nasty stain and needed urgent help—these guys showed up the same day and made it disappear! Fast, friendly, and effective!",
   },
   {
     id: 2,
@@ -77,17 +77,17 @@ const testimonialsData = [
     id: 4,
     name: "Eminem Smith",
     image:
-      "https://randomuser.me/api/portraits/men/45.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRueVtgQ5lunR_tZFsd8Eu6nkzFeJuWnrCXmoBHr21NvF_mJLzlMu_eecJKrpXpWlzMRFQ&usqp=CAU",
     text:
-      "This service was amazing! The team was professional and punctual. Highly recommend to anyone looking for quality service.",
+      "Called in the morning, and they were here by the afternoon! Incredible same-day service and top-quality cleaning. Super impressed!",
   },
   {
     id: 5,
     name: "Will Lee",
     image:
-      "https://randomuser.me/api/portraits/women/44.jpg",
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRueVtgQ5lunR_tZFsd8Eu6nkzFeJuWnrCXmoBHr21NvF_mJLzlMu_eecJKrpXpWlzMRFQ&usqp=CAU",
     text:
-      "Great experience from start to finish. The booking process was smooth and the service exceeded my expectations.",
+      "Fantastic service! Our carpets look brand new, and the whole house smells fresh. The team was professional, quick, and friendly. Highly recommend!",
   },
   // Add more testimonials as needed
 ];

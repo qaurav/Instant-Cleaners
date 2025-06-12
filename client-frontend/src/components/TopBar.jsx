@@ -95,7 +95,7 @@ const TopBar = () => {
           <PhoneIcon fontSize={isMobile ? "small" : "large"} sx={{ color: "rgb(37, 150, 190)" }} />
           <Typography
             component="a"
-            href="tel:+15551234567"
+            href="tel:+61411331731"
             sx={{
               color: "#222",
               textDecoration: "none",
@@ -105,7 +105,7 @@ const TopBar = () => {
               "&:hover": { textDecoration: "underline" },
             }}
           >
-            +1 (555) 123-4567
+            +61 (411) 331731
           </Typography>
         </Box>
       </Box>

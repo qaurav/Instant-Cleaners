@@ -4,13 +4,13 @@ import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
 const galleryImages = [
-  "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1522199710521-72d69614c702?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1532634726-8b9fb9987b0d?auto=format&fit=crop&w=800&q=80",
-  "https://images.unsplash.com/photo-1523413651479-597eb2da0ad6?auto=format&fit=crop&w=800&q=80",
+  "https://www.rjliving.com.au/cdn/shop/articles/SereneLiving2_13dfbda4-c5df-4e2f-8b5d-1f2dd5a70f89.jpg?v=1695360399",
+  "https://stanleysteemer-cdn-guhsdrcta9dzabde.a01.azurefd.net/prod-container/images/default-source/furniture-cleaning-page/upholstery-serviceline-noaffa-720x460.png?sfvrsn=634ba292_2",
+  "https://i0.wp.com/enviro-clean.co.uk/wp-content/uploads/2021/04/Deep-and-Thorough-Cleaning.png?fit=1080%2C1080&ssl=1",
+  "https://images.stockcake.com/public/f/7/c/f7c8bec2-7457-4ebb-b7d6-40e4212f281f_large/luxurious-leather-lounge-stockcake.jpg",
+  "https://www.luxurylivingroomfurnitures.com/wp-content/uploads/2022/03/%E6%9C%AA%E6%A0%87%E9%A2%98-1-%E6%81%A2%E5%A4%8D%E7%9A%84-1-500x500.jpg",
+  "https://i.pinimg.com/736x/ee/b6/46/eeb6463a561f8b097d53af4cec176a24.jpg",
+  "https://img5.su-cdn.com/cdn-cgi/image/width=750,height=750/mall/file/2021/08/26/45e4de6d4f4d4cf4b990bf045747eb79.jpg",
 ];
 
 const AboutUsPage = () => {
@@ -87,7 +87,8 @@ const AboutUsPage = () => {
               paragraph
               sx={{ fontSize: bodyFontSize, color: "#555", mb: 3 }}
             >
-              Welcome to our Service Booking platform! We are dedicated to providing top-notch services across multiple locations. Our mission is to connect you with the best professionals and make your booking experience seamless and hassle-free.
+              Instant carpet cleaning services started out as “Experts Carpet Cleaning” in june, 2010 before changing its name to instant carpet cleaning services in 2019.
+
             </Typography>
 
             <Typography
@@ -95,7 +96,9 @@ const AboutUsPage = () => {
               paragraph
               sx={{ fontSize: bodyFontSize, color: "#555", mb: 3 }}
             >
-              Whether you need home repairs, cleaning, or any other service, we have you covered. Our team is committed to quality, reliability, and customer satisfaction.
+
+              Over the past 15 years, we have quickly grown from a husband-and-wife team, working just a few hours a week, to a large team made up of passionate and highly trained detail cleaners – not just ordinary, hasty spray-and-wipers!
+
             </Typography>
 
             <Typography
@@ -103,7 +106,7 @@ const AboutUsPage = () => {
               paragraph
               sx={{ fontSize: bodyFontSize, color: "#555" }}
             >
-              We believe in transparency, trust, and excellence. Thank you for choosing us as your service partner!
+              Instant carpet cleaning services high standard quickly became the norm, with new clients constantly asking us where we had been hiding ourselves all these years, as our cleaning standards were so much higher than what they had experienced in the past
             </Typography>
           </Box>
         </Grid>
