@@ -8,8 +8,8 @@ const express = require('express');
        port: 465,
        secure: true,
        auth: {
-         user: process.env.EMAIL_USER,
-         pass: process.env.EMAIL_PASS
+         user: 'info@instantcarpetcleaningservices.com.au',
+         pass: 'Baishak@1998'
        },
        tls: {
          rejectUnauthorized: false
@@ -32,7 +32,7 @@ const express = require('express');
        }
 
        const mailOptions = {
-         from: process.env.EMAIL_USER,
+         from: 'info@instantcarpetcleaningservices.com.au',
          to: 'info@instantcarpetcleaningservices.com.au',
          replyTo: email,
          subject: `New Contact Form Submission from ${name}`,
