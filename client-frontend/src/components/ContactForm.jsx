@@ -8,7 +8,7 @@ const ContactForm = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const API_BASE_URL = process.env.REACT_APP_API_URL;
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   const CONTACT_ENDPOINT = `${API_BASE_URL}/contact`; // Adjust endpoint if different
 
   const handleChange = (e) => {

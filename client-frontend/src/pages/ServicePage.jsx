@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import BookingForm from "../components/BookingForm";
 import { createSlug } from "../slugify";
 
@@ -63,7 +63,7 @@ const stepList = [
 
 const ServicePage = ({ services }) => {
   const { slug } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [service, setService] = useState(null);
   const [error, setError] = useState(null);
 

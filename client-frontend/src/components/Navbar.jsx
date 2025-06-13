@@ -52,17 +52,17 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
   const navigate = useNavigate();
   const location = useLocation();
 
-  const idToLabel = navItems.reduce((acc, item) => {
-    acc[item.id] = item.label;
-    return acc;
-  }, {});
+  // const idToLabel = navItems.reduce((acc, item) => {
+  //   acc[item.id] = item.label;
+  //   return acc;
+  // }, {});
 
-  // Sync local activeIdState with parentActiveId for home page
-  useEffect(() => {
-    if (location.pathname === "/" && parentActiveId && parentActiveId !== activeIdState) {
-      setActiveIdState(parentActiveId);
-    }
-  }, [parentActiveId, location.pathname]);
+  // // Sync local activeIdState with parentActiveId for home page
+  // useEffect(() => {
+  //   if (location.pathname === "/" && parentActiveId && parentActiveId !== activeIdState) {
+  //     setActiveIdState(parentActiveId);
+  //   }
+  // }, [parentActiveId, location.pathname]);
 
   // Handle dynamic navbar text based on route
   useEffect(() => {
@@ -142,20 +142,20 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
     setOpenLocationsDrawer(false);
   };
 
-  const handleOpenServicesMenu = (event) => {
-    setAnchorElServices(event.currentTarget);
-    setAnchorElLocations(null);
-  };
+  // const handleOpenServicesMenu = (event) => {
+  //   setAnchorElServices(event.currentTarget);
+  //   setAnchorElLocations(null);
+  // };
 
-  const handleOpenLocationsMenu = (event) => {
-    setAnchorElLocations(event.currentTarget);
-    setAnchorElServices(null);
-  };
+  // const handleOpenLocationsMenu = (event) => {
+  //   setAnchorElLocations(event.currentTarget);
+  //   setAnchorElServices(null);
+  // };
 
-  const handleCloseMenus = () => {
-    setAnchorElServices(null);
-    setAnchorElLocations(null);
-  };
+  // const handleCloseMenus = () => {
+  //   setAnchorElServices(null);
+  //   setAnchorElLocations(null);
+  // };
 
   const drawerOffset = topBarVisible ? topBarHeight + navbarHeight : navbarHeight;
 
