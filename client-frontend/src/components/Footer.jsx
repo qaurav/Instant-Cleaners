@@ -132,10 +132,11 @@ const Footer = ({ services = [], locations = [] }) => {
           <br />
           E:{" "}
           <a
-            href="mailto:info@instantcleaners.com.au"
+            href="mailto:info@instantcarpetcleaningservices.com.au"
             style={{ color: "#1e90ff", textDecoration: "none" }}
           >
-            info@instantcleaners.com.au
+
+            info@instantcarpetcleaningservices.com.au
           </a>
           <br />
           P:{" "}

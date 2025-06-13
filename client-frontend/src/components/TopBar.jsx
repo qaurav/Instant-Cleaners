@@ -77,7 +77,7 @@ const TopBar = () => {
           <EmailIcon fontSize={isMobile ? "small" : "large"} sx={{ color: "rgb(37, 150, 190)" }} />
           <Typography
             component="a"
-            href="mailto:info@instantcleaners.com"
+            href="mailto:info@instantcarpetcleaningservices.com.au"
             sx={{
               color: "#222",
               textDecoration: "none",
@@ -87,7 +87,8 @@ const TopBar = () => {
               "&:hover": { textDecoration: "underline" },
             }}
           >
-            info@instantcleaners.com
+            
+info@instantcarpetcleaningservices.com.au
           </Typography>
         </Box>
 
