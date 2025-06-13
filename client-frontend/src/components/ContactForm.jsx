@@ -8,29 +8,66 @@ const ContactForm = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const handleChange = e => {
+  const API_BASE_URL = process.env.REACT_APP_API_URL;
+  const CONTACT_ENDPOINT = `${API_BASE_URL}/contact`; // Adjust endpoint if different
+
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async e => {
+  const validateForm = () => {
+    if (!formData.name.trim()) return 'Name is required';
+    if (!formData.email.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/)) return 'Invalid email format';
+    if (!formData.message.trim()) return 'Message is required';
+    return '';
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSuccessMsg('');
     setErrorMsg('');
+
+    const validationError = validateForm();
+    if (validationError) {
+      setErrorMsg(validationError);
+      return;
+    }
+
     setSubmitting(true);
     try {
-      await axios.post('http://localhost:5000/api/contact', formData); // Hardcoded URL
-      setSuccessMsg('Message sent successfully!');
-      setFormData({ name: '', email: '', message: '' });
-    } catch {
-      setErrorMsg('Failed to send message.');
+      const response = await axios.post(CONTACT_ENDPOINT, formData, {
+        headers: { 'Content-Type': 'application/json' },
+        timeout: 10000, // 10-second timeout
+      });
+      if (response.status === 200 || response.status === 201) {
+        setSuccessMsg('Message sent successfully!');
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        setErrorMsg('Unexpected response from server.');
+      }
+    } catch (error) {
+      if (error.response) {
+        setErrorMsg(`Server error: ${error.response.data.message || 'Unknown error'}`);
+      } else if (error.request) {
+        setErrorMsg('Network error: Unable to reach the server.');
+      } else {
+        setErrorMsg('Error: Failed to send message.');
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ maxWidth: 500, mx: 'auto', mt: 4, p: 2 }}>
-      <Typography variant="h5" gutterBottom>Contact Us</Typography>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      noValidate
+      sx={{ maxWidth: 500, mx: 'auto', mt: 4, p: 2 }}
+    >
+      <Typography variant="h5" gutterBottom>
+        Contact Us
+      </Typography>
       <TextField
         fullWidth
         label="Name"
@@ -39,6 +76,8 @@ const ContactForm = () => {
         onChange={handleChange}
         required
         margin="normal"
+        error={!!errorMsg && errorMsg.includes('Name')}
+        helperText={errorMsg.includes('Name') ? errorMsg : ''}
       />
       <TextField
         fullWidth
@@ -49,6 +88,8 @@ const ContactForm = () => {
         onChange={handleChange}
         required
         margin="normal"
+        error={!!errorMsg && errorMsg.includes('email')}
+        helperText={errorMsg.includes('email') ? errorMsg : ''}
       />
       <TextField
         fullWidth
@@ -60,12 +101,23 @@ const ContactForm = () => {
         onChange={handleChange}
         required
         margin="normal"
+        error={!!errorMsg && errorMsg.includes('Message')}
+        helperText={errorMsg.includes('Message') ? errorMsg : ''}
       />
-      <Button type="submit" variant="contained" color="primary" disabled={submitting} fullWidth sx={{ mt: 2 }}>
+      <Button
+        type="submit"
+        variant="contained"
+        color="primary"
+        disabled={submitting}
+        fullWidth
+        sx={{ mt: 2 }}
+      >
         {submitting ? 'Sending...' : 'Send Message'}
       </Button>
       {successMsg && <Alert severity="success" sx={{ mt: 2 }}>{successMsg}</Alert>}
-      {errorMsg && <Alert severity="error" sx={{ mt: 2 }}>{errorMsg}</Alert>}
+      {errorMsg && !errorMsg.includes('Name') && !errorMsg.includes('email') && !errorMsg.includes('Message') && (
+        <Alert severity="error" sx={{ mt: 2 }}>{errorMsg}</Alert>
+      )}
     </Box>
   );
 };
