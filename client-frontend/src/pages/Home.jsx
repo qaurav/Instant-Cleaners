@@ -11,6 +11,19 @@ import Testimonials from "../components/Testimonials";
 import { Box, Typography } from "@mui/material";
 import { createSlug } from "../slugify";
 
+// Debounce function
+const debounce = (func, wait) => {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+};
+
 const sectionStyle = {
   maxWidth: 1200,
   width: "100%",
@@ -25,6 +38,7 @@ function Home() {
   const [services, setServices] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   const [activeId, setActiveId] = useState("home");
+  const [isMapLoaded, setIsMapLoaded] = useState(true);
 
   const sectionRefs = useRef({
     home: null,
@@ -52,9 +66,7 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 600);
-    };
+    const handleResize = () => setIsMobile(window.innerWidth <= 600);
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => window.removeEventListener("resize", handleResize);
@@ -63,7 +75,7 @@ function Home() {
   useEffect(() => {
     if (!isMobile) return;
 
-    const handleScroll = () => {
+    const handleScroll = debounce(() => {
       const offsetAdjustment = 64 + (window.innerWidth <= 600 ? 180 : 60);
       const scrollPosition = window.scrollY + offsetAdjustment + window.innerHeight * 0.3;
 
@@ -73,7 +85,6 @@ function Home() {
         if (ref) {
           const sectionTop = ref.offsetTop;
           const sectionBottom = sectionTop + ref.offsetHeight;
-
           if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
             newActiveId = id;
           }
@@ -83,10 +94,9 @@ function Home() {
       if (newActiveId !== activeId) {
         setActiveId(newActiveId);
       }
-    };
+    }, 100);
 
     handleScroll();
-
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile, activeId]);
@@ -96,26 +106,26 @@ function Home() {
       <Navbar services={services} locations={locations} setActiveId={setActiveId} activeId={activeId} />
       <section
         id="home"
-        ref={(el) => (sectionRefs.current.home = el)}
+        ref={(el) => (sectionRefs.current.home = el ? (sectionRefs.current.home = el) : null)}
         style={{
           minHeight: "70vh",
           display: "flex",
-          flexDirection: isMobile ? "column" : "row", // Row for desktop, column for mobile
+          flexDirection: isMobile ? "column" : "row",
           justifyContent: "space-between",
-          alignItems: "stretch", // Ensure equal height
+          alignItems: "stretch",
           padding: "40px 20px",
           position: "relative",
           background: "#f0f0f0",
-          flexWrap: "nowrap", // Prevent wrapping
+          flexWrap: "nowrap",
         }}
       >
         <div
           style={{
-            flex: "1 1 60%", 
+            flex: "1 1 60%",
             minHeight: "68vh",
-            minWidth: "0", // Allow shrinking
+            minWidth: "0",
             backgroundImage: `url(/welcomeimageinstantcleaners.jpg)`,
-            backgroundSize: "cover",
+            backgroundSize: isMobile ? "contain" : "cover",
             backgroundPosition: "center",
             display: "flex",
             flexDirection: "column",
@@ -133,7 +143,7 @@ function Home() {
               left: 0,
               right: 0,
               bottom: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.4)", // Darker overlay for better text contrast
+              backgroundColor: "rgba(0, 0, 0, 0.4)",
               zIndex: 1,
             }}
           />
@@ -164,9 +174,9 @@ function Home() {
         </div>
         <div
           style={{
-            flex: "1 1 50%", // Equal width with image section
+            flex: "1 1 50%",
             minHeight: "68vh",
-            minWidth: "0", // Allow shrinking
+            minWidth: "0",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -245,10 +255,9 @@ function Home() {
       >
         <Testimonials />
       </section>
-
       <section
         id="contact"
-        ref={(el) => (sectionRefs.current.contact = el)}
+        ref={(el) => (sectionRefs.current.contact = el ? (sectionRefs.current.contact = el) : null)}
         style={{ padding: "40px 20px" }}
       >
         <div style={sectionStyle}>
@@ -281,16 +290,22 @@ function Home() {
                 overflowY: "auto",
               }}
             >
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d424141.6978944982!2d150.93197474999997!3d-33.84824395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743f%3A0x3017d681632a850!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2snp!4v1747214629578!5m2!1sen!2snp"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Sydney Map"
-              />
+              {isMapLoaded ? (
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d424143.8758070011!2d150.60232580354247!3d-33.847805266742924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743f%3A0x3017d681632a850!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2snp!4v1749800167647!5m2!1sen!2snp"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }} // Changed to object
+                  allowFullScreen // Changed to camelCase
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade" // Changed to camelCase
+                  title="Sydney Map"
+                  onError={() => setIsMapLoaded(false)}
+                  onLoad={() => setIsMapLoaded(true)}
+                />
+              ) : (
+                <p>Map is loading or unavailable. Please check your connection or try again later.</p>
+              )}
             </div>
           </div>
         </div>

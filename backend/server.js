@@ -2,15 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 
-const sitemapRouter = require('./routes/sitemapRouter'); // Path to the above router file
-
-
-
+const sitemapRouter = require('./routes/sitemapRouter');
 const locationRoutes = require('./routes/locationRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const contactRoutes = require('./routes/contactRoutes');
+const contactRoutes = require('./routes/contact');
+
 
 const app = express();
 
@@ -24,7 +22,7 @@ const allowedOrigins = [
 ];
 
 app.use('/', sitemapRouter);
-// Custom CORS middleware
+
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
@@ -50,7 +48,6 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));

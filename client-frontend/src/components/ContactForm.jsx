@@ -18,7 +18,7 @@ const ContactForm = () => {
     setErrorMsg('');
     setSubmitting(true);
     try {
-      await axios.post('/api/contact', formData);
+      await axios.post('http://localhost:5000/api/contact', formData); // Hardcoded URL
       setSuccessMsg('Message sent successfully!');
       setFormData({ name: '', email: '', message: '' });
     } catch {
