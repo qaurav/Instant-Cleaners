@@ -127,6 +127,7 @@ function Home() {
             backgroundImage: `url(/welcomeimageinstantcleaners.jpg)`,
             backgroundSize: isMobile ? "contain" : "cover",
             backgroundPosition: "center",
+            backgroundRepeat: "np-repeat",
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
@@ -290,22 +291,7 @@ function Home() {
                 overflowY: "auto",
               }}
             >
-              {isMapLoaded ? (
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d424143.8758070011!2d150.60232580354247!3d-33.847805266742924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743f%3A0x3017d681632a850!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2snp!4v1749800167647!5m2!1sen!2snp"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0 }} // Changed to object
-                  allowFullScreen // Changed to camelCase
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade" // Changed to camelCase
-                  title="Sydney Map"
-                  onError={() => setIsMapLoaded(false)}
-                  onLoad={() => setIsMapLoaded(true)}
-                />
-              ) : (
-                <p>Map is loading or unavailable. Please check your connection or try again later.</p>
-              )}
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d424141.6978944982!2d150.93197474999997!3d-33.84824395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743f%3A0x3017d681632a850!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2snp!4v1749959002538!5m2!1sen!2snp" width="600" height="450" style={{border:0}} allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade" title="sydney-map"></iframe>
             </div>
           </div>
         </div>
