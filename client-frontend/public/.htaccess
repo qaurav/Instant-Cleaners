@@ -2,10 +2,14 @@
   RewriteEngine On
   RewriteBase /
 
-  # Redirect /sitemap.xml requests to backend server
+  # 🔁 Redirect non-www to www (301 permanent redirect)
+  RewriteCond %{HTTP_HOST} ^instantcarpetcleaningservices\.com\.au$ [NC]
+  RewriteRule ^(.*)$ https://www.instantcarpetcleaningservices.com.au/$1 [L,R=301]
+
+  # 🔁 Redirect /sitemap.xml to backend
   RewriteRule ^sitemap\.xml$ https://api.instantcarpetcleaningservices.com.au/sitemap.xml [R=302,L]
 
-  # Existing SPA rewrite rules
+  # ⚙️ SPA rewrite rules (React, Vue, etc.)
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
