@@ -18,7 +18,7 @@ function slugify(text) {
 
 router.get('/sitemap.xml', async (req, res) => {
   try {
-    const baseUrl = 'https://instantcarpetcleaningservices.com.au/'; // Replace with your actual domain
+    const baseUrl = 'https://instantcarpetcleaningservices.com.au'; // Replace with your actual domain
 
     // Static pages
     const staticPages = ['/', '/aboutus'];
