@@ -38,7 +38,7 @@ function Home() {
   const [services, setServices] = useState([]);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   const [activeId, setActiveId] = useState("home");
-  const [isMapLoaded, setIsMapLoaded] = useState(true);
+  // const [isMapLoaded, setIsMapLoaded] = useState(true);
 
   const sectionRefs = useRef({
     home: null,
