@@ -2,9 +2,14 @@
   RewriteEngine On
   RewriteBase /
 
-  # 🔁 Redirect non-www to www (301 permanent redirect)
+  # 🔁 Redirect www to non-www (301 permanent redirect)
+  RewriteCond %{HTTP_HOST} ^www\.instantcarpetcleaningservices\.com\.au$ [NC]
+  RewriteRule ^(.*)$ https://instantcarpetcleaningservices.com.au/$1 [L,R=301]
+
+  # 🔁 Redirect HTTP to HTTPS for non-www
+  RewriteCond %{HTTPS} off
   RewriteCond %{HTTP_HOST} ^instantcarpetcleaningservices\.com\.au$ [NC]
-  RewriteRule ^(.*)$ https://www.instantcarpetcleaningservices.com.au/$1 [L,R=301]
+  RewriteRule ^(.*)$ https://instantcarpetcleaningservices.com.au/$1 [L,R=301]
 
   # 🔁 Redirect /sitemap.xml to backend
   RewriteRule ^sitemap\.xml$ https://api.instantcarpetcleaningservices.com.au/sitemap.xml [R=302,L]
