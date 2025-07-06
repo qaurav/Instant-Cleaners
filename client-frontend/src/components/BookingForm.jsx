@@ -40,29 +40,30 @@ const BookingForm = ({ fixedService }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSuccessMsg("");
-    setErrorMsg("");
-    setSubmitting(true);
-    try {
-      await api.post("/bookings", formData);
-      setSuccessMsg("Booking submitted successfully!");
-      setFormData({
-        clientName: "",
-        email: "",
-        phone: "",
-        service: fixedService ? fixedService._id : "",
-        address: "",
-        bookingDate: "",
-        message: "",
-      });
-    } catch (err) {
-      setErrorMsg("Failed to submit booking.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSuccessMsg("");
+  setErrorMsg("");
+  setSubmitting(true);
+  try {
+    const res = await api.post("/bookings", formData);
+    setSuccessMsg(res.data.message || "Booking submitted successfully!");
+    setFormData({
+      clientName: "",
+      email: "",
+      phone: "",
+      service: fixedService ? fixedService._id : "",
+      address: "",
+      bookingDate: "",
+      message: "",
+    });
+  } catch (err) {
+    setErrorMsg("Failed to submit booking.");
+  } finally {
+    setSubmitting(false);
+  }
+};
+
 
   return (
     <Box
