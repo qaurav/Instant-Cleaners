@@ -142,9 +142,9 @@ function Home() {
               minHeight: "68vh",
               minWidth: "0",
               backgroundImage: `url(/welcomeimageinstantcleaners.jpg)`,
-              backgroundSize: isMobile ? "contain" : "cover",
+              backgroundSize: "cover",           // Always cover
               backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
+              backgroundRepeat: "no-repeat",     // Never repeat
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -154,8 +154,7 @@ function Home() {
               position: "relative",
             }}
             role="img"
-            aria-label="Carpet and upholstery cleaning Sydney"
-          >
+            aria-label="Carpet and upholstery cleaning Sydney" >
             <div
               style={{
                 position: "absolute",
