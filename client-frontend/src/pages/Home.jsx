@@ -139,22 +139,23 @@ function Home() {
           <div
             style={{
               flex: "1 1 60%",
-              minHeight: "68vh",
+              minHeight: "70vh", // Match section height for full banner height
               minWidth: "0",
               backgroundImage: `url(/welcomeimageinstantcleaners.jpg)`,
-              backgroundSize: "cover",           // Always cover
+              backgroundSize: "cover", // Fill container fully
               backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",     // Never repeat
+              backgroundRepeat: "no-repeat",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
               textAlign: "center",
-              padding: "20px",
               position: "relative",
+              padding: 0, // Remove padding for full image coverage
             }}
             role="img"
-            aria-label="Carpet and upholstery cleaning Sydney" >
+            aria-label="Carpet and upholstery cleaning Sydney"
+          >
             <div
               style={{
                 position: "absolute",
@@ -167,25 +168,26 @@ function Home() {
               }}
               aria-hidden="true"
             />
-            <div style={{ position: "relative", zIndex: 2, color: "#fff", padding: "20px" }}>
+            <div style={{ position: "relative", zIndex: 2, color: "#fff", padding: "10px" }}>
               <h1
                 style={{
-                  fontSize: "3.5rem",
+                  fontSize: isMobile ? "2rem" : "2.5rem", // Smaller font size
                   fontWeight: "bold",
                   textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
-                  marginBottom: "20px",
-                  letterSpacing: "2px",
+                  marginBottom: "12px",
+                  letterSpacing: "1px",
                 }}
               >
                 CARPET & UPHOLSTERY CLEANING SYDNEY
               </h1>
               <p
                 style={{
-                  fontSize: "1.8rem",
-                  maxWidth: "700px",
-                  lineHeight: "1.8",
+                  fontSize: isMobile ? "1rem" : "1.2rem",
+                  maxWidth: "90vw",
+                  lineHeight: "1.5",
                   textShadow: "2px 2px 6px rgba(0, 0, 0, 0.8)",
-                  padding: "15px",
+                  padding: "6px",
+                  margin: 0,
                 }}
               >
                 At <b>Instant Carpet Cleaning Services</b>, we are passionate about delivering{" "}
