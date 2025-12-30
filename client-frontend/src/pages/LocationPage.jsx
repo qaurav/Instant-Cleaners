@@ -96,7 +96,6 @@ const LocationPage = ({ locations }) => {
       return;
     }
 
-    // Find location ID by slug
     const matchedLocation = locations.find(
       (loc) => createSlug(loc.name) === slug
     );
@@ -106,7 +105,6 @@ const LocationPage = ({ locations }) => {
       return;
     }
 
-    // Fetch location details by ID
     api
       .get(`/locations/${matchedLocation._id}`)
       .then((res) => {
@@ -143,6 +141,85 @@ const LocationPage = ({ locations }) => {
       });
   }, [slug, locations]);
 
+  // Generate Schema
+  const generateSchema = () => {
+    if (!location) return null;
+
+    const baseUrl = window.location.origin;
+    const cleanDescription = location.description
+      ? location.description.replace(/(<([^>]+)>)/gi, "").trim()
+      : `Professional carpet cleaning services in ${location.name}`;
+
+    // LocalBusiness Schema
+    const localBusinessSchema = {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": `${baseUrl}/locations/${slug}#business`,
+      name: `Instant Carpet Cleaning - ${location.name}`,
+      description: cleanDescription,
+      image: location.image || `${baseUrl}/default-location.jpg`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: location.name,
+        addressRegion: "NSW",
+        addressCountry: "AU",
+      },
+      geo: location.coordinates ? {
+        "@type": "GeoCoordinates",
+        latitude: location.coordinates.lat,
+        longitude: location.coordinates.lng,
+      } : undefined,
+      url: `${baseUrl}/locations/${slug}`,
+      telephone: location.phone || "+61-XXX-XXX-XXX",
+      priceRange: "$$",
+      areaServed: {
+        "@type": "City",
+        name: location.name,
+      },
+      hasOfferCatalog: servicesAtLocation.length > 0 ? {
+        "@type": "OfferCatalog",
+        name: "Carpet Cleaning Services",
+        itemListElement: servicesAtLocation.map((service, index) => ({
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "Service",
+            name: service.name,
+            description: service.description?.replace(/(<([^>]+)>)/gi, "").slice(0, 200),
+            url: `${baseUrl}/services/${createSlug(service.name)}`,
+          },
+        })),
+      } : undefined,
+    };
+
+    // BreadcrumbList Schema
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: baseUrl,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Locations",
+          item: `${baseUrl}/locations`,
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: location.name,
+          item: `${baseUrl}/locations/${slug}`,
+        },
+      ],
+    };
+
+    return [localBusinessSchema, breadcrumbSchema];
+  };
+
   if (loading && showLoader) {
     return <LogoLoader />;
   }
@@ -160,6 +237,8 @@ const LocationPage = ({ locations }) => {
       </main>
     );
 
+  const schemas = generateSchema();
+
   return (
     <>
       <Helmet>
@@ -173,6 +252,29 @@ const LocationPage = ({ locations }) => {
           }
         />
         <meta name="robots" content="index, follow" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content={`${location.name} - Instant Carpet Cleaning`} />
+        <meta property="og:description" content={location.description?.replace(/(<([^>]+)>)/gi, "").slice(0, 200)} />
+        <meta property="og:image" content={location.image} />
+        <meta property="og:url" content={`${window.location.origin}/locations/${slug}`} />
+        <meta property="og:type" content="website" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${location.name} - Instant Carpet Cleaning`} />
+        <meta name="twitter:description" content={location.description?.replace(/(<([^>]+)>)/gi, "").slice(0, 200)} />
+        <meta name="twitter:image" content={location.image} />
+
+        {/* Canonical URL */}
+        <link rel="canonical" href={`${window.location.origin}/locations/${slug}`} />
+
+        {/* Structured Data */}
+        {schemas && schemas.map((schema, index) => (
+          <script key={index} type="application/ld+json">
+            {JSON.stringify(schema)}
+          </script>
+        ))}
       </Helmet>
 
       <main style={styles.container}>
