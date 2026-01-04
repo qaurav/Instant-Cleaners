@@ -462,7 +462,7 @@
   }
 }
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   .locations-grid {
     grid-template-columns: repeat(auto-fill, minmax(340px, 380px));
     justify-content: center;
@@ -474,9 +474,9 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
-}
+} */
 
-@media (min-width: 768px) {
+/* @media (min-width: 768px) {
   .services-grid {
     grid-template-columns: repeat(auto-fill, minmax(340px, 380px));
     justify-content: center;
@@ -488,7 +488,7 @@
     grid-template-columns: 1fr;
     gap: 24px;
   }
-}
+} */
 
 @media (max-width: 640px) {
   .hero-section {
