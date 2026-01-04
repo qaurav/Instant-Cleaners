@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
-import { TextField, Button, Box, Typography, Alert } from '@mui/material';
+import { 
+  TextField, 
+  Button, 
+  Box, 
+  Typography, 
+  Alert,
+  InputAdornment,
+} from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import MessageIcon from '@mui/icons-material/Message';
+import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
 
 const ContactForm = () => {
@@ -9,7 +20,7 @@ const ContactForm = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-  const CONTACT_ENDPOINT = `${API_BASE_URL}/contact`; // Adjust endpoint if different
+  const CONTACT_ENDPOINT = `${API_BASE_URL}/contact`;
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -37,10 +48,10 @@ const ContactForm = () => {
     try {
       const response = await axios.post(CONTACT_ENDPOINT, formData, {
         headers: { 'Content-Type': 'application/json' },
-        timeout: 10000, // 10-second timeout
+        timeout: 10000,
       });
       if (response.status === 200 || response.status === 201) {
-        setSuccessMsg('Message sent successfully!');
+        setSuccessMsg('Message sent successfully! We will get back to you soon.');
         setFormData({ name: '', email: '', message: '' });
       } else {
         setErrorMsg('Unexpected response from server.');
@@ -63,11 +74,25 @@ const ContactForm = () => {
       component="form"
       onSubmit={handleSubmit}
       noValidate
-      sx={{ maxWidth: 500, mx: 'auto', mt: 4, p: 2 }}
+      sx={{ 
+        width: "100%",
+        maxWidth: 600, 
+        mx: 'auto',
+      }}
     >
-      <Typography variant="h5" gutterBottom>
-        Contact Us
+      <Typography 
+        variant="h5" 
+        gutterBottom
+        sx={{
+          fontWeight: 700,
+          color: "#1a1a1a",
+          mb: 3,
+          fontSize: { xs: "1.5rem", md: "1.75rem" },
+        }}
+      >
+        Get in Touch
       </Typography>
+
       <TextField
         fullWidth
         label="Name"
@@ -78,7 +103,28 @@ const ContactForm = () => {
         margin="normal"
         error={!!errorMsg && errorMsg.includes('Name')}
         helperText={errorMsg.includes('Name') ? errorMsg : ''}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PersonIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
+
       <TextField
         fullWidth
         label="Email"
@@ -90,33 +136,113 @@ const ContactForm = () => {
         margin="normal"
         error={!!errorMsg && errorMsg.includes('email')}
         helperText={errorMsg.includes('email') ? errorMsg : ''}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <EmailIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
+
       <TextField
         fullWidth
         label="Message"
         name="message"
         multiline
-        rows={4}
+        rows={5}
         value={formData.message}
         onChange={handleChange}
         required
         margin="normal"
         error={!!errorMsg && errorMsg.includes('Message')}
         helperText={errorMsg.includes('Message') ? errorMsg : ''}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start" sx={{ alignSelf: "flex-start", mt: 2 }}>
+              <MessageIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
+
       <Button
         type="submit"
         variant="contained"
-        color="primary"
         disabled={submitting}
         fullWidth
-        sx={{ mt: 2 }}
+        startIcon={<SendIcon />}
+        sx={{ 
+          mt: 3,
+          py: 1.5,
+          backgroundColor: "#2596BE",
+          fontSize: "1rem",
+          fontWeight: 700,
+          textTransform: "uppercase",
+          letterSpacing: 0.5,
+          boxShadow: "0 4px 12px rgba(37, 150, 190, 0.3)",
+          "&:hover": {
+            backgroundColor: "#1A7A9E",
+            boxShadow: "0 6px 16px rgba(37, 150, 190, 0.4)",
+            transform: "translateY(-2px)",
+          },
+          "&:disabled": {
+            backgroundColor: "#b0b0b0",
+          },
+          transition: "all 0.3s ease",
+        }}
       >
         {submitting ? 'Sending...' : 'Send Message'}
       </Button>
-      {successMsg && <Alert severity="success" sx={{ mt: 2 }}>{successMsg}</Alert>}
+
+      {successMsg && (
+        <Alert 
+          severity="success" 
+          sx={{ 
+            mt: 2,
+            borderRadius: 2,
+          }}
+        >
+          {successMsg}
+        </Alert>
+      )}
+      
       {errorMsg && !errorMsg.includes('Name') && !errorMsg.includes('email') && !errorMsg.includes('Message') && (
-        <Alert severity="error" sx={{ mt: 2 }}>{errorMsg}</Alert>
+        <Alert 
+          severity="error" 
+          sx={{ 
+            mt: 2,
+            borderRadius: 2,
+          }}
+        >
+          {errorMsg}
+        </Alert>
       )}
     </Box>
   );

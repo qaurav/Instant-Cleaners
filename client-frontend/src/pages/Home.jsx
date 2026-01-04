@@ -8,11 +8,11 @@ import LocationCard from "../components/LocationCard";
 import ServiceCard from "../components/ServiceCard";
 import AboutUs from "../components/AboutUs";
 import Testimonials from "../components/Testimonials";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Container } from "@mui/material";
 import { createSlug } from "../slugify";
 import { Helmet } from "react-helmet";
+import "./Home.css";
 
-// Debounce function
 const debounce = (func, wait) => {
   let timeout;
   return function executedFunction(...args) {
@@ -23,12 +23,6 @@ const debounce = (func, wait) => {
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
   };
-};
-
-const sectionStyle = {
-  maxWidth: 1200,
-  width: "100%",
-  margin: "0 auto",
 };
 
 function Home() {
@@ -77,7 +71,8 @@ function Home() {
 
     const handleScroll = debounce(() => {
       const offsetAdjustment = 64 + (window.innerWidth <= 600 ? 180 : 60);
-      const scrollPosition = window.scrollY + offsetAdjustment + window.innerHeight * 0.3;
+      const scrollPosition =
+        window.scrollY + offsetAdjustment + window.innerHeight * 0.3;
 
       let newActiveId = activeId;
 
@@ -104,12 +99,53 @@ function Home() {
   return (
     <>
       <Helmet>
-        <title>Instant Carpet Cleaning Services - Sydney's Trusted Carpet & Upholstery Cleaners</title>
+        <title>
+          Instant Carpet Cleaning Services - Sydney's Trusted Carpet &
+          Upholstery Cleaners
+        </title>
         <meta
           name="description"
           content="Instant Carpet Cleaning Services offers expert carpet and upholstery cleaning across Sydney. Residential, commercial & specialized cleaning with eco-friendly solutions. Book now!"
         />
         <meta name="robots" content="index, follow" />
+        <link
+          rel="canonical"
+          href="https://instantcarpetcleaningservices.com.au/"
+        />
+
+        {/* Open Graph */}
+        <meta
+          property="og:title"
+          content="Instant Carpet Cleaning Services - Sydney's Trusted Cleaners"
+        />
+        <meta
+          property="og:description"
+          content="Expert carpet and upholstery cleaning across Sydney. Residential, commercial & specialized cleaning with eco-friendly solutions."
+        />
+        <meta
+          property="og:url"
+          content="https://instantcarpetcleaningservices.com.au/"
+        />
+        <meta property="og:type" content="website" />
+        <meta
+          property="og:image"
+          content="https://instantcarpetcleaningservices.com.au/welcomeimageinstantcleaners.jpg"
+        />
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content="Instant Carpet Cleaning Services - Sydney"
+        />
+        <meta
+          name="twitter:description"
+          content="Expert carpet and upholstery cleaning across Sydney."
+        />
+        <meta
+          name="twitter:image"
+          content="https://instantcarpetcleaningservices.com.au/welcomeimageinstantcleaners.jpg"
+        />
       </Helmet>
 
       <Navbar
@@ -119,109 +155,110 @@ function Home() {
         activeId={activeId}
       />
 
-      <main>
+      <main className="home-main">
         <section
           id="home"
-          ref={(el) => (sectionRefs.current.home = el ? (sectionRefs.current.home = el) : null)}
-          style={{
-            minHeight: "70vh",
-            display: "flex",
-            flexDirection: isMobile ? "column" : "row",
-            justifyContent: "space-between",
-            alignItems: "stretch",
-            padding: "40px 20px",
-            position: "relative",
-            background: "#f0f0f0",
-            flexWrap: "nowrap",
-          }}
+          ref={(el) => (sectionRefs.current.home = el)}
+          className="hero-section"
           aria-label="Home section with introduction and booking form"
         >
-          <div
-            style={{
-              flex: "1 1 60%",
-              minHeight: "70vh", // Match section height for full banner height
-              minWidth: "0",
-              backgroundImage: `url(/welcomeimageinstantcleaners.jpg)`,
-              backgroundSize: "cover", // Fill container fully
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              textAlign: "center",
-              position: "relative",
-              padding: 0, // Remove padding for full image coverage
-            }}
-            role="img"
-            aria-label="Carpet and upholstery cleaning Sydney"
-          >
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: "rgba(0, 0, 0, 0.4)",
-                zIndex: 1,
-              }}
-              aria-hidden="true"
-            />
-            <div style={{ position: "relative", zIndex: 2, color: "#fff", padding: "10px" }}>
-              <h1
-                style={{
-                  fontSize: isMobile ? "2rem" : "2.5rem", // Smaller font size
-                  fontWeight: "bold",
-                  textShadow: "2px 2px 4px rgba(0, 0, 0, 0.7)",
-                  marginBottom: "12px",
-                  letterSpacing: "1px",
-                }}
-              >
-                CARPET & UPHOLSTERY CLEANING SYDNEY
-              </h1>
-              <p
-                style={{
-                  fontSize: isMobile ? "1rem" : "1.2rem",
-                  maxWidth: "90vw",
-                  lineHeight: "1.5",
-                  textShadow: "2px 2px 6px rgba(0, 0, 0, 0.8)",
-                  padding: "6px",
-                  margin: 0,
-                }}
-              >
-                At <b>Instant Carpet Cleaning Services</b>, we are passionate about delivering{" "}
-                <b>exceptional cleaning services</b> that transform spaces into{" "}
-                <b>pristine, safe, and healthy spaces</b>. Our expert team operates all over{" "}
-                <b>Sydney</b> providing upholstery cleaning solutions for{" "}
-                <b>Residential, Commercial, and Specialized facilities</b>. Book now and experience the difference!
-              </p>
+          <div className="hero-wrapper">
+            <div className="hero-content-side">
+              <div className="hero-image-container">
+                <img
+                  src="/welcomeimageinstantcleaners.jpg"
+                  alt="Professional carpet cleaning"
+                  className="hero-image"
+                />
+                <div className="hero-overlay"></div>
+              </div>
+
+              <div className="hero-text-wrapper">
+                <div className="hero-badge">
+                  <span className="badge-star">⭐</span>
+                  <span>15+ Years Excellence</span>
+                </div>
+
+                <h1 className="hero-title">
+                  CARPET & UPHOLSTERY
+                  <br />
+                  CLEANING <span className="highlight-text">SYDNEY</span>
+                </h1>
+
+                <p className="hero-description">
+                  At <strong>Instant Carpet Cleaning Services</strong>, we
+                  deliver exceptional cleaning that transforms your space into a{" "}
+                  <strong>pristine, safe, and healthy environment</strong>. Our
+                  expert team serves all of <strong>Sydney</strong> with
+                  solutions for{" "}
+                  <strong>
+                    Residential, Commercial, and Specialized facilities
+                  </strong>
+                  .
+                </p>
+
+                <div className="hero-features">
+                  <div className="feature-item">
+                    <div className="feature-check">✓</div>
+                    <span>Eco-Friendly Products</span>
+                  </div>
+                  <div className="feature-item">
+                    <div className="feature-check">✓</div>
+                    <span>Licensed & Insured</span>
+                  </div>
+                  <div className="feature-item">
+                    <div className="feature-check">✓</div>
+                    <span>Same-Day Available</span>
+                  </div>
+                </div>
+
+                <div className="hero-buttons">
+                  <button
+                    className="btn-primary-hero"
+                    onClick={() =>
+                      document
+                        .getElementById("contact")
+                        ?.scrollIntoView({ behavior: "smooth" })
+                    }
+                  >
+                    Get Free Quote
+                    <span className="btn-arrow">→</span>
+                  </button>
+                  <a href="tel:+61411331731" className="btn-secondary-hero">
+                    <span className="phone-icon">📞</span>
+                    Call: (411) 331 731
+                  </a>
+                </div>
+              </div>
             </div>
-          </div>
-          <div
-            style={{
-              flex: "1 1 50%",
-              minHeight: "68vh",
-              minWidth: "0",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: "20px",
-              overflowY: "auto",
-            }}
-          >
-            <div style={{ ...sectionStyle, height: "100%", display: "flex", alignItems: "center" }}>
+
+            <div className="hero-form-side">
               <BookingForm />
             </div>
           </div>
         </section>
-
-        <section id="services" ref={(el) => (sectionRefs.current.services = el)} aria-labelledby="services-heading">
-          <Box sx={{ padding: { xs: "40px 10px", sm: "60px 20px" }, maxWidth: { xs: "100%", md: 1400 }, mx: "auto" }}>
-            <Typography variant="h3" component="h2" id="services-heading" gutterBottom align="center">
-              Our Services
-            </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        {/* Services Section */}
+        <section
+          id="services"
+          ref={(el) => (sectionRefs.current.services = el)}
+          className="services-section"
+          aria-labelledby="services-heading"
+        >
+          <Container maxWidth="lg">
+            <div className="section-header">
+              <Typography
+                variant="h2"
+                component="h2"
+                id="services-heading"
+                className="section-title"
+              >
+                Our Services
+              </Typography>
+              <Typography variant="body1" className="section-subtitle">
+                Professional cleaning solutions for every need
+              </Typography>
+            </div>
+            <div className="services-grid">
               {services.map((svc) => {
                 const slug = createSlug(svc.name);
                 return (
@@ -232,20 +269,40 @@ function Home() {
                   />
                 );
               })}
-            </Box>
-          </Box>
+            </div>
+          </Container>
         </section>
-
-        <section id="aboutus" ref={(el) => (sectionRefs.current.aboutus = el)} style={{ backgroundColor: "#f0f4f8" }} aria-label="About us section">
+        {/* About Us Section */}
+        <section
+          id="aboutus"
+          ref={(el) => (sectionRefs.current.aboutus = el)}
+          className="aboutus-section"
+          aria-label="About us section"
+        >
           <AboutUs />
         </section>
-
-        <section id="locations" ref={(el) => (sectionRefs.current.locations = el)} style={{ backgroundColor: "#f0f4f8" }} aria-labelledby="locations-heading">
-          <Box sx={{ padding: { xs: "40px 10px", sm: "60px 20px" }, maxWidth: { xs: "100%", md: 1400 }, mx: "auto" }}>
-            <Typography variant="h3" component="h2" id="locations-heading" gutterBottom align="center">
-              Our Locations
-            </Typography>
-            <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        {/* Locations Section */}
+        <section
+          id="locations"
+          ref={(el) => (sectionRefs.current.locations = el)}
+          className="locations-section"
+          aria-labelledby="locations-heading"
+        >
+          <Container maxWidth="lg">
+            <div className="section-header">
+              <Typography
+                variant="h2"
+                component="h2"
+                id="locations-heading"
+                className="section-title"
+              >
+                Our Locations
+              </Typography>
+              <Typography variant="body1" className="section-subtitle">
+                Serving all Sydney suburbs with excellence
+              </Typography>
+            </div>
+            <div className="locations-grid">
               {locations.map((loc) => {
                 const slug = createSlug(loc.name);
                 return (
@@ -256,53 +313,49 @@ function Home() {
                   />
                 );
               })}
-            </Box>
-          </Box>
+            </div>
+          </Container>
         </section>
-
-        <section id="testimonials" ref={(el) => (sectionRefs.current.testimonials = el)} style={{ borderBottom: "2px solid #ccc", paddingBottom: "20px" }} aria-label="Testimonials section">
+        {/* Testimonials Section */}
+        <section
+          id="testimonials"
+          ref={(el) => (sectionRefs.current.testimonials = el)}
+          className="testimonials-section"
+          aria-label="Testimonials section"
+        >
           <Testimonials />
         </section>
-
-        <section id="contact" ref={(el) => (sectionRefs.current.contact = el ? (sectionRefs.current.contact = el) : null)} style={{ padding: "40px 20px" }} aria-labelledby="contact-heading">
-          <Box sx={sectionStyle}>
-            <Typography variant="h3" component="h2" id="contact-heading" gutterBottom>
-              Contact Us
-            </Typography>
-            <div
-              style={{
-                display: "flex",
-                flexDirection: isMobile ? "column" : "row",
-                justifyContent: "space-between",
-                alignItems: "stretch",
-                flexWrap: "wrap",
-                gap: "20px",
-                width: "100%",
-              }}
-            >
-              <div
-                style={{
-                  flex: "1 1 400px",
-                  maxWidth: isMobile ? "100%" : "48%",
-                  padding: "20px",
-                  overflowY: "auto",
-                }}
+        {/* Contact Section */}
+        <section
+          id="contact"
+          ref={(el) => (sectionRefs.current.contact = el)}
+          className="contact-section"
+          aria-labelledby="contact-heading"
+        >
+          <Container maxWidth="lg">
+            <div className="section-header">
+              <Typography
+                variant="h2"
+                component="h2"
+                id="contact-heading"
+                className="section-title"
               >
+                Contact Us
+              </Typography>
+              <Typography variant="body1" className="section-subtitle">
+                Get in touch with our friendly team
+              </Typography>
+            </div>
+            <div className="contact-content-wrapper">
+              <div className="contact-form-container">
                 <ContactForm />
               </div>
-              <div
-                style={{
-                  flex: "1 1 400px",
-                  maxWidth: isMobile ? "100%" : "48%",
-                  padding: "20px",
-                  overflowY: "auto",
-                }}
-              >
+              <div className="contact-map-container">
                 <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d424141.6978944982!2d150.93197474999997!3d-33.84824395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743f%3A0x3017d681632a850!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2snp!4v1749959002538!5m2!1sen!2snp"
-                  width="600"
-                  height="450"
-                  style={{ border: 0 }}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0, borderRadius: "12px" }}
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
@@ -310,7 +363,7 @@ function Home() {
                 />
               </div>
             </div>
-          </Box>
+          </Container>
         </section>
       </main>
     </>

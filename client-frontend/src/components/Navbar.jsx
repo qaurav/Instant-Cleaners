@@ -1,10 +1,9 @@
-// Navbar.jsx
 import React, { useState, useEffect } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import IconButton from "@mui/icons-material/Menu";
+import IconButton from "@mui/material/IconButton";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -12,9 +11,9 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Collapse from "@mui/material/Collapse";
+import MenuIcon from "@mui/icons-material/Menu";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { useTheme } from "@mui/material/styles";
@@ -23,48 +22,34 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const navItems = [
   { label: "Home", id: "home" },
-  { label: "Locations", id: "locations" },
-  { label: "About Us", id: "aboutus" },
   { label: "Services", id: "services" },
+  { label: "About Us", id: "aboutus" },
+  { label: "Locations", id: "locations" },
   { label: "Testimonials", id: "testimonials" },
   { label: "Contact", id: "contact" },
 ];
 
 const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentActiveId }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
   const topBarHeight = isMobile ? 180 : 60;
-  const navbarHeight = 64;
+  const navbarHeight = 70;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeIdState, setActiveIdState] = useState("home");
   const [topBarVisible, setTopBarVisible] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
 
-  // Dropdown anchors for desktop menus
   const [anchorElServices, setAnchorElServices] = useState(null);
   const [anchorElLocations, setAnchorElLocations] = useState(null);
 
-  // Drawer dropdown open states for mobile
   const [openServicesDrawer, setOpenServicesDrawer] = useState(false);
   const [openLocationsDrawer, setOpenLocationsDrawer] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  // const idToLabel = navItems.reduce((acc, item) => {
-  //   acc[item.id] = item.label;
-  //   return acc;
-  // }, {});
-
-  // // Sync local activeIdState with parentActiveId for home page
-  // useEffect(() => {
-  //   if (location.pathname === "/" && parentActiveId && parentActiveId !== activeIdState) {
-  //     setActiveIdState(parentActiveId);
-  //   }
-  // }, [parentActiveId, location.pathname]);
-
-  // Handle dynamic navbar text based on route
   useEffect(() => {
     const path = location.pathname;
 
@@ -90,6 +75,7 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
   useEffect(() => {
     const handleScroll = () => {
       setTopBarVisible(window.scrollY <= 50);
+      setScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -142,24 +128,8 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
     setOpenLocationsDrawer(false);
   };
 
-  // const handleOpenServicesMenu = (event) => {
-  //   setAnchorElServices(event.currentTarget);
-  //   setAnchorElLocations(null);
-  // };
-
-  // const handleOpenLocationsMenu = (event) => {
-  //   setAnchorElLocations(event.currentTarget);
-  //   setAnchorElServices(null);
-  // };
-
-  // const handleCloseMenus = () => {
-  //   setAnchorElServices(null);
-  //   setAnchorElLocations(null);
-  // };
-
   const drawerOffset = topBarVisible ? topBarHeight + navbarHeight : navbarHeight;
 
-  // Format the activeIdState text for display
   const formatActiveIdText = (text) => {
     if (text.startsWith("Locations >")) {
       const parts = text.split(" > ");
@@ -182,15 +152,29 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
   };
 
   const drawer = (
-    <Box sx={{ width: 250 }} role="presentation">
-      <List>
+    <Box sx={{ width: 280 }} role="presentation">
+      <List sx={{ pt: 3 }}>
         {navItems.map(({ label, id }) => (
           <React.Fragment key={id}>
             {id === "services" ? (
               <>
                 <ListItem disablePadding>
-                  <ListItemButton onClick={() => setOpenServicesDrawer(!openServicesDrawer)}>
-                    <ListItemText primary="Services" />
+                  <ListItemButton 
+                    onClick={() => setOpenServicesDrawer(!openServicesDrawer)}
+                    sx={{
+                      py: 1.5,
+                      '&:hover': {
+                        backgroundColor: 'rgba(37, 150, 190, 0.08)',
+                      },
+                    }}
+                  >
+                    <ListItemText 
+                      primary="Services" 
+                      primaryTypographyProps={{
+                        fontWeight: 600,
+                        fontSize: '1.05rem',
+                      }}
+                    />
                     {openServicesDrawer ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                   </ListItemButton>
                 </ListItem>
@@ -204,10 +188,21 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
                       services.map((service, idx) => (
                         <ListItemButton
                           key={idx}
-                          sx={{ pl: 4 }}
+                          sx={{ 
+                            pl: 5,
+                            py: 1.2,
+                            '&:hover': {
+                              backgroundColor: 'rgba(37, 150, 190, 0.05)',
+                            },
+                          }}
                           onClick={() => handleServiceClick(service)}
                         >
-                          <ListItemText primary={service.name} />
+                          <ListItemText 
+                            primary={service.name}
+                            primaryTypographyProps={{
+                              fontSize: '0.95rem',
+                            }}
+                          />
                         </ListItemButton>
                       ))
                     )}
@@ -217,8 +212,22 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
             ) : id === "locations" ? (
               <>
                 <ListItem disablePadding>
-                  <ListItemButton onClick={() => setOpenLocationsDrawer(!openLocationsDrawer)}>
-                    <ListItemText primary="Locations" />
+                  <ListItemButton 
+                    onClick={() => setOpenLocationsDrawer(!openLocationsDrawer)}
+                    sx={{
+                      py: 1.5,
+                      '&:hover': {
+                        backgroundColor: 'rgba(37, 150, 190, 0.08)',
+                      },
+                    }}
+                  >
+                    <ListItemText 
+                      primary="Locations"
+                      primaryTypographyProps={{
+                        fontWeight: 600,
+                        fontSize: '1.05rem',
+                      }}
+                    />
                     {openLocationsDrawer ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                   </ListItemButton>
                 </ListItem>
@@ -232,10 +241,21 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
                       locations.map((location, idx) => (
                         <ListItemButton
                           key={idx}
-                          sx={{ pl: 4 }}
+                          sx={{ 
+                            pl: 5,
+                            py: 1.2,
+                            '&:hover': {
+                              backgroundColor: 'rgba(37, 150, 190, 0.05)',
+                            },
+                          }}
                           onClick={() => handleLocationClick(location)}
                         >
-                          <ListItemText primary={location.name} />
+                          <ListItemText 
+                            primary={location.name}
+                            primaryTypographyProps={{
+                              fontSize: '0.95rem',
+                            }}
+                          />
                         </ListItemButton>
                       ))
                     )}
@@ -244,33 +264,50 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
               </>
             ) : (
               <ListItem disablePadding>
-                <ListItemButton onClick={() => handleNavClick(id)}>
-                  <ListItemText primary={label} />
+                <ListItemButton 
+                  onClick={() => handleNavClick(id)}
+                  sx={{
+                    py: 1.5,
+                    '&:hover': {
+                      backgroundColor: 'rgba(37, 150, 190, 0.08)',
+                    },
+                  }}
+                >
+                  <ListItemText 
+                    primary={label}
+                    primaryTypographyProps={{
+                      fontWeight: 600,
+                      fontSize: '1.05rem',
+                    }}
+                  />
                 </ListItemButton>
               </ListItem>
             )}
           </React.Fragment>
         ))}
-        {/* Redesigned Request a Quote button with border and background */}
-        <ListItem disablePadding>
-          <ListItemButton
+        
+        <ListItem disablePadding sx={{ mt: 3, px: 2 }}>
+          <Button
+            fullWidth
+            variant="contained"
             onClick={() => handleNavClick("contact")}
             sx={{
-              backgroundColor: "#FFD700", // Yellow background
-              border: "2px solid #FFD700", // Matching border
-              borderRadius: 4, // Rounded corners
-              padding: "8px 16px", // Adjusted padding
-              "&:hover": {
-                backgroundColor: "#FFC107", // Slightly darker yellow on hover
-                borderColor: "#FFC107",
+              backgroundColor: "#FFD700",
+              color: "#1a1a1a",
+              fontWeight: 700,
+              py: 1.5,
+              textTransform: "uppercase",
+              fontSize: '0.95rem',
+              letterSpacing: 0.5,
+              boxShadow: '0 4px 12px rgba(255, 215, 0, 0.3)',
+              '&:hover': {
+                backgroundColor: "#FFC107",
+                boxShadow: '0 6px 16px rgba(255, 215, 0, 0.4)',
               },
             }}
           >
-            <ListItemText
-              primary="Request a Quote"
-              sx={{ color: "#333", fontWeight: 600, textTransform: "uppercase" }} // Dark text for contrast
-            />
-          </ListItemButton>
+            Request a Quote
+          </Button>
         </ListItem>
       </List>
     </Box>
@@ -280,24 +317,25 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
     <>
       <AppBar
         position="fixed"
-        color="primary"
         sx={{
           top: topBarVisible ? topBarHeight : 0,
           height: navbarHeight,
           zIndex: 1400,
-          transition: "top 0.3s ease-in-out",
-          px: isMobile ? 1 : 3,
+          transition: 'all 0.3s ease-in-out',
+          backgroundColor: scrolled ? 'rgba(37, 150, 190, 0.98)' : 'rgb(37, 150, 190)',
+          backdropFilter: scrolled ? 'blur(10px)' : 'none',
+          boxShadow: scrolled ? '0 4px 20px rgba(0,0,0,0.1)' : '0 2px 8px rgba(0,0,0,0.05)',
         }}
       >
         <Toolbar
           sx={{
-            minHeight: navbarHeight,
+            minHeight: `${navbarHeight}px !important`,
             display: "flex",
             justifyContent: "space-between",
-            px: isMobile ? 0 : 2,
+            px: { xs: 2, md: 4 },
           }}
         >
-          {(isMobile || isTablet) ? (
+          {isMobile || isTablet ? (
             <>
               <IconButton
                 color="inherit"
@@ -305,7 +343,12 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
                 aria-label="menu"
                 onClick={() => setDrawerOpen(true)}
                 size="large"
-                sx={{ mr: 1 }}
+                sx={{ 
+                  mr: 2,
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                  },
+                }}
               >
                 <MenuIcon />
               </IconButton>
@@ -315,153 +358,251 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
                 component="div"
                 sx={{
                   flexGrow: 1,
-                  fontWeight: 600,
+                  fontWeight: 700,
                   textTransform: "uppercase",
                   color: "#fff",
-                  fontSize: "1rem",
+                  fontSize: { xs: '0.95rem', sm: '1.1rem' },
+                  letterSpacing: 0.5,
                 }}
               >
                 {formatActiveIdText(activeIdState)}
               </Typography>
             </>
           ) : (
-            <Box sx={{ display: "flex", gap: 3, alignItems: "center" }}>
-              {navItems.map(({ label, id }) => {
-                if (id === "services") {
-                  return (
-                    <Box key={id} sx={{ position: "relative" }}>
-                      <Button
-                        color="inherit"
-                        endIcon={<ExpandMoreIcon />}
-                        sx={{
-                          textTransform: "none",
-                          borderBottom: activeIdState.startsWith("Services") ? "2px solid #FFD700" : "none",
-                          fontWeight: activeIdState.startsWith("Services") ? 700 : 500,
-                          fontSize: 16,
-                          "&:hover": {
-                            borderBottom: "2px solid #FFD700",
-                            backgroundColor: "transparent",
-                          },
-                        }}
-                        onClick={(e) => setAnchorElServices(e.currentTarget)}
-                      >
-                        {label}
-                      </Button>
-                      <Menu
-                        anchorEl={anchorElServices}
-                        open={Boolean(anchorElServices)}
-                        onClose={() => setAnchorElServices(null)}
-                        MenuListProps={{ sx: { backgroundColor: "rgb(37, 150, 190)", color: "#fff" } }}
-                        PaperProps={{ sx: { mt: 1 } }}
-                      >
-                        {services.length === 0 ? (
-                          <MenuItem disabled sx={{ color: "#fff" }}>
-                            No services available
-                          </MenuItem>
-                        ) : (
-                          services.map((service, idx) => (
-                            <MenuItem
-                              key={idx}
-                              onClick={() => handleServiceClick(service)}
-                              sx={{ color: "#fff" }}
-                            >
-                              {service.name}
+            <>
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                {navItems.map(({ label, id }) => {
+                  if (id === "services") {
+                    return (
+                      <Box key={id}>
+                        <Button
+                          color="inherit"
+                          endIcon={<ExpandMoreIcon />}
+                          sx={{
+                            textTransform: "none",
+                            fontWeight: activeIdState.startsWith("Services") ? 700 : 500,
+                            fontSize: '1rem',
+                            px: 2,
+                            py: 1,
+                            borderRadius: 2,
+                            position: 'relative',
+                            '&::after': {
+                              content: '""',
+                              position: 'absolute',
+                              bottom: 8,
+                              left: 16,
+                              right: 16,
+                              height: 3,
+                              backgroundColor: '#FFD700',
+                              transform: activeIdState.startsWith("Services") ? 'scaleX(1)' : 'scaleX(0)',
+                              transition: 'transform 0.3s ease',
+                            },
+                            '&:hover': {
+                              backgroundColor: 'rgba(255,255,255,0.1)',
+                            },
+                            '&:hover::after': {
+                              transform: 'scaleX(1)',
+                            },
+                          }}
+                          onClick={(e) => setAnchorElServices(e.currentTarget)}
+                        >
+                          {label}
+                        </Button>
+                        <Menu
+                          anchorEl={anchorElServices}
+                          open={Boolean(anchorElServices)}
+                          onClose={() => setAnchorElServices(null)}
+                          PaperProps={{
+                            sx: {
+                              mt: 1,
+                              borderRadius: 2,
+                              minWidth: 220,
+                              boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                            }
+                          }}
+                          MenuListProps={{ 
+                            sx: { 
+                              backgroundColor: "rgb(37, 150, 190)", 
+                              color: "#fff",
+                              py: 1,
+                            } 
+                          }}
+                        >
+                          {services.length === 0 ? (
+                            <MenuItem disabled sx={{ color: "#fff", py: 1.5 }}>
+                              No services available
                             </MenuItem>
-                          ))
-                        )}
-                      </Menu>
-                    </Box>
-                  );
-                }
-                if (id === "locations") {
-                  return (
-                    <Box key={id} sx={{ position: "relative" }}>
-                      <Button
-                        color="inherit"
-                        endIcon={<ExpandMoreIcon />}
-                        sx={{
-                          textTransform: "none",
-                          borderBottom: activeIdState.startsWith("Locations") ? "2px solid #FFD700" : "none",
-                          fontWeight: activeIdState.startsWith("Locations") ? 700 : 500,
-                          fontSize: 16,
-                          "&:hover": {
-                            borderBottom: "2px solid #FFD700",
-                            backgroundColor: "transparent",
-                          },
-                        }}
-                        onClick={(e) => setAnchorElLocations(e.currentTarget)}
-                      >
-                        {label}
-                      </Button>
-                      <Menu
-                        anchorEl={anchorElLocations}
-                        open={Boolean(anchorElLocations)}
-                        onClose={() => setAnchorElLocations(null)}
-                        MenuListProps={{ sx: { backgroundColor: "rgb(37, 150, 190)", color: "#fff" } }}
-                        PaperProps={{ sx: { mt: 1 } }}
-                      >
-                        {locations.length === 0 ? (
-                          <MenuItem disabled sx={{ color: "fff" }}>
-                            No locations available
-                          </MenuItem>
-                        ) : (
-                          locations.map((location, idx) => (
-                            <MenuItem
-                              key={idx}
-                              onClick={() => handleLocationClick(location)}
-                              sx={{ color: "#fff" }}
-                            >
-                              {location.name}
+                          ) : (
+                            services.map((service, idx) => (
+                              <MenuItem
+                                key={idx}
+                                onClick={() => handleServiceClick(service)}
+                                sx={{ 
+                                  color: "#fff",
+                                  py: 1.5,
+                                  px: 3,
+                                  fontSize: '0.95rem',
+                                  '&:hover': {
+                                    backgroundColor: 'rgba(255,255,255,0.1)',
+                                  },
+                                }}
+                              >
+                                {service.name}
+                              </MenuItem>
+                            ))
+                          )}
+                        </Menu>
+                      </Box>
+                    );
+                  }
+                  if (id === "locations") {
+                    return (
+                      <Box key={id}>
+                        <Button
+                          color="inherit"
+                          endIcon={<ExpandMoreIcon />}
+                          sx={{
+                            textTransform: "none",
+                            fontWeight: activeIdState.startsWith("Locations") ? 700 : 500,
+                            fontSize: '1rem',
+                            px: 2,
+                            py: 1,
+                            borderRadius: 2,
+                            position: 'relative',
+                            '&::after': {
+                              content: '""',
+                              position: 'absolute',
+                              bottom: 8,
+                              left: 16,
+                              right: 16,
+                              height: 3,
+                              backgroundColor: '#FFD700',
+                              transform: activeIdState.startsWith("Locations") ? 'scaleX(1)' : 'scaleX(0)',
+                              transition: 'transform 0.3s ease',
+                            },
+                            '&:hover': {
+                              backgroundColor: 'rgba(255,255,255,0.1)',
+                            },
+                            '&:hover::after': {
+                              transform: 'scaleX(1)',
+                            },
+                          }}
+                          onClick={(e) => setAnchorElLocations(e.currentTarget)}
+                        >
+                          {label}
+                        </Button>
+                        <Menu
+                          anchorEl={anchorElLocations}
+                          open={Boolean(anchorElLocations)}
+                          onClose={() => setAnchorElLocations(null)}
+                          PaperProps={{
+                            sx: {
+                              mt: 1,
+                              borderRadius: 2,
+                              minWidth: 220,
+                              boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                            }
+                          }}
+                          MenuListProps={{ 
+                            sx: { 
+                              backgroundColor: "rgb(37, 150, 190)", 
+                              color: "#fff",
+                              py: 1,
+                            } 
+                          }}
+                        >
+                          {locations.length === 0 ? (
+                            <MenuItem disabled sx={{ color: "#fff", py: 1.5 }}>
+                              No locations available
                             </MenuItem>
-                          ))
-                        )}
-                      </Menu>
-                    </Box>
+                          ) : (
+                            locations.map((location, idx) => (
+                              <MenuItem
+                                key={idx}
+                                onClick={() => handleLocationClick(location)}
+                                sx={{ 
+                                  color: "#fff",
+                                  py: 1.5,
+                                  px: 3,
+                                  fontSize: '0.95rem',
+                                  '&:hover': {
+                                    backgroundColor: 'rgba(255,255,255,0.1)',
+                                  },
+                                }}
+                              >
+                                {location.name}
+                              </MenuItem>
+                            ))
+                          )}
+                        </Menu>
+                      </Box>
+                    );
+                  }
+                  const isActive = activeIdState === id || 
+                                  (id === "aboutus" && activeIdState === "About Us");
+                  return (
+                    <Button
+                      key={id}
+                      color="inherit"
+                      sx={{
+                        textTransform: "none",
+                        fontWeight: isActive ? 700 : 500,
+                        fontSize: '1rem',
+                        px: 2,
+                        py: 1,
+                        borderRadius: 2,
+                        position: 'relative',
+                        '&::after': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: 8,
+                          left: 16,
+                          right: 16,
+                          height: 3,
+                          backgroundColor: '#FFD700',
+                          transform: isActive ? 'scaleX(1)' : 'scaleX(0)',
+                          transition: 'transform 0.3s ease',
+                        },
+                        '&:hover': {
+                          backgroundColor: 'rgba(255,255,255,0.1)',
+                        },
+                        '&:hover::after': {
+                          transform: 'scaleX(1)',
+                        },
+                      }}
+                      onClick={() => handleNavClick(id)}
+                    >
+                      {label}
+                    </Button>
                   );
-                }
-                return (
-                  <Button
-                    key={id}
-                    color="inherit"
-                    sx={{
-                      textTransform: "none",
-                      borderBottom: activeIdState === id || activeIdState === "About Us" ? "2px solid #FFD700" : "none",
-                      fontWeight: activeIdState === id || activeIdState === "About Us" ? 700 : 500,
-                      fontSize: 16,
-                      "&:hover": {
-                        borderBottom: "2px solid #FFD700",
-                        backgroundColor: "transparent",
-                      },
-                    }}
-                    onClick={() => handleNavClick(id)}
-                  >
-                    {label}
-                  </Button>
-                );
-              })}
-            </Box>
-          )}
+                })}
+              </Box>
 
-          {!isMobile && !isTablet && (
-            <Button
-              variant="outlined"
-              sx={{
-                borderColor: "#fff",
-                color: "#fff",
-                fontWeight: 600,
-                textTransform: "none",
-                fontSize: 16,
-                px: 3,
-                py: 1,
-                "&:hover": {
-                  backgroundColor: "rgba(255,255,255,0.2)",
-                  borderColor: "#fff",
-                },
-              }}
-              onClick={() => handleNavClick("contact")}
-            >
-              REQUEST A QUOTE
-            </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#FFD700",
+                  color: "#1a1a1a",
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  fontSize: '0.95rem',
+                  px: 4,
+                  py: 1.2,
+                  borderRadius: 2,
+                  letterSpacing: 0.5,
+                  boxShadow: '0 4px 12px rgba(255, 215, 0, 0.3)',
+                  "&:hover": {
+                    backgroundColor: "#FFC107",
+                    boxShadow: '0 6px 16px rgba(255, 215, 0, 0.4)',
+                    transform: 'translateY(-2px)',
+                  },
+                  transition: 'all 0.3s ease',
+                }}
+                onClick={() => handleNavClick("contact")}
+              >
+                Request a Quote
+              </Button>
+            </>
           )}
         </Toolbar>
       </AppBar>
@@ -476,6 +617,8 @@ const Navbar = ({ services = [], locations = [], setActiveId, activeId: parentAc
             zIndex: 1600,
             top: drawerOffset,
             height: `calc(100% - ${drawerOffset}px)`,
+            borderTopRightRadius: 16,
+            boxShadow: '4px 0 20px rgba(0,0,0,0.1)',
           },
         }}
       >

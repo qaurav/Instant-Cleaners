@@ -10,7 +10,11 @@ const accentColor = "rgb(37, 150, 190)";
 const renderStars = (count = 5) => (
   <div style={{ marginBottom: 8 }} aria-label={`${count} star rating`}>
     {Array.from({ length: count }).map((_, i) => (
-      <span key={i} style={{ color: "#ffb400", fontSize: "1.3rem" }} aria-hidden="true">
+      <span
+        key={i}
+        style={{ color: "#ffb400", fontSize: "1.3rem" }}
+        aria-hidden="true"
+      >
         ★
       </span>
     ))}
@@ -40,7 +44,8 @@ const packageData = [
     name: "Deluxe Protection",
     price: 149.99,
     wasPrice: 199.99,
-    features: "All Premium features + fabric protection & eco-friendly products",
+    features:
+      "All Premium features + fabric protection & eco-friendly products",
     icon: "🛡️",
     rating: 5,
     bg: "linear-gradient(135deg, #80deea 0%, #f9faff 100%)",
@@ -109,14 +114,28 @@ const ServicePage = ({ services }) => {
 
   if (error)
     return (
-      <main style={{ padding: 24, maxWidth: 900, margin: "auto", fontFamily: "Arial, sans-serif" }}>
+      <main
+        style={{
+          padding: 24,
+          maxWidth: 900,
+          margin: "auto",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
         <p style={{ color: "red" }}>{error}</p>
       </main>
     );
 
   if (!service)
     return (
-      <main style={{ padding: 24, maxWidth: 900, margin: "auto", fontFamily: "Arial, sans-serif" }}>
+      <main
+        style={{
+          padding: 24,
+          maxWidth: 900,
+          margin: "auto",
+          fontFamily: "Arial, sans-serif",
+        }}
+      >
         <p>Service not found</p>
       </main>
     );
@@ -132,6 +151,61 @@ const ServicePage = ({ services }) => {
         <title>{service.name} - Instant Carpet Cleaning Services</title>
         <meta name="description" content={metaDescription} />
         <meta name="robots" content="index, follow" />
+        <link
+          rel="canonical"
+          href={`https://instantcarpetcleaningservices.com.au/services/${slug}`}
+        />
+
+        {/* Open Graph */}
+        <meta
+          property="og:title"
+          content={`${service.name} - Instant Carpet Cleaning`}
+        />
+        <meta property="og:description" content={metaDescription} />
+        <meta
+          property="og:url"
+          content={`https://instantcarpetcleaningservices.com.au/services/${slug}`}
+        />
+        <meta property="og:type" content="website" />
+        {service.image && <meta property="og:image" content={service.image} />}
+
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          name="twitter:title"
+          content={`${service.name} - Instant Carpet Cleaning`}
+        />
+        <meta name="twitter:description" content={metaDescription} />
+        {service.image && <meta name="twitter:image" content={service.image} />}
+
+        {/* Schema.org Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            name: service.name,
+            description: metaDescription,
+            provider: {
+              "@type": "LocalBusiness",
+              name: "Instant Carpet Cleaning Services",
+              url: "https://instantcarpetcleaningservices.com.au",
+              telephone: "+61411331731",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Sydney",
+                addressRegion: "NSW",
+                addressCountry: "AU",
+              },
+            },
+            areaServed: {
+              "@type": "City",
+              name: "Sydney",
+            },
+            image:
+              service.image ||
+              "https://instantcarpetcleaningservices.com.au/welcomeimageinstantcleaners.jpg",
+          })}
+        </script>
       </Helmet>
 
       <main
@@ -237,7 +311,10 @@ const ServicePage = ({ services }) => {
                   gap: 16,
                 }}
               >
-                <span style={{ fontSize: "1.6rem", marginTop: 2 }} aria-hidden="true">
+                <span
+                  style={{ fontSize: "1.6rem", marginTop: 2 }}
+                  aria-hidden="true"
+                >
                   {f.icon}
                 </span>
                 <div>
@@ -250,7 +327,9 @@ const ServicePage = ({ services }) => {
         </section>
 
         <p style={{ fontSize: "1.1rem", marginBottom: 30 }}>
-          Our mission is to create a healthier indoor environment by removing allergens and bacteria that can affect your well-being – all while preserving the softness and beauty of your carpets.
+          Our mission is to create a healthier indoor environment by removing
+          allergens and bacteria that can affect your well-being – all while
+          preserving the softness and beauty of your carpets.
         </p>
 
         <section aria-labelledby="packages-heading">
@@ -293,7 +372,10 @@ const ServicePage = ({ services }) => {
                   transition: "transform 0.2s",
                 }}
               >
-                <div style={{ fontSize: "2.3rem", marginBottom: 12 }} aria-hidden="true">
+                <div
+                  style={{ fontSize: "2.3rem", marginBottom: 12 }}
+                  aria-hidden="true"
+                >
                   {pkg.icon}
                 </div>
                 <div
@@ -348,7 +430,9 @@ const ServicePage = ({ services }) => {
                   </span>
                 </div>
 
-                <div style={{ fontSize: "1.07rem", color: "#444" }}>{pkg.features}</div>
+                <div style={{ fontSize: "1.07rem", color: "#444" }}>
+                  {pkg.features}
+                </div>
               </article>
             ))}
           </div>
@@ -379,34 +463,56 @@ const ServicePage = ({ services }) => {
           </ol>
         </section>
 
-        <p style={{ fontStyle: "italic", color: "#555", marginBottom: 28, fontSize: "1.08rem" }}>
-          Experience the joy of walking on soft, clean carpets that enhance the comfort and beauty of your home or office.
+        <p
+          style={{
+            fontStyle: "italic",
+            color: "#555",
+            marginBottom: 28,
+            fontSize: "1.08rem",
+          }}
+        >
+          Experience the joy of walking on soft, clean carpets that enhance the
+          comfort and beauty of your home or office.
         </p>
 
         <div style={{ textAlign: "center", marginBottom: 40 }}>
-          <span style={{ fontWeight: 700, color: accentColor, fontSize: "1.1rem", marginRight: 6 }}>
+          <span
+            style={{
+              fontWeight: 700,
+              color: accentColor,
+              fontSize: "1.1rem",
+              marginRight: 6,
+            }}
+          >
             Don’t wait!
           </span>
           <span>
-            Contact us today to schedule your appointment and enjoy a healthier, fresher living space with our trusted carpet cleaning experts.
+            Contact us today to schedule your appointment and enjoy a healthier,
+            fresher living space with our trusted carpet cleaning experts.
           </span>
         </div>
 
         {/* Booking form with fixedService prop */}
-        <section aria-label="Booking form" style={{
-          marginTop: 30,
-          background: "#fff",
-          borderRadius: 12,
-          boxShadow: "0 2px 10px rgba(37,150,190,0.06)",
-          padding: 28,
-          maxWidth: 600,
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}>
+        <section
+          aria-label="Booking form"
+          style={{
+            marginTop: 30,
+            background: "#fff",
+            borderRadius: 12,
+            boxShadow: "0 2px 10px rgba(37,150,190,0.06)",
+            padding: 28,
+            maxWidth: 600,
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
           <BookingForm fixedService={service} />
         </section>
 
-        <nav aria-label="Back to home page" style={{ textAlign: "center", marginTop: 38 }}>
+        <nav
+          aria-label="Back to home page"
+          style={{ textAlign: "center", marginTop: 38 }}
+        >
           <Link
             to="/"
             style={{
@@ -425,7 +531,8 @@ const ServicePage = ({ services }) => {
             }}
             onMouseEnter={(e) => (e.target.style.background = "#b2ebf2")}
             onMouseLeave={(e) =>
-              (e.target.style.background = "linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%)")
+              (e.target.style.background =
+                "linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%)")
             }
           >
             ← Back to Home

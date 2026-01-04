@@ -30,8 +30,8 @@ const TopBar = () => {
         left: 0,
         right: 0,
         height,
-        backgroundColor: "#fff",
-        color: "#222",
+        backgroundColor: "#ffffff",
+        color: "#1a1a1a",
         display: "flex",
         flexDirection: isMobile ? "column" : "row",
         alignItems: "center",
@@ -40,17 +40,32 @@ const TopBar = () => {
         py: isMobile ? 2 : 0,
         zIndex: 1500,
         boxSizing: "border-box",
-        borderBottom: "3px solid rgb(37, 150, 190)",
+        borderBottom: "3px solid #2596BE",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
         userSelect: "none",
         transition: "top 0.3s ease-in-out",
       }}
     >
       {/* Logo */}
-      <Box sx={{ display: "flex", alignItems: "center", mb: isMobile ? 2 : 0 }}>
+      <Box 
+        sx={{ 
+          display: "flex", 
+          alignItems: "center", 
+          mb: isMobile ? 1.5 : 0,
+          transition: "transform 0.3s ease",
+          "&:hover": {
+            transform: "scale(1.05)",
+          },
+        }}
+      >
         <img
           src="/instantcleanerslogo.jpg"
           alt="Instant Carpet Cleaning Services"
-          style={{ height: isMobile ? 40 : 50, cursor: "pointer" }}
+          style={{ 
+            height: isMobile ? 40 : 50, 
+            cursor: "pointer",
+            borderRadius: "8px",
+          }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         />
       </Box>
@@ -61,52 +76,112 @@ const TopBar = () => {
           display: "flex",
           flexDirection: isMobile ? "column" : "row",
           alignItems: "center",
-          justifyContent: isMobile ? "center" : "flex-start",
-          gap: isMobile ? 2 : 5,
+          justifyContent: isMobile ? "center" : "flex-end",
+          gap: isMobile ? 1.5 : 4,
           width: isMobile ? "100%" : "auto",
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <AccessTimeIcon fontSize={isMobile ? "small" : "large"} sx={{ color: "rgb(37, 150, 190)" }} />
-          <Typography component="span" sx={{ fontWeight: 400, fontSize: isMobile ? 15 : 20 }}>
-            24*7 Available
+        <Box 
+          sx={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: 1,
+            transition: "transform 0.2s ease",
+            "&:hover": {
+              transform: "translateX(3px)",
+            },
+          }}
+        >
+          <AccessTimeIcon 
+            fontSize={isMobile ? "small" : "medium"} 
+            sx={{ 
+              color: "#2596BE",
+              filter: "drop-shadow(0 2px 4px rgba(37, 150, 190, 0.2))",
+            }} 
+          />
+          <Typography 
+            component="span" 
+            sx={{ 
+              fontWeight: 600, 
+              fontSize: isMobile ? "0.85rem" : "0.95rem",
+              color: "#1a1a1a",
+            }}
+          >
+            24/7 Available
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <EmailIcon fontSize={isMobile ? "small" : "large"} sx={{ color: "rgb(37, 150, 190)" }} />
+        <Box 
+          sx={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: 1,
+            transition: "transform 0.2s ease",
+            "&:hover": {
+              transform: "translateX(3px)",
+            },
+          }}
+        >
+          <EmailIcon 
+            fontSize={isMobile ? "small" : "medium"} 
+            sx={{ 
+              color: "#2596BE",
+              filter: "drop-shadow(0 2px 4px rgba(37, 150, 190, 0.2))",
+            }} 
+          />
           <Typography
             component="a"
             href="mailto:info@instantcarpetcleaningservices.com.au"
             sx={{
-              color: "#222",
+              color: "#1a1a1a",
               textDecoration: "none",
-              fontWeight: 400,
-              fontSize: isMobile ? 15 : 20,
+              fontWeight: 600,
+              fontSize: isMobile ? "0.85rem" : "0.95rem",
               cursor: "pointer",
-              "&:hover": { textDecoration: "underline" },
+              transition: "color 0.3s ease",
+              "&:hover": { 
+                color: "#2596BE",
+              },
             }}
           >
-            
-info@instantcarpetcleaningservices.com.au
+            info@instantcarpetcleaningservices.com.au
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <PhoneIcon fontSize={isMobile ? "small" : "large"} sx={{ color: "rgb(37, 150, 190)" }} />
+        <Box 
+          sx={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: 1,
+            transition: "transform 0.2s ease",
+            "&:hover": {
+              transform: "translateX(3px)",
+            },
+          }}
+        >
+          <PhoneIcon 
+            fontSize={isMobile ? "small" : "medium"} 
+            sx={{ 
+              color: "#2596BE",
+              filter: "drop-shadow(0 2px 4px rgba(37, 150, 190, 0.2))",
+            }} 
+          />
           <Typography
             component="a"
             href="tel:+61411331731"
             sx={{
-              color: "#222",
+              color: "#1a1a1a",
               textDecoration: "none",
-              fontWeight: 400,
-              fontSize: isMobile ? 15 : 20,
+              fontWeight: 600,
+              fontSize: isMobile ? "0.85rem" : "0.95rem",
               cursor: "pointer",
-              "&:hover": { textDecoration: "underline" },
+              transition: "color 0.3s ease",
+              "&:hover": { 
+                color: "#2596BE",
+              },
             }}
           >
-            +61 (411) 331731
+            +61 (411) 331 731
           </Typography>
         </Box>
       </Box>

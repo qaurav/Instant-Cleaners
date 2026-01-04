@@ -9,7 +9,14 @@ import {
   Button,
   Typography,
   Alert,
+  InputAdornment,
 } from "@mui/material";
+import PersonIcon from '@mui/icons-material/Person';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import MessageIcon from '@mui/icons-material/Message';
 import api from "../api";
 
 const BookingForm = ({ fixedService }) => {
@@ -40,47 +47,59 @@ const BookingForm = ({ fixedService }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setSuccessMsg("");
-  setErrorMsg("");
-  setSubmitting(true);
-  try {
-    const res = await api.post("/bookings", formData);
-    setSuccessMsg(res.data.message || "Booking submitted successfully!");
-    setFormData({
-      clientName: "",
-      email: "",
-      phone: "",
-      service: fixedService ? fixedService._id : "",
-      address: "",
-      bookingDate: "",
-      message: "",
-    });
-  } catch (err) {
-    setErrorMsg("Failed to submit booking.");
-  } finally {
-    setSubmitting(false);
-  }
-};
-
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSuccessMsg("");
+    setErrorMsg("");
+    setSubmitting(true);
+    try {
+      const res = await api.post("/bookings", formData);
+      setSuccessMsg(res.data.message || "Booking submitted successfully!");
+      setFormData({
+        clientName: "",
+        email: "",
+        phone: "",
+        service: fixedService ? fixedService._id : "",
+        address: "",
+        bookingDate: "",
+        message: "",
+      });
+    } catch (err) {
+      setErrorMsg("Failed to submit booking. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <Box
       component="form"
       onSubmit={handleSubmit}
       sx={{
+        width: "100%",
         maxWidth: 600,
         mx: "auto",
-        p: 1, // Reduced from 2 to 1
-        boxShadow: 3,
-        borderRadius: 2,
-        backgroundColor: "background.paper",
+        p: 4,
+        boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+        borderRadius: 3,
+        backgroundColor: "#ffffff",
+        border: "1px solid #e0e0e0",
       }}
       noValidate
       autoComplete="off"
     >
-      <Typography variant="h5" component="h2" gutterBottom>
+      <Typography 
+        variant="h4" 
+        component="h2" 
+        gutterBottom
+        sx={{
+          fontWeight: 700,
+          color: "#1a1a1a",
+          mb: 3,
+          textAlign: "center",
+          fontSize: { xs: "1.75rem", md: "2rem" },
+        }}
+      >
         Book a Service
       </Typography>
 
@@ -92,7 +111,27 @@ const BookingForm = ({ fixedService }) => {
         required
         fullWidth
         margin="normal"
-        size="small" // Reduce field height
+        size="small"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PersonIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
 
       <TextField
@@ -104,7 +143,27 @@ const BookingForm = ({ fixedService }) => {
         required
         fullWidth
         margin="normal"
-        size="small" // Reduce field height
+        size="small"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <EmailIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
 
       <TextField
@@ -116,7 +175,27 @@ const BookingForm = ({ fixedService }) => {
         required
         fullWidth
         margin="normal"
-        size="small" // Reduce field height
+        size="small"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PhoneIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
 
       {fixedService ? (
@@ -128,10 +207,33 @@ const BookingForm = ({ fixedService }) => {
           InputProps={{
             readOnly: true,
           }}
-          size="small" // Reduce field height
+          size="small"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "#f5f5f5",
+            },
+          }}
         />
       ) : (
-        <FormControl fullWidth margin="normal" required>
+        <FormControl 
+          fullWidth 
+          margin="normal" 
+          required
+          size="small"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "&:hover fieldset": {
+                borderColor: "#2596BE",
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#2596BE",
+              },
+            },
+            "& .MuiInputLabel-root.Mui-focused": {
+              color: "#2596BE",
+            },
+          }}
+        >
           <InputLabel id="service-label">Select Service</InputLabel>
           <Select
             labelId="service-label"
@@ -140,7 +242,6 @@ const BookingForm = ({ fixedService }) => {
             value={formData.service}
             label="Select Service"
             onChange={handleChange}
-            size="small" // Reduce field height
           >
             <MenuItem value="">
               <em>None</em>
@@ -161,7 +262,27 @@ const BookingForm = ({ fixedService }) => {
         onChange={handleChange}
         fullWidth
         margin="normal"
-        size="small" // Reduce field height
+        size="small"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LocationOnIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
 
       <TextField
@@ -176,7 +297,27 @@ const BookingForm = ({ fixedService }) => {
         InputLabelProps={{
           shrink: true,
         }}
-        size="small" // Reduce field height
+        size="small"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <CalendarTodayIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
 
       <TextField
@@ -185,30 +326,79 @@ const BookingForm = ({ fixedService }) => {
         value={formData.message}
         onChange={handleChange}
         multiline
-        rows={2} // Reduced from 3 to 2
+        rows={3}
         fullWidth
         margin="normal"
-        size="small" // Reduce field height
+        size="small"
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start" sx={{ alignSelf: "flex-start", mt: 1 }}>
+              <MessageIcon sx={{ color: "#2596BE" }} />
+            </InputAdornment>
+          ),
+        }}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "&:hover fieldset": {
+              borderColor: "#2596BE",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#2596BE",
+            },
+          },
+          "& .MuiInputLabel-root.Mui-focused": {
+            color: "#2596BE",
+          },
+        }}
       />
 
       <Button
         type="submit"
         variant="contained"
-        color="primary"
         disabled={submitting}
         fullWidth
-        sx={{ mt: 0.5 }} // Reduced from 1 to 0.5
+        sx={{ 
+          mt: 3,
+          py: 1.5,
+          backgroundColor: "#2596BE",
+          fontSize: "1rem",
+          fontWeight: 700,
+          textTransform: "uppercase",
+          letterSpacing: 0.5,
+          boxShadow: "0 4px 12px rgba(37, 150, 190, 0.3)",
+          "&:hover": {
+            backgroundColor: "#1A7A9E",
+            boxShadow: "0 6px 16px rgba(37, 150, 190, 0.4)",
+            transform: "translateY(-2px)",
+          },
+          "&:disabled": {
+            backgroundColor: "#b0b0b0",
+          },
+          transition: "all 0.3s ease",
+        }}
       >
         {submitting ? "Submitting..." : "Submit Booking"}
       </Button>
 
       {successMsg && (
-        <Alert severity="success" sx={{ mt: 0.5 }}>
+        <Alert 
+          severity="success" 
+          sx={{ 
+            mt: 2,
+            borderRadius: 2,
+          }}
+        >
           {successMsg}
         </Alert>
       )}
       {errorMsg && (
-        <Alert severity="error" sx={{ mt: 0.5 }}>
+        <Alert 
+          severity="error" 
+          sx={{ 
+            mt: 2,
+            borderRadius: 2,
+          }}
+        >
           {errorMsg}
         </Alert>
       )}

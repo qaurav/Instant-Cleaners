@@ -164,11 +164,13 @@ const LocationPage = ({ locations }) => {
         addressRegion: "NSW",
         addressCountry: "AU",
       },
-      geo: location.coordinates ? {
-        "@type": "GeoCoordinates",
-        latitude: location.coordinates.lat,
-        longitude: location.coordinates.lng,
-      } : undefined,
+      geo: location.coordinates
+        ? {
+            "@type": "GeoCoordinates",
+            latitude: location.coordinates.lat,
+            longitude: location.coordinates.lng,
+          }
+        : undefined,
       url: `${baseUrl}/locations/${slug}`,
       telephone: location.phone || "+61-XXX-XXX-XXX",
       priceRange: "$$",
@@ -176,19 +178,24 @@ const LocationPage = ({ locations }) => {
         "@type": "City",
         name: location.name,
       },
-      hasOfferCatalog: servicesAtLocation.length > 0 ? {
-        "@type": "OfferCatalog",
-        name: "Carpet Cleaning Services",
-        itemListElement: servicesAtLocation.map((service, index) => ({
-          "@type": "Offer",
-          itemOffered: {
-            "@type": "Service",
-            name: service.name,
-            description: service.description?.replace(/(<([^>]+)>)/gi, "").slice(0, 200),
-            url: `${baseUrl}/services/${createSlug(service.name)}`,
-          },
-        })),
-      } : undefined,
+      hasOfferCatalog:
+        servicesAtLocation.length > 0
+          ? {
+              "@type": "OfferCatalog",
+              name: "Carpet Cleaning Services",
+              itemListElement: servicesAtLocation.map((service, index) => ({
+                "@type": "Offer",
+                itemOffered: {
+                  "@type": "Service",
+                  name: service.name,
+                  description: service.description
+                    ?.replace(/(<([^>]+)>)/gi, "")
+                    .slice(0, 200),
+                  url: `${baseUrl}/services/${createSlug(service.name)}`,
+                },
+              })),
+            }
+          : undefined,
     };
 
     // BreadcrumbList Schema
@@ -248,33 +255,66 @@ const LocationPage = ({ locations }) => {
           content={
             location.description
               ? location.description.replace(/(<([^>]+)>)/gi, "").slice(0, 160)
-              : `Learn about our services and offerings at ${location.name}.`
+              : `Professional carpet cleaning services in ${location.name}. Learn about our services and offerings.`
           }
         />
         <meta name="robots" content="index, follow" />
-        
+        <link
+          rel="canonical"
+          href={`https://instantcarpetcleaningservices.com.au/locations/${slug}`}
+        />
+
         {/* Open Graph */}
-        <meta property="og:title" content={`${location.name} - Instant Carpet Cleaning`} />
-        <meta property="og:description" content={location.description?.replace(/(<([^>]+)>)/gi, "").slice(0, 200)} />
+        <meta
+          property="og:title"
+          content={`${location.name} - Instant Carpet Cleaning`}
+        />
+        <meta
+          property="og:description"
+          content={location.description
+            ?.replace(/(<([^>]+)>)/gi, "")
+            .slice(0, 200)}
+        />
         <meta property="og:image" content={location.image} />
-        <meta property="og:url" content={`${window.location.origin}/locations/${slug}`} />
+        <meta
+          property="og:url"
+          content={`https://instantcarpetcleaningservices.com.au/locations/${slug}`}
+        />
         <meta property="og:type" content="website" />
-        
+
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`${location.name} - Instant Carpet Cleaning`} />
-        <meta name="twitter:description" content={location.description?.replace(/(<([^>]+)>)/gi, "").slice(0, 200)} />
+        <meta
+          name="twitter:title"
+          content={`${location.name} - Instant Carpet Cleaning`}
+        />
+        <meta
+          name="twitter:description"
+          content={location.description
+            ?.replace(/(<([^>]+)>)/gi, "")
+            .slice(0, 200)}
+        />
         <meta name="twitter:image" content={location.image} />
 
-        {/* Canonical URL */}
-        <link rel="canonical" href={`${window.location.origin}/locations/${slug}`} />
-
         {/* Structured Data */}
-        {schemas && schemas.map((schema, index) => (
-          <script key={index} type="application/ld+json">
-            {JSON.stringify(schema)}
-          </script>
-        ))}
+        {schemas &&
+          schemas.map((schema, index) => (
+            <script key={index} type="application/ld+json">
+              {JSON.stringify({
+                ...schema,
+                url: `https://instantcarpetcleaningservices.com.au/locations/${slug}`,
+                image:
+                  location.image ||
+                  "https://instantcarpetcleaningservices.com.au/default-location.jpg",
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: location.name,
+                  addressRegion: "NSW",
+                  addressCountry: "AU",
+                },
+              })}
+            </script>
+          ))}
       </Helmet>
 
       <main style={styles.container}>
@@ -308,7 +348,9 @@ const LocationPage = ({ locations }) => {
                 <ServiceCard
                   key={service._id}
                   service={service}
-                  onClick={() => navigate(`/services/${createSlug(service.name)}`)}
+                  onClick={() =>
+                    navigate(`/services/${createSlug(service.name)}`)
+                  }
                 />
               ))}
             </div>
@@ -317,13 +359,17 @@ const LocationPage = ({ locations }) => {
           )}
         </section>
 
-        <nav aria-label="Back to home page" style={{ textAlign: "center", marginTop: 38 }}>
+        <nav
+          aria-label="Back to home page"
+          style={{ textAlign: "center", marginTop: 38 }}
+        >
           <Link
             to="/"
             style={styles.backLink}
             onMouseEnter={(e) => (e.target.style.background = "#b2ebf2")}
             onMouseLeave={(e) =>
-              (e.target.style.background = "linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%)")
+              (e.target.style.background =
+                "linear-gradient(90deg, #e0f7fa 0%, #b2ebf2 100%)")
             }
           >
             ← Back to Home
