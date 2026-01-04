@@ -46,8 +46,9 @@
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, 
-    rgba(37, 150, 190, 0.93) 0%, 
+  background: linear-gradient(
+    135deg,
+    rgba(37, 150, 190, 0.93) 0%,
     rgba(26, 122, 158, 0.96) 100%
   );
 }
@@ -68,7 +69,7 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #FFD700;
+  background: #ffd700;
   color: #1a1a1a;
   padding: 8px 18px;
   border-radius: 50px;
@@ -94,7 +95,7 @@
 }
 
 .highlight-text {
-  color: #FFD700;
+  color: #ffd700;
   font-size: 3.8rem;
   display: inline-block;
   text-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
@@ -111,7 +112,7 @@
 
 .hero-description strong {
   font-weight: 700;
-  color: #FFD700;
+  color: #ffd700;
 }
 
 /* Features */
@@ -133,7 +134,7 @@
 .feature-check {
   width: 26px;
   height: 26px;
-  background: #FFD700;
+  background: #ffd700;
   color: #1a1a1a;
   border-radius: 50%;
   display: flex;
@@ -152,7 +153,7 @@
 }
 
 .btn-primary-hero {
-  background: #FFD700;
+  background: #ffd700;
   color: #1a1a1a;
   border: none;
   padding: 16px 36px;
@@ -172,7 +173,7 @@
 .btn-primary-hero:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 30px rgba(255, 215, 0, 0.45);
-  background: #FFC107;
+  background: #ffc107;
 }
 
 .btn-arrow {
@@ -351,9 +352,10 @@
 
 .services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 30px;
   justify-items: center;
+  max-width: 100%;
 }
 
 /* About Us Section */
@@ -369,9 +371,10 @@
 
 .locations-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: 40px;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 30px;
   justify-items: center;
+  max-width: 100%;
 }
 
 /* Testimonials Section */
@@ -456,6 +459,34 @@
   .services-grid,
   .locations-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .locations-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 380px));
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .locations-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+@media (min-width: 768px) {
+  .services-grid {
+    grid-template-columns: repeat(auto-fill, minmax(340px, 380px));
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
   }
 }
 
