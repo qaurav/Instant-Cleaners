@@ -1,69 +1,89 @@
 const express = require('express');
 const router = express.Router();
 
-// Import your models or DB query functions
+// Import your models
 const Service = require('../models/Service');
 const Location = require('../models/Location');
 
-// Simple slugify function (you can use a library like slugify if you prefer)
+// Slugify function - matches your frontend
 function slugify(text) {
+  if (typeof text !== "string") {
+    text = String(text || "");
+  }
   return text
     .toString()
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-')           // Replace spaces with -
-    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
-    .replace(/\-\-+/g, '-');        // Replace multiple - with single -
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 router.get('/sitemap.xml', async (req, res) => {
   try {
-    const baseUrl = 'https://instantcarpetcleaningservices.com.au'; // Replace with your actual domain
+    const baseUrl = 'https://instantcarpetcleaningservices.com.au';
+    const today = new Date().toISOString().split('T')[0];
 
-    // Static pages
-    const staticPages = ['/', '/aboutus'];
-
-    // Fetch raw service and location names from DB
-    const services = await Service.find({}, 'name').lean(); // Assuming 'name' field
+    // Fetch services and locations from DB
+    const services = await Service.find({}, 'name').lean();
     const locations = await Location.find({}, 'name').lean();
 
-    // Build URLs array
-    let urls = [];
-
-    // Add static pages
-    staticPages.forEach(page => urls.push(`${baseUrl}${page}`));
-
-    // Add service pages with slugified names
-    services.forEach(service => {
-      const slug = slugify(service.name);
-      urls.push(`${baseUrl}/services/${slug}`);
-    });
-
-    // Add location pages with slugified names
-    locations.forEach(location => {
-      const slug = slugify(location.name);
-      urls.push(`${baseUrl}/locations/${slug}`);
-    });
-
-    // Generate XML sitemap string
+    // Generate XML sitemap
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
     xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
 
-    urls.forEach(url => {
-      xml += `  <url>\n`;
-      xml += `    <loc>${url}</loc>\n`;
-      xml += `    <changefreq>weekly</changefreq>\n`;
-      xml += `    <priority>1.0</priority>\n`;
-      xml += `  </url>\n`;
+    // Homepage
+    xml += `  <url>\n`;
+    xml += `    <loc>${baseUrl}/</loc>\n`;
+    xml += `    <lastmod>${today}</lastmod>\n`;
+    xml += `    <changefreq>weekly</changefreq>\n`;
+    xml += `    <priority>1.0</priority>\n`;
+    xml += `  </url>\n`;
+
+    // About page
+    xml += `  <url>\n`;
+    xml += `    <loc>${baseUrl}/aboutus</loc>\n`;
+    xml += `    <lastmod>${today}</lastmod>\n`;
+    xml += `    <changefreq>monthly</changefreq>\n`;
+    xml += `    <priority>0.8</priority>\n`;
+    xml += `  </url>\n`;
+
+    // Service pages
+    services.forEach(service => {
+      const slug = slugify(service.name);
+      if (slug && slug.length > 0) {
+        xml += `  <url>\n`;
+        xml += `    <loc>${baseUrl}/services/${slug}</loc>\n`;
+        xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += `    <changefreq>monthly</changefreq>\n`;
+        xml += `    <priority>0.9</priority>\n`;
+        xml += `  </url>\n`;
+      }
+    });
+
+    // Location pages
+    locations.forEach(location => {
+      const slug = slugify(location.name);
+      if (slug && slug.length > 0) {
+        xml += `  <url>\n`;
+        xml += `    <loc>${baseUrl}/locations/${slug}</loc>\n`;
+        xml += `    <lastmod>${today}</lastmod>\n`;
+        xml += `    <changefreq>monthly</changefreq>\n`;
+        xml += `    <priority>0.8</priority>\n`;
+        xml += `  </url>\n`;
+      }
     });
 
     xml += `</urlset>`;
 
+    // Set proper headers
     res.header('Content-Type', 'application/xml');
+    res.header('Cache-Control', 'public, max-age=3600');
     res.send(xml);
 
+    console.log(`✅ Sitemap generated: ${services.length} services, ${locations.length} locations`);
+
   } catch (error) {
-    console.error('Error generating sitemap:', error);
+    console.error('❌ Error generating sitemap:', error);
     res.status(500).send('Server Error');
   }
 });
