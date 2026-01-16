@@ -298,7 +298,7 @@ const Footer = ({ services = [], locations = [] }) => {
               />
               <Typography
                 component="a"
-                href="tel:+61411331731"
+                href="tel:++61420953979"
                 variant="body2"
                 sx={{
                   color: "#b0b0b0",
@@ -308,7 +308,7 @@ const Footer = ({ services = [], locations = [] }) => {
                   "&:hover": { color: "#FFD700" },
                 }}
               >
-                +61 (411) 331 731
+                +61 420 953 979
               </Typography>
             </Box>
 

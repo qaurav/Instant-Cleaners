@@ -168,7 +168,7 @@ const TopBar = () => {
           />
           <Typography
             component="a"
-            href="tel:+61411331731"
+            href="tel:++614209539791"
             sx={{
               color: "#1a1a1a",
               textDecoration: "none",
@@ -181,7 +181,7 @@ const TopBar = () => {
               },
             }}
           >
-            +61 (411) 331 731
+            +61420953979
           </Typography>
         </Box>
       </Box>
