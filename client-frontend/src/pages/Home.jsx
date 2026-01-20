@@ -108,11 +108,16 @@ function Home() {
           content="Instant Carpet Cleaning Services offers expert carpet and upholstery cleaning across Sydney. Residential, commercial & specialized cleaning with eco-friendly solutions. Book now!"
         />
         <meta name="robots" content="index, follow" />
-        <link
+        {/* <link
           rel="canonical"
           href="https://instantcarpetcleaningservices.com.au/"
-        />
-
+        /> */}
+        {location.pathname === "/" && (
+          <link
+            rel="canonical"
+            href="https://instantcarpetcleaningservices.com.au/"
+          />
+        )}
         {/* Open Graph */}
         <meta
           property="og:title"
