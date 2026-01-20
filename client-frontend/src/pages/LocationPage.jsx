@@ -97,7 +97,7 @@ const LocationPage = ({ locations }) => {
     }
 
     const matchedLocation = locations.find(
-      (loc) => createSlug(loc.name) === slug
+      (loc) => createSlug(loc.name) === slug,
     );
     if (!matchedLocation) {
       setError("Location not found");
@@ -120,7 +120,7 @@ const LocationPage = ({ locations }) => {
               .then((svcRes) => {
                 const allServices = svcRes.data;
                 const filteredServices = allServices.filter((svc) =>
-                  res.data.services.includes(svc._id)
+                  res.data.services.includes(svc._id),
                 );
                 setServicesAtLocation(filteredServices);
                 setLoading(false);
@@ -261,7 +261,7 @@ const LocationPage = ({ locations }) => {
         <meta name="robots" content="index, follow" />
         <link
           rel="canonical"
-          href={`https://instantcarpetcleaningservices.com.au/locations/${slug}`}
+          href={`https://instantcarpetcleaningservices.com.au${window.location.pathname}`}
         />
 
         {/* Open Graph */}
