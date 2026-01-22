@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
+const API_BASE_URL =
+  process.env.REACT_APP_API_BASE_URL || "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -19,10 +20,8 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-
 // Admin Auth
 export const loginAdmin = (credentials) => api.post("/admin/login", credentials);
-
 export const logoutAdmin = () => api.post("/admin/logout");
 
 // Admin CRUD
@@ -33,7 +32,8 @@ export const deleteAdmin = (id) => api.delete(`/admin/${id}`);
 
 // Booking CRUD
 export const fetchBookings = () => api.get("/bookings");
-export const fetchCompletedBookings = () => api.get("/bookings?status=completed");
+export const fetchCompletedBookings = () =>
+  api.get("/bookings?status=completed");
 export const createBooking = (data) => api.post("/bookings", data);
 export const updateBooking = (id, data) => api.put(`/bookings/${id}`, data);
 export const deleteBooking = (id) => api.delete(`/bookings/${id}`);
@@ -49,5 +49,11 @@ export const fetchLocations = () => api.get("/locations");
 export const createLocation = (data) => api.post("/locations", data);
 export const updateLocation = (id, data) => api.put(`/locations/${id}`, data);
 export const deleteLocation = (id) => api.delete(`/locations/${id}`);
+
+// Mail (use same axios instance)
+export const getInbox = () => api.get("/mail/inbox");
+export const getMessage = (uid) => api.get(`/mail/message/${uid}`);
+export const sendMail = ({ to, subject, text, html }) =>
+  api.post("/mail/send", { to, subject, text, html });
 
 export default api;

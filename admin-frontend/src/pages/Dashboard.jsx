@@ -1,3 +1,4 @@
+// src/pages/Dashboard.jsx
 import React, { useState, useEffect } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import DashboardLayout from "../components/DashboardLayout";
@@ -5,18 +6,16 @@ import AdminCRUD from "../components/AdminCRUD";
 import BookingCRUD from "../components/BookingCRUD";
 import ServiceCRUD from "../components/ServiceCRUD";
 import LocationCRUD from "../components/LocationCRUD";
+import MailCRUD from "../components/MailCRUD"; // <-- NEW
 
 const Dashboard = () => {
   const location = useLocation();
 
-  // Initialize selectedModel based on current path segment
   const [selectedModel, setSelectedModel] = useState(() => {
-    // Extract first segment after /dashboard/
-    const pathSegment = location.pathname.split("/")[2]; // index 0 is '', 1 is 'dashboard', 2 is model
-    return pathSegment || "admin"; // default to admin if no segment
+    const pathSegment = location.pathname.split("/")[2];
+    return pathSegment || "admin";
   });
 
-  // Update selectedModel whenever location changes
   useEffect(() => {
     const pathSegment = location.pathname.split("/")[2];
     if (pathSegment && pathSegment !== selectedModel) {
@@ -25,13 +24,17 @@ const Dashboard = () => {
   }, [location.pathname, selectedModel]);
 
   return (
-    <DashboardLayout selectedModel={selectedModel} setSelectedModel={setSelectedModel}>
+    <DashboardLayout
+      selectedModel={selectedModel}
+      setSelectedModel={setSelectedModel}
+    >
       <Routes>
         <Route path="/" element={<Navigate to="admin" replace />} />
         <Route path="admin" element={<AdminCRUD />} />
         <Route path="booking" element={<BookingCRUD />} />
         <Route path="services" element={<ServiceCRUD />} />
         <Route path="locations" element={<LocationCRUD />} />
+        <Route path="mail" element={<MailCRUD />} /> {/* NEW */}
       </Routes>
     </DashboardLayout>
   );
