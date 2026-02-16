@@ -100,56 +100,41 @@ function Home() {
     <>
       <Helmet>
         <title>
-          Instant Carpet Cleaning Services - Sydney's Trusted Carpet &
-          Upholstery Cleaners
+          Affordable Carpet Cleaning Sydney | Best Steam & Upholstery Cleaning
+          Services
         </title>
+
         <meta
           name="description"
-          content="Instant Carpet Cleaning Services offers expert carpet and upholstery cleaning across Sydney. Residential, commercial & specialized cleaning with eco-friendly solutions. Book now!"
+          content="Looking for affordable carpet cleaning in Sydney? We provide the best same-day carpet steam cleaning, rug cleaning, upholstery cleaning & commercial carpet cleaning services across Sydney. Licensed, insured & eco-friendly cleaners."
         />
+
+        <meta
+          name="keywords"
+          content="affordable carpet cleaning Sydney, best carpet cleaners Sydney, cheap carpet cleaning Sydney, same day carpet cleaning, carpet steam cleaning Sydney, rug cleaning Sydney, upholstery cleaning Sydney, commercial carpet cleaning Sydney, professional carpet cleaners Sydney"
+        />
+
         <meta name="robots" content="index, follow" />
-        {/* <link
-          rel="canonical"
-          href="https://instantcarpetcleaningservices.com.au/"
-        /> */}
+
         {location.pathname === "/" && (
           <link
             rel="canonical"
             href="https://instantcarpetcleaningservices.com.au/"
           />
         )}
-        {/* Open Graph */}
+
+        <meta property="og:type" content="website" />
         <meta
           property="og:title"
-          content="Instant Carpet Cleaning Services - Sydney's Trusted Cleaners"
+          content="Affordable & Best Carpet Cleaning Sydney"
         />
         <meta
           property="og:description"
-          content="Expert carpet and upholstery cleaning across Sydney. Residential, commercial & specialized cleaning with eco-friendly solutions."
+          content="Professional same-day carpet steam cleaning, rug & upholstery cleaning services across Sydney."
         />
         <meta
           property="og:url"
           content="https://instantcarpetcleaningservices.com.au/"
-        />
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:image"
-          content="https://instantcarpetcleaningservices.com.au/welcomeimageinstantcleaners.jpg"
-        />
-
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Instant Carpet Cleaning Services - Sydney"
-        />
-        <meta
-          name="twitter:description"
-          content="Expert carpet and upholstery cleaning across Sydney."
-        />
-        <meta
-          name="twitter:image"
-          content="https://instantcarpetcleaningservices.com.au/welcomeimageinstantcleaners.jpg"
         />
       </Helmet>
 
@@ -165,57 +150,33 @@ function Home() {
           id="home"
           ref={(el) => (sectionRefs.current.home = el)}
           className="hero-section"
-          aria-label="Home section with introduction and booking form"
         >
           <div className="hero-wrapper">
             <div className="hero-content-side">
               <div className="hero-image-container">
                 <img
                   src="/welcomeimageinstantcleaners.jpg"
-                  alt="Professional carpet cleaning"
+                  alt="Affordable Carpet Cleaning Sydney - Professional Steam Cleaning"
                   className="hero-image"
                 />
                 <div className="hero-overlay"></div>
               </div>
 
               <div className="hero-text-wrapper">
-                <div className="hero-badge">
-                  <span className="badge-star">⭐</span>
-                  <span>15+ Years Excellence</span>
-                </div>
-
                 <h1 className="hero-title">
-                  CARPET & UPHOLSTERY
+                  Affordable & Best Carpet Cleaning
                   <br />
-                  CLEANING <span className="highlight-text">SYDNEY</span>
+                  Services in <span className="highlight-text">Sydney</span>
                 </h1>
 
                 <p className="hero-description">
-                  At <strong>Instant Carpet Cleaning Services</strong>, we
-                  deliver exceptional cleaning that transforms your space into a{" "}
-                  <strong>pristine, safe, and healthy environment</strong>. Our
-                  expert team serves all of <strong>Sydney</strong> with
-                  solutions for{" "}
-                  <strong>
-                    Residential, Commercial, and Specialized facilities
-                  </strong>
-                  .
+                  We are Sydney’s trusted and professional carpet cleaners
+                  providing <strong>affordable carpet cleaning</strong>,
+                  <strong> same day steam cleaning</strong>, rug cleaning,
+                  upholstery cleaning and commercial carpet cleaning services.
+                  Our expert team delivers deep stain removal, odour treatment,
+                  and eco-friendly sanitisation for homes and businesses.
                 </p>
-
-                <div className="hero-features">
-                  <div className="feature-item">
-                    <div className="feature-check">✓</div>
-                    <span>Eco-Friendly Products</span>
-                  </div>
-                  <div className="feature-item">
-                    <div className="feature-check">✓</div>
-                    <span>Licensed & Insured</span>
-                  </div>
-                  <div className="feature-item">
-                    <div className="feature-check">✓</div>
-                    <span>Same-Day Available</span>
-                  </div>
-                </div>
 
                 <div className="hero-buttons">
                   <button
@@ -226,12 +187,11 @@ function Home() {
                         ?.scrollIntoView({ behavior: "smooth" })
                     }
                   >
-                    Get Free Quote
-                    <span className="btn-arrow">→</span>
+                    Get Free Quote →
                   </button>
+
                   <a href="tel:+61411331731" className="btn-secondary-hero">
-                    <span className="phone-icon">📞</span>
-                    Call: (411) 331 731
+                    📞 Call Now
                   </a>
                 </div>
               </div>
@@ -242,27 +202,45 @@ function Home() {
             </div>
           </div>
         </section>
+
+        {/* SEO Content Section */}
+        <section className="seo-content-section">
+          <Container maxWidth="lg">
+            <Typography variant="h2" className="section-title">
+              Best & Cheap Carpet Cleaning Sydney – Same Day Available
+            </Typography>
+
+            <Typography variant="body1" sx={{ mt: 2 }}>
+              If you are searching for the best carpet cleaning in Sydney at
+              affordable prices, our professional cleaners are ready to help. We
+              specialise in carpet steam cleaning, rug cleaning, upholstery
+              cleaning, end of lease carpet cleaning, and commercial carpet
+              cleaning across all Sydney suburbs. Using advanced hot water
+              extraction technology, we remove deep dirt, bacteria, allergens,
+              and tough stains while keeping your carpets fresh and hygienic.
+            </Typography>
+
+            <Typography variant="body1" sx={{ mt: 2 }}>
+              Our affordable carpet cleaning services are designed for both
+              residential and commercial clients who want high-quality results
+              without overpaying. We offer same-day carpet cleaning, emergency
+              stain removal, pet odour treatment, and eco-friendly sanitisation
+              to ensure your home or office stays clean, safe, and healthy.
+            </Typography>
+          </Container>
+        </section>
+
         {/* Services Section */}
         <section
           id="services"
           ref={(el) => (sectionRefs.current.services = el)}
           className="services-section"
-          aria-labelledby="services-heading"
         >
           <Container maxWidth="lg">
-            <div className="section-header">
-              <Typography
-                variant="h2"
-                component="h2"
-                id="services-heading"
-                className="section-title"
-              >
-                Our Services
-              </Typography>
-              <Typography variant="body1" className="section-subtitle">
-                Professional cleaning solutions for every need
-              </Typography>
-            </div>
+            <Typography variant="h2" className="section-title">
+              Professional Carpet & Upholstery Cleaning Services
+            </Typography>
+
             <div className="services-grid">
               {services.map((svc) => {
                 const slug = createSlug(svc.name);
@@ -277,36 +255,27 @@ function Home() {
             </div>
           </Container>
         </section>
-        {/* About Us Section */}
+
+        {/* About Section */}
         <section
           id="aboutus"
           ref={(el) => (sectionRefs.current.aboutus = el)}
           className="aboutus-section"
-          aria-label="About us section"
         >
           <AboutUs />
         </section>
-        {/* Locations Section */}
+
+        {/* Locations */}
         <section
           id="locations"
           ref={(el) => (sectionRefs.current.locations = el)}
           className="locations-section"
-          aria-labelledby="locations-heading"
         >
           <Container maxWidth="lg">
-            <div className="section-header">
-              <Typography
-                variant="h2"
-                component="h2"
-                id="locations-heading"
-                className="section-title"
-              >
-                Our Locations
-              </Typography>
-              <Typography variant="body1" className="section-subtitle">
-                Serving all Sydney suburbs with excellence
-              </Typography>
-            </div>
+            <Typography variant="h2" className="section-title">
+              Carpet Cleaning Services Across Sydney Suburbs
+            </Typography>
+
             <div className="locations-grid">
               {locations.map((loc) => {
                 const slug = createSlug(loc.name);
@@ -321,51 +290,28 @@ function Home() {
             </div>
           </Container>
         </section>
-        {/* Testimonials Section */}
+
         <section
           id="testimonials"
           ref={(el) => (sectionRefs.current.testimonials = el)}
           className="testimonials-section"
-          aria-label="Testimonials section"
         >
           <Testimonials />
         </section>
-        {/* Contact Section */}
+
         <section
           id="contact"
           ref={(el) => (sectionRefs.current.contact = el)}
           className="contact-section"
-          aria-labelledby="contact-heading"
         >
           <Container maxWidth="lg">
-            <div className="section-header">
-              <Typography
-                variant="h2"
-                component="h2"
-                id="contact-heading"
-                className="section-title"
-              >
-                Contact Us
-              </Typography>
-              <Typography variant="body1" className="section-subtitle">
-                Get in touch with our friendly team
-              </Typography>
-            </div>
+            <Typography variant="h2" className="section-title">
+              Get Affordable Carpet Cleaning Quote Today
+            </Typography>
+
             <div className="contact-content-wrapper">
               <div className="contact-form-container">
                 <ContactForm />
-              </div>
-              <div className="contact-map-container">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d424141.6978944982!2d150.93197474999997!3d-33.84824395!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b129838f39a743f%3A0x3017d681632a850!2sSydney%20NSW%2C%20Australia!5e0!3m2!1sen!2snp!4v1749959002538!5m2!1sen!2snp"
-                  width="100%"
-                  height="100%"
-                  style={{ border: 0, borderRadius: "12px" }}
-                  allowFullScreen=""
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="Map showing Sydney, Australia"
-                />
               </div>
             </div>
           </Container>
