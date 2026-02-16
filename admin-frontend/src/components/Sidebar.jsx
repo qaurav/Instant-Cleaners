@@ -1,5 +1,12 @@
+// src/components/Sidebar.jsx
 import React from "react";
-import { List, ListItemButton, ListItemText, Drawer, Toolbar } from "@mui/material";
+import {
+  List,
+  ListItemButton,
+  ListItemText,
+  Drawer,
+  Toolbar,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 const Sidebar = ({ selectedModel, setSelectedModel }) => {
@@ -10,6 +17,7 @@ const Sidebar = ({ selectedModel, setSelectedModel }) => {
     { label: "Booking", path: "booking" },
     { label: "Services", path: "services" },
     { label: "Locations", path: "locations" },
+    { label: "Mail", path: "mail" }, // <-- NEW
   ];
 
   const handleClick = (path) => {
