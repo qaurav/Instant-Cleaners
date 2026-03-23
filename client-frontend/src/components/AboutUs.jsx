@@ -80,7 +80,7 @@ const AboutUs = () => {
         >
           <Typography
             variant="h2"
-            component="h1"
+            component="h2"
             sx={{
               fontWeight: 800,
               mb: 4,
