@@ -148,7 +148,7 @@ const AboutUsPage = () => {
           <Box sx={{ textAlign: "center", mb: { xs: 6, md: 8 } }}>
             <Typography
               variant="h2"
-              component="h1"
+              component="h2"
               sx={{
                 fontWeight: 800,
                 color: "#1a1a1a",
